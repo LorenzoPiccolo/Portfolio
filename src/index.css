@@ -1,0 +1,68 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --color-light: #f4f4f4;
+    --color-dark: #181818;
+    --color-primary: #EF4E16;
+    --color-gray100: #F0F0F0;
+    --color-gray150: #E5E7EB;
+    --color-gray200: #CFCFCF;
+    --color-gray300: #ADADAD;
+    --color-gray400: #7F7F7F;
+    --color-gray500: #5A5A5A;
+    --color-gray600: #484848;
+    --color-gray700: #292929;
+    --color-gray800: #1E1E1E;
+    --color-gray850: #191919;
+  }
+
+  html,
+  body,
+  #root {
+    height: 100%;
+  }
+}
+
+@layer components {
+  .title-64 {
+    @apply font-urbanist text-[64px];
+  }
+
+  .title-44 {
+    @apply font-urbanist text-[44px];
+  }
+
+  .title-32 {
+    @apply font-urbanist text-[32px];
+  }
+
+  .title-24 {
+    @apply font-urbanist text-[24px];
+  }
+
+  .text-16 {
+    @apply font-urbanist text-[16px];
+  }
+
+  .text-14 {
+    @apply font-urbanist text-[14px];
+  }
+
+  .text-12 {
+    @apply font-urbanist text-[12px];
+  }
+}
+
+@layer utilities {
+  .skill-active {
+    color: var(--color-dark);
+  } /* colore scuro quando una skill è “in focus” */
+
+  .fadeInUp {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+}
