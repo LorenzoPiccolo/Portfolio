@@ -29,7 +29,7 @@ export default function Header({ currentPage = 'Home' }) {
   useEffect(() => () => window.clearTimeout(hoverTimeoutRef.current), []);
 
   return (
-    <header className="fixed top-6 left-1/2 -translate-x-1/2 z-50">
+    <header className="fixed top-6 left-1/2 -translate-x-1/2 z-50 scale-[0.98] hover:scale-[1] transition-transform duration-300 ease-quad">
       <div
         className="w-[460px] rounded-[14px] border border-gray600 bg-gray850/70 backdrop-blur-[12px] px-2.5 py-2.5 flex items-center justify-between"
       >

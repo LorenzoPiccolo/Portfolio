@@ -22,6 +22,7 @@ export default function Hero() {
   const sectionRef = useRef(null);
   const canvasRef = useRef(null);
   const imagesRef = useRef([]);
+  const gradientRef = useRef(null);
   const stateRef = useRef({ frame: 0 });
   const [ready, setReady] = useState(false);
 
@@ -109,8 +110,14 @@ export default function Hero() {
         onUpdate: render,
       });
 
+      const gradientTween = gradientRef.current
+        ? gsap.fromTo(
+            gradientRef.current,
+            { scaleY: 0, transformOrigin: 'bottom center' },
+            { scaleY: 1, ease: 'none', paused: true }
+          )
+        : null;
 
-      
       // smoothing dello scroll + pin della sezione
       ScrollTrigger.create({
         id: 'hero-scroll',
@@ -124,6 +131,7 @@ export default function Hero() {
         refreshPriority: 1,
         onUpdate: (self) => {
           scrubTween.progress(self.progress);
+          gradientTween?.progress(self.progress);
         },
       });
     }, sectionRef);
@@ -154,7 +162,12 @@ export default function Hero() {
       />
 
       <div className="absolute bottom-0 select-none">
-        <img src="../../img/gradient.png" className="w-[100vw]"></img>
+        <img
+          ref={gradientRef}
+          src="../../img/gradient-2.png"
+          className="w-[100vw]"
+          style={{ transformOrigin: 'bottom center', transform: 'scaleY(0)' }}
+        />
       </div>
 
       {/* Contenuto in basso, allineato con flex (niente absolute) */}
@@ -170,7 +183,7 @@ export default function Hero() {
         <div className="hero-marquee overflow-y-visible">
           <div className="whitespace-nowrap will-change-transform inline-block animate-[marqueeLeft_35s_linear_infinite]">
             <MarqueeChunk />
-            <MarqueeChunk />
+            <MarqueeChunk /> 
           </div>
         </div>
       </div>

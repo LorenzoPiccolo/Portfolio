@@ -76,7 +76,7 @@ export default function SecondSection() {
         <div className="flex items-start gap-6">
           {/* Blocco 1 - 50% width, 550px height */}
           <div className="basis-1/2">
-            <a href="#" className="block transition-transform duration-300 hover:-translate-y-4">
+            <a href="#" className="block transition-transform duration-300 hover:-translate-y-3 ease-out">
               <div className="h-[550px] rounded-[14px] border border-gray600 bg-gray850/70 backdrop-blur-[12px] flex items-center justify-center">
                 <img src="../../img/icona-01.svg" alt="icona 01" className="w-[300px] h-[300px]" />
               </div>
@@ -86,7 +86,7 @@ export default function SecondSection() {
 
           {/* Blocco 2 - 25% width, 300px height */}
           <div className="basis-1/4">
-            <a href="#" className="block transition-transform duration-300 hover:-translate-y-4">
+            <a href="#" className="block transition-transform duration-300 hover:-translate-y-3 ease-out">
               <div className="h-[300px] rounded-[14px] border border-gray600 bg-gray850/70 backdrop-blur-[12px] flex items-center justify-center">
                 <img src="../../img/icona-02.svg" alt="icona 02" className="w-[230px] h-[230px]" />
               </div>
@@ -96,7 +96,7 @@ export default function SecondSection() {
 
           {/* Blocco 3 - 25% width, 300px height */}
           <div className="basis-1/4">
-            <a href="#" className="block transition-transform duration-300 hover:-translate-y-4">
+            <a href="#" className="block transition-transform duration-300 hover:-translate-y-3 ease-out">
               <div className="h-[300px] rounded-[14px] border border-gray600 bg-gray850/70 backdrop-blur-[12px] flex items-center justify-center">
                 <img src="../../img/icona-03.svg" alt="icona 03" className="w-[140px] h-[140px]" />
               </div>

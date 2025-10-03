@@ -4,6 +4,7 @@ import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 import SelectedWorkCard from '../components/SelectedWorkCard.jsx';
+import DynamicButton from '../components/DynamicButton.jsx';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -41,6 +42,7 @@ const WORKS = [
 
 export default function FourthSection() {
   const sectionRef = useRef(null);
+  const buttonRef = useRef(null);
 
   useLayoutEffect(() => {
     const sectionEl = sectionRef.current;
@@ -119,6 +121,24 @@ export default function FourthSection() {
       });
 
       applyState(trigger.progress || 0, true);
+
+      const dynamicButton = buttonRef.current;
+      if (dynamicButton) {
+        gsap.set(dynamicButton, { autoAlpha: 0, y: 40,});
+        gsap.to(dynamicButton, {
+          autoAlpha: 1,
+          y: 0,
+          duration: 0.8,
+          ease: 'power2.out',
+          scrollTrigger: {
+            trigger: sectionEl,
+            start: 'top 70%',
+            end: 'bottom top',
+            toggleActions: 'play reverse play reverse',
+            markers: true,
+          },
+        });
+      }
     }, sectionEl);
 
     return () => ctx.revert();
@@ -126,6 +146,9 @@ export default function FourthSection() {
 
   return (
     <section ref={sectionRef} className="relative isolate bg-light text-dark z-10">
+      <div className="absolute bottom-12 left-1/2 z-20 -translate-x-1/2">
+        <DynamicButton ref={buttonRef} label="Design focus" />
+      </div>
       <div className="flex h-screen w-full flex-col items-center justify-center gap-12">
 
         <div className="relative flex w-full justify-center">
