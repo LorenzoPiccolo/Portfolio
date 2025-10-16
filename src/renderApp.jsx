@@ -8,23 +8,30 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 gsap.registerPlugin(ScrollTrigger);
 
 export default function renderApp(RootComponent) {
-  const lenis = new Lenis({
-    duration: 1.1,
-    easing: (t) => 1 - Math.pow(1 - t, 3),
-    smoothWheel: true,
-    smoothTouch: false,
-    wheelMultiplier: 1.0,
-  });
+  const prefersTouchScrolling =
+    typeof window !== 'undefined' &&
+    (window.matchMedia('(hover: none) and (pointer: coarse)').matches || window.innerWidth <= 768);
 
-  gsap.ticker.add((time) => {
-    lenis.raf(time * 1000);
-  });
+  let lenis;
+  if (!prefersTouchScrolling) {
+    lenis = new Lenis({
+      duration: 1.1,
+      easing: (t) => 1 - Math.pow(1 - t, 3),
+      smoothWheel: true,
+      smoothTouch: false,
+      wheelMultiplier: 1.0,
+    });
 
-  lenis.on('scroll', () => {
-    ScrollTrigger.update();
-  });
+    gsap.ticker.add((time) => {
+      lenis.raf(time * 1000);
+    });
 
-  ScrollTrigger.addEventListener('refresh', () => lenis.resize());
+    lenis.on('scroll', () => {
+      ScrollTrigger.update();
+    });
+
+    ScrollTrigger.addEventListener('refresh', () => lenis?.resize());
+  }
 
   if (document.fonts && document.fonts.ready) {
     document.fonts.ready.then(() => {
