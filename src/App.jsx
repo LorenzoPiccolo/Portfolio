@@ -3,30 +3,20 @@ import { useEffect } from 'react';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 import Header from './components/Header.jsx';
-import Hero from './sections/Hero.jsx';
-import SecondSection from './sections/SecondSection.jsx'; // 👈 importa la seconda sezione
-import ThirdSection from './sections/ThirdSection.jsx';
-import FourthSection from './sections/FourthSection.jsx';
-import FifthSection from './sections/FifthSection.jsx';
+import Hero from './pages/home/sections/Hero.jsx';
+import SecondSection from './pages/home/sections/SecondSection.jsx'; // 👈 importa la seconda sezione
+import ThirdSection from './pages/home/sections/ThirdSection.jsx';
+import FourthSection from './pages/home/sections/FourthSection.jsx';
+import FifthSection from './pages/home/sections/FifthSection.jsx';
+import Footer from './components/Footer.jsx';
+import useResizeTick from './hooks/useResizeTick.js';
 
 export default function App() {
+  const resizeTick = useResizeTick();
+
   useEffect(() => {
-    let timeoutId = null;
-
-    const handleResize = () => {
-      window.clearTimeout(timeoutId);
-      timeoutId = window.setTimeout(() => { 
-        ScrollTrigger.refresh();
-      }, 150);
-    };
-
-    window.addEventListener('resize', handleResize);
-
-    return () => {
-      window.removeEventListener('resize', handleResize);
-      window.clearTimeout(timeoutId);
-    };
-  }, []);
+    ScrollTrigger.refresh();
+  }, [resizeTick]);
 
   return (
     <div className="min-h-screen bg-black text-white">
@@ -35,15 +25,17 @@ export default function App() {
       <Header currentPage="Home" />
 
       {/* Hero come prima sezione del sito */}
-      <Hero />
+      <Hero resizeTick={resizeTick} />
 
-      <SecondSection /> 
-        
-      <ThirdSection /> 
+      <SecondSection resizeTick={resizeTick} /> 
+
+      <ThirdSection resizeTick={resizeTick} /> 
       
-      <FourthSection />
+      <FourthSection resizeTick={resizeTick} />
 
-      <FifthSection />
+      <FifthSection resizeTick={resizeTick} />
+
+      <Footer resizeTick={resizeTick} />
       
     </div>
   );

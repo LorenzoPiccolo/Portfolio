@@ -17,6 +17,8 @@
     --color-gray700: #292929;
     --color-gray800: #1E1E1E;
     --color-gray850: #191919;
+    --blurBg: rgba(25, 25, 25, 0.72);
+    --blurStroke: rgba(72, 72, 72, 0.85);
   }
 
   html,
@@ -31,6 +33,10 @@
     @apply font-urbanist text-[64px];
   }
 
+  .title-80 {
+    @apply font-urbanist text-[48px] md:text-[80px];
+  }
+
   .title-44 {
     @apply font-urbanist text-[44px];
   }
@@ -41,6 +47,10 @@
 
   .title-24 {
     @apply font-urbanist text-[24px];
+  }
+
+   .text-20 {
+    @apply font-urbanist text-[20px];
   }
 
   .text-16 {

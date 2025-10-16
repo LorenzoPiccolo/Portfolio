@@ -1,0 +1,283 @@
+// src/pages/home/sections/FifthSection.jsx
+import { useEffect, useLayoutEffect, useRef, useState } from 'react';
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+gsap.registerPlugin(ScrollTrigger);
+
+const STICKERS = [
+  {
+    src: '../../../../img/stickers/sticker-8.svg',
+    alt: 'Orange code 90210 sticker',
+    top: '22%',
+    left: '38%',
+    width: '120px',
+    aspect: '94 / 32',
+    frame: false,
+    zIndex: 4,
+    fromY: 10,
+    toY: -200,
+    transform: 'rotate(18deg)',
+  },
+  {
+    src: '../../../../img/stickers/sticker-7.svg',
+    alt: 'Profile',
+    top: '12%',
+    left: '74%',
+    width: '340px',
+    frame: false,
+    zIndex: 6,
+    fromY: 10,
+    toY: -170,
+  },
+  {
+    src: '../../../../img/stickers/sticker-5-icon.svg',
+    alt: 'Outline globe sticker',
+    top: '38%',
+    left: '25%',
+    width: '260px',
+    aspect: '1 / 1',
+    frame: true,
+    paddingClass: 'p-8',
+    zIndex: 3,
+    fromY: 10,
+    toY: -120,
+  },
+  {
+    src: '../../../../img/stickers/sticker-4-icon.svg',
+    alt: 'Red star sticker',
+    top: '40%',
+    left: '80%',
+    width: '240px',
+    aspect: '138 / 79',
+    frame: true,
+    paddingClass: 'p-6',
+    zIndex: 5,
+    fromY: 10,
+    toY: -110,
+  },
+  {
+    src: '../../../../img/stickers/sticker-6.svg',
+    alt: 'Warm gradient sticker',
+    top: '54%',
+    left: '30%',
+    width: '280px',
+    aspect: '194 / 48',
+    frame: false,
+    zIndex: 2,
+    fromY: 80,
+    toY: -160,
+  },
+  {
+    src: '../../../../img/stickers/sticker-2.svg',
+    alt: 'Torii sticker',
+    top: '90%',
+    left: '65%',
+    width: '200px',
+    aspect: '1 / 1',
+    frame: false,
+    zIndex: 4,
+    fromY: 90,
+    toY: -200,
+  },
+  {
+    src: '../../../../img/stickers/sticker-3.svg',
+    alt: 'LN badge sticker',
+    top: '95%',
+    left: '28%',
+    width: '340px',
+    aspect: '272 / 83',
+    frame: false,
+    zIndex: 2,
+    fromY: 110,
+    toY: -200,
+  },
+  {
+    src: '../../../../img/stickers/sticker-1.svg',
+    alt: 'Radial burst sticker',
+    top: '62%',
+    left: '86%',
+    width: '150px',
+    aspect: '1 / 1',
+    frame: false,
+    zIndex: 1,
+    fromY: 70,
+    toY: -130,
+  },
+];
+
+export default function FifthSection({ resizeTick = 0 }) {
+  const sectionRef = useRef(null);
+  const headingRef = useRef(null);
+  const stickersRef = useRef(null);
+  const [isMobile, setIsMobile] = useState(() => {
+    if (typeof window === 'undefined') return false;
+    return window.matchMedia('(max-width: 767px)').matches;
+  });
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return undefined;
+    const mq = window.matchMedia('(max-width: 767px)');
+    const update = () => setIsMobile(mq.matches);
+    update();
+    mq.addEventListener('change', update);
+    return () => mq.removeEventListener('change', update);
+  }, []);
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    const mq = window.matchMedia('(max-width: 767px)');
+    setIsMobile(mq.matches);
+  }, [resizeTick]);
+
+  useLayoutEffect(() => {
+    const section = sectionRef.current;
+    const heading = headingRef.current;
+    if (!section || !heading) return;
+
+    const ctx = gsap.context(() => {
+      const boxes = gsap.utils.toArray(section.querySelectorAll('[data-fifth-box]'));
+      if (!boxes.length) return;
+
+      const scrollDistance = () => {
+        const container = stickersRef.current;
+        const containerHeight = container?.offsetHeight || section.offsetHeight || window.innerHeight * 2;
+        const travel = containerHeight - window.innerHeight;
+        return Math.max(travel, window.innerHeight * 0.8);
+      };
+
+      gsap.set(heading, { scale: 1.2, transformOrigin: '50% 50%' });
+      gsap.set(boxes, { willChange: 'transform' });
+
+      const timeline = gsap.timeline({
+        defaults: { ease: 'none' },
+        scrollTrigger: {
+          id: 'fifth-section-gallery',
+          trigger: section,
+          start: 'top 40%',
+          end: () => `+=${scrollDistance()} -=1000px`,
+          scrub: true,
+          invalidateOnRefresh: true,
+          markers: false,
+        },
+      });
+
+      timeline.fromTo(
+        heading,
+        { scale: 1.5 },
+        { scale: 1, duration: 0.25, ease: 'power3.out' }
+      );
+      timeline.add('stickers');
+
+      boxes.forEach((box) => {
+        const fromY = Number(box.getAttribute('data-from') || 40);
+        const toY = Number(box.getAttribute('data-to') || -120);
+
+        timeline.fromTo(
+          box,
+          { yPercent: fromY },
+          { yPercent: toY },
+          'stickers'
+        );
+      });
+    }, section);
+
+    return () => ctx.revert();
+  }, [resizeTick]);
+
+  return (
+    <section
+      ref={sectionRef}
+      className="relative isolate h-[200vh] md:h-[200vh] min-h-[700px] bg-dark px-6 text-light overflow-hidden"
+    >
+      <div
+        ref={headingRef}
+        className="fixed w-screen left-0 right-0 top-0 w-full z-10 flex h-screen items-center justify-center px-6"
+      >
+        <h4 className="md:title-32 title-24 w-[60%] md:max-w-[30vw] text-center font-normal leading-tight">
+          Full-time perfection seeker.
+          <br />
+          Love minimalism, Japan, space and Ferrari.
+        </h4>
+      </div>
+
+      <div className="pointer-events-none absolute inset-0 flex flex-col align-center">
+
+        <div className="h-full w-full pointer-events-none"></div>
+
+        <div
+          ref={stickersRef}
+          className="relative h-[300vh] z-10 w-full"
+        >
+          {STICKERS.map((sticker, index) => {
+          const frameBase = sticker.frame
+            ? 'overflow-hidden rounded-[28px] border border-gray600/80 bg-gray850/70 backdrop-blur-[18px] shadow-[0_0_60px_rgba(24,24,24,0.6)]'
+            : '';
+          const padding = sticker.frame ? sticker.paddingClass ?? 'p-6' : sticker.paddingClass ?? '';
+
+            const innerClasses = [
+              'flex items-center justify-center w-full',
+              frameBase,
+              padding,
+            ]
+              .filter(Boolean)
+              .join(' ');
+
+            const fit = sticker.fit ?? 'contain';
+
+            const imageClasses = [
+              'w-full',
+              sticker.frame ? 'h-full' : 'h-auto',
+              fit === 'cover' ? 'object-cover' : 'object-contain',
+              sticker.imageClass,
+            ]
+              .filter(Boolean)
+              .join(' ');
+
+            let computedWidth = sticker.width;
+            if (
+              isMobile &&
+              typeof sticker.width === 'string' &&
+              sticker.width.trim().endsWith('px')
+            ) {
+              const numeric = parseFloat(sticker.width);
+              if (!Number.isNaN(numeric)) {
+                computedWidth = `${numeric * 0.6}px`;
+              }
+            }
+
+            const outerStyle = {
+              top: sticker.top,
+              left: sticker.left,
+              zIndex: sticker.zIndex ?? index + 1,
+              width: computedWidth,
+              transform: 'translate(-50%, -50%)',
+            };
+
+            const innerStyle = {
+              aspectRatio: sticker.aspect,
+            };
+
+            return (
+              <div key={sticker.src} className="absolute" style={outerStyle}>
+                <div
+                  data-fifth-box
+                  data-from={sticker.fromY}
+                  data-to={sticker.toY}
+                  className={innerClasses}
+                  style={innerStyle}
+                >
+                  <img src={sticker.src} alt={sticker.alt} className={imageClasses} />
+                </div>
+              </div>
+            );
+          })}
+          <div className="w-full absolute bottom-0 left-0 right-0">
+            <img src="../../../../img/gradient-2.png" className="w-full origin-bottom" />
+          </div>
+        </div>
+        
+      </div>
+    </section>
+  );
+}
