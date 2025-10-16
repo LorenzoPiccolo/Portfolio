@@ -1,12 +1,19 @@
 // src/pages/works/sections/ThirdSection.jsx
 import CaseHistoryCard from '../../../components/CaseHistoryCard.jsx';
+import project03 from '../../../../img/project-03.jpg';
+import imageFooter02 from '../../../../img/image-footer-02.jpg';
+import imageFooter03 from '../../../../img/image-footer-03.jpg';
+import imageFooter04 from '../../../../img/image-footer-04.jpg';
+import imageFooter05 from '../../../../img/image-footer-05.jpg';
+import footerImage from '../../../../img/footer-image.jpg';
+import gradientImage from '../../../../img/gradient.png';
 
 const CASE_HISTORY_CARDS = [
   {
     id: 'build-zero',
     title: 'Build Zero',
     type: 'UX/UI',
-    image: '../../../../img/project-03.jpg',
+    image: project03,
     size: 'md',
     className: 'lg:row-start-1 lg:col-start-1',
     year: '2024',
@@ -15,7 +22,7 @@ const CASE_HISTORY_CARDS = [
     id: 'romaji',
     title: 'Romaji',
     type: 'Magazine',
-    image: '../../../../img/image-footer-02.jpg',
+    image: imageFooter02,
     size: 'sm',
     className: 'lg:row-start-1 lg:col-start-7',
     year: '2024',
@@ -24,7 +31,7 @@ const CASE_HISTORY_CARDS = [
     id: 'atalus',
     title: 'Atalus',
     type: 'Brand Identity',
-    image: '../../../../img/image-footer-03.jpg',
+    image: imageFooter03,
     size: 'sm',
     className: 'lg:row-start-1 lg:col-start-10',
     year: '2025',
@@ -33,7 +40,7 @@ const CASE_HISTORY_CARDS = [
     id: 'reborn',
     title: 'Reborn',
     type: 'Vinyl',
-    image: '../../../../img/image-footer-04.jpg',
+    image: imageFooter04,
     size: 'lg',
     className: 'lg:row-start-2 lg:col-start-3 lg:self-center',
     year: '2023',
@@ -42,7 +49,7 @@ const CASE_HISTORY_CARDS = [
     id: 'more-than-me',
     title: 'MoreThanMe',
     type: 'Merchandising',
-    image: '../../../../img/image-footer-05.jpg',
+    image: imageFooter05,
     size: 'sm',
     className: 'lg:row-start-3 lg:col-start-1',
     year: '2025',
@@ -51,7 +58,7 @@ const CASE_HISTORY_CARDS = [
     id: 'yep',
     title: 'Yep',
     type: 'Logo',
-    image: '../../../../img/footer-image.jpg',
+    image: footerImage,
     size: 'sm',
     className: 'lg:row-start-3 lg:col-start-4',
     year: '2024',
@@ -60,7 +67,7 @@ const CASE_HISTORY_CARDS = [
     id: 'feb-care',
     title: 'FEB Care',
     type: 'Catalog',
-    image: '../../../../img/gradient.png',
+    image: gradientImage,
     size: 'md',
     className: 'lg:row-start-3 lg:col-start-7',
     year: '2025',

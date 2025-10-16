@@ -2,21 +2,18 @@
 import { useEffect, useLayoutEffect, useRef, useState, useCallback } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-
-
+import heroGradient from '../../../../img/gradient-2.png';
 
 gsap.registerPlugin(ScrollTrigger);
 
-// === Config ===
-const FRAME_COUNT = 147;              // <-- imposta il numero di frame
-const PAD = 3;                        // <-- padding numerico: 001, 002, ...
-const EXT = '.jpg';                   // <-- cambia in '.png' se serve
-const BASE_PATH = '../../../../img/frames/';         // <-- cartella in /public
-
-function frameSrc(index) {
-  const n = String(index + 1).padStart(PAD, '0');
-  return `${BASE_PATH}header${n}${EXT}`; 
-}
+const FRAME_MODULES = import.meta.glob('../../../../img/frames/*.jpg', {
+  eager: true,
+  import: 'default',
+});
+const FRAME_SOURCES = Object.keys(FRAME_MODULES)
+  .sort((a, b) => a.localeCompare(b))
+  .map((key) => FRAME_MODULES[key]);
+const FRAME_COUNT = FRAME_SOURCES.length;
 
 export default function Hero({ resizeTick = 0 }) {
   const sectionRef = useRef(null);
@@ -29,12 +26,18 @@ export default function Hero({ resizeTick = 0 }) {
 
   // Preload immagini
   useEffect(() => {
+    if (!FRAME_COUNT) {
+      setReady(true);
+      imagesRef.current = [];
+      return;
+    }
+
     const imgs = [];
     let loaded = 0;
 
     for (let i = 0; i < FRAME_COUNT; i++) {
       const img = new Image();
-      img.src = frameSrc(i);
+      img.src = FRAME_SOURCES[i];
       img.decode?.(); // hint ai browser moderni
       img.onload = () => {
         loaded++;
@@ -98,6 +101,7 @@ export default function Hero({ resizeTick = 0 }) {
   // Setup ScrollTrigger + tween progress-driven
   useLayoutEffect(() => {
     if (!ready || !sectionRef.current || !canvasRef.current) return;
+    if (!FRAME_COUNT) return;
 
     resizeCanvas();
     render();
@@ -184,7 +188,7 @@ export default function Hero({ resizeTick = 0 }) {
       <div className="absolute bottom-0 select-none">
         <img
           ref={gradientRef}
-          src="../../../../img/gradient-2.png"
+          src={heroGradient}
           className="w-[100vw]"
           style={{ transformOrigin: 'bottom center', transform: 'scaleY(0)' }}
         />

@@ -6,6 +6,11 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { ChevronRight } from 'lucide-react';
 
 import DynamicButton from '../../../components/DynamicButton.jsx';
+import iconOne from '../../../../img/icona-01.svg';
+import iconTwoOne from '../../../../img/icona-02-1.svg';
+import iconTwoTwo from '../../../../img/icona-02-2.svg';
+import iconTwoThree from '../../../../img/icona-02-3.svg';
+import iconThree from '../../../../img/icona-03.svg';
 gsap.registerPlugin(ScrollTrigger);
 
 const COLOR_LIGHT = 'var(--color-light)';
@@ -97,7 +102,7 @@ export default function SecondSection({ resizeTick = 0 }) {
           <div className="md:basis-1/2 w-full">
             <a href="#" className="block transition-transform duration-300 hover:scale-[1.02] ease-out">
               <div className="w-full h-[50vh] md:h-[550px] rounded-[14px] border border-gray600 bg-gray850/70 backdrop-blur-[12px] flex items-center justify-center">
-                <img src="../../../../img/icona-01.svg" alt="icona 01" className="md:w-[400px] w-[250px]" />
+                <img src={iconOne} alt="icona 01" className="md:w-[400px] w-[250px]" />
               </div>
               <div className="title-24 font-normal mt-2">Web design</div>
             </a>
@@ -107,9 +112,9 @@ export default function SecondSection({ resizeTick = 0 }) {
           <div className="md:basis-1/4 w-full">
             <a href="#" className="block transition-transform duration-300 hover:scale-[1.02] ease-out">
               <div className="w-full h-[50vh] md:h-[300px] rounded-[14px] border border-gray600 bg-gray850/70 backdrop-blur-[12px] flex gap-[32px] hover:gap-[64px] transition-all duration-300 ease-out items-center justify-center">
-                <img src="../../../../img/icona-02-1.svg" alt="icona 02" className="h-[60px]" />
-                <img src="../../../../img/icona-02-2.svg" alt="icona 02" className="h-[150px]" />
-                <img src="../../../../img/icona-02-3.svg" alt="icona 02" className="h-[60px]" />
+                <img src={iconTwoOne} alt="icona 02" className="h-[60px]" />
+                <img src={iconTwoTwo} alt="icona 02" className="h-[150px]" />
+                <img src={iconTwoThree} alt="icona 02" className="h-[60px]" />
               </div>
               <div className="title-24 font-normal mt-2">UX/UI Design</div>
             </a>
@@ -120,7 +125,7 @@ export default function SecondSection({ resizeTick = 0 }) {
             <a href="#" className="group block transition-transform duration-300 hover:scale-[1.03] ease-out">
               <div className="w-full h-[50vh] md:h-[300px] rounded-[14px] border border-gray600 bg-gray850/70 backdrop-blur-[12px] flex items-center justify-center">
                 <img
-                  src="../../../../img/icona-03.svg"
+                  src={iconThree}
                   alt="icona 03"
                   className="w-[140px] h-[140px] transform transition-transform duration-[5000ms] ease-out motion-reduce:transform-none motion-safe:group-hover:rotate-[360deg]"
                 />

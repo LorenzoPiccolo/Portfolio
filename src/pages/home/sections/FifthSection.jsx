@@ -2,12 +2,21 @@
 import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import gradientImage from '../../../../img/gradient-2.png';
+import sticker8 from '../../../../img/stickers/sticker-8.svg';
+import sticker7 from '../../../../img/stickers/sticker-7.svg';
+import sticker5Icon from '../../../../img/stickers/sticker-5-icon.svg';
+import sticker4Icon from '../../../../img/stickers/sticker-4-icon.svg';
+import sticker6 from '../../../../img/stickers/sticker-6.svg';
+import sticker2 from '../../../../img/stickers/sticker-2.svg';
+import sticker3 from '../../../../img/stickers/sticker-3.svg';
+import sticker1 from '../../../../img/stickers/sticker-1.svg';
 
 gsap.registerPlugin(ScrollTrigger);
 
 const STICKERS = [
   {
-    src: '../../../../img/stickers/sticker-8.svg',
+    src: sticker8,
     alt: 'Orange code 90210 sticker',
     top: '22%',
     left: '38%',
@@ -20,7 +29,7 @@ const STICKERS = [
     transform: 'rotate(18deg)',
   },
   {
-    src: '../../../../img/stickers/sticker-7.svg',
+    src: sticker7,
     alt: 'Profile',
     top: '12%',
     left: '74%',
@@ -31,7 +40,7 @@ const STICKERS = [
     toY: -170,
   },
   {
-    src: '../../../../img/stickers/sticker-5-icon.svg',
+    src: sticker5Icon,
     alt: 'Outline globe sticker',
     top: '38%',
     left: '25%',
@@ -44,7 +53,7 @@ const STICKERS = [
     toY: -120,
   },
   {
-    src: '../../../../img/stickers/sticker-4-icon.svg',
+    src: sticker4Icon,
     alt: 'Red star sticker',
     top: '40%',
     left: '80%',
@@ -57,7 +66,7 @@ const STICKERS = [
     toY: -110,
   },
   {
-    src: '../../../../img/stickers/sticker-6.svg',
+    src: sticker6,
     alt: 'Warm gradient sticker',
     top: '54%',
     left: '30%',
@@ -69,7 +78,7 @@ const STICKERS = [
     toY: -160,
   },
   {
-    src: '../../../../img/stickers/sticker-2.svg',
+    src: sticker2,
     alt: 'Torii sticker',
     top: '90%',
     left: '65%',
@@ -81,7 +90,7 @@ const STICKERS = [
     toY: -200,
   },
   {
-    src: '../../../../img/stickers/sticker-3.svg',
+    src: sticker3,
     alt: 'LN badge sticker',
     top: '95%',
     left: '28%',
@@ -93,7 +102,7 @@ const STICKERS = [
     toY: -200,
   },
   {
-    src: '../../../../img/stickers/sticker-1.svg',
+    src: sticker1,
     alt: 'Radial burst sticker',
     top: '62%',
     left: '86%',
@@ -273,7 +282,7 @@ export default function FifthSection({ resizeTick = 0 }) {
             );
           })}
           <div className="w-full absolute bottom-0 left-0 right-0">
-            <img src="../../../../img/gradient-2.png" className="w-full origin-bottom" />
+            <img src={gradientImage} className="w-full origin-bottom" />
           </div>
         </div>
         

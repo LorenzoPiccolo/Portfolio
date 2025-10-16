@@ -1,5 +1,6 @@
 // src/components/Header.jsx
 import { useEffect, useRef, useState } from 'react';
+import logo from '../../img/logo.svg';
 
 const NAV_LINKS = ['Home', 'Works', 'About me', 'Process', ];
 
@@ -35,7 +36,7 @@ export default function Header({ currentPage = 'Home' }) {
         className="w-full rounded-[14px] border border-gray600 bg-gray850/70 backdrop-blur-[12px] px-2.5 py-2.5 flex items-center justify-between md:w-[460px]"
       >
         <a href="/" className="inline-flex items-center gap-2">
-          <img src="../../img/logo.svg" alt="Logo" className="h-10 w-10 md:h-8 md:w-8" />
+          <img src={logo} alt="Logo" className="h-10 w-10 md:h-8 md:w-8" />
         </a>
 
         <div className="relative inline-flex items-start">
