@@ -176,7 +176,7 @@ export default function Hero({ resizeTick = 0 }) {
     <section
       id="home"
       ref={sectionRef}
-      className="relative isolate h-screen min-h-[700px] w-screen bg-black flex flex-col justify-end overflow-x-hidden overflow-y-visible z-10"
+      className="relative isolate h-[100svh] md:h-screen min-h-[700px] w-screen bg-black flex flex-col justify-end overflow-x-hidden overflow-y-visible z-10"
     >
       {/* Canvas background (sotto al contenuto) */}
       <canvas
