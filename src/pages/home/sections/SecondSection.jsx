@@ -6,6 +6,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { ChevronRight } from 'lucide-react';
 
 import DynamicButton from '../../../components/DynamicButton.jsx';
+import { useFadeInUp } from '../../../hooks/useFadeInUp.js';
 import iconOne from '../../../../img/icona-01.svg';
 import iconTwoOne from '../../../../img/icona-02-1.svg';
 import iconTwoTwo from '../../../../img/icona-02-2.svg';
@@ -17,6 +18,7 @@ const COLOR_LIGHT = 'var(--color-light)';
 
 export default function SecondSection({ resizeTick = 0 }) {
   const sectionRef = useRef(null);
+  useFadeInUp(sectionRef, { trigger: sectionRef });
 
   useLayoutEffect(() => {
     const el = sectionRef.current;
@@ -62,9 +64,10 @@ export default function SecondSection({ resizeTick = 0 }) {
   const buttonScrollTrigger = useMemo(
     () => ({
       trigger: () => sectionRef.current,
-      start: 'top bottom',
+      start: 'top center',
       end: 'bottom bottom+=100',
       toggleActions: 'play reverse play reverse',
+      markers: false,
     }),
     [resizeTick],
   );

@@ -2,6 +2,7 @@
 import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { useFadeInUp } from '../../../hooks/useFadeInUp.js';
 gsap.registerPlugin(ScrollTrigger);
 
 const SKILLS = [
@@ -30,6 +31,7 @@ export default function ThirdSection({ resizeTick = 0 }) {
     if (typeof window === 'undefined') return false;
     return window.matchMedia('(max-width: 767px)').matches;
   });
+  useFadeInUp(sectionRef, { trigger: sectionRef });
 
   useEffect(() => {
     if (typeof window === 'undefined') return undefined;

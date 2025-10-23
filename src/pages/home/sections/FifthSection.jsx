@@ -11,6 +11,7 @@ import sticker6 from '../../../../img/stickers/sticker-6.svg';
 import sticker2 from '../../../../img/stickers/sticker-2.svg';
 import sticker3 from '../../../../img/stickers/sticker-3.svg';
 import sticker1 from '../../../../img/stickers/sticker-1.svg';
+import { useFadeInUp } from '../../../hooks/useFadeInUp.js';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -123,6 +124,7 @@ export default function FifthSection({ resizeTick = 0 }) {
     if (typeof window === 'undefined') return false;
     return window.matchMedia('(max-width: 767px)').matches;
   });
+  useFadeInUp(sectionRef, { trigger: sectionRef });
 
   useEffect(() => {
     if (typeof window === 'undefined') return undefined;

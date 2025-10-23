@@ -3,6 +3,8 @@ import { useEffect, useLayoutEffect, useRef, useState, useCallback } from 'react
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import heroGradient from '../../../../img/gradient-2.png';
+import useViewportHeight from '../../../hooks/useViewportHeight.js';
+import { useFadeInUp } from '../../../hooks/useFadeInUp.js';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -20,9 +22,10 @@ export default function Hero({ resizeTick = 0 }) {
   const canvasRef = useRef(null);
   const imagesRef = useRef([]);
   const gradientRef = useRef(null);
-  const marqueeRef = useRef(null);
   const stateRef = useRef({ frame: 0 });
   const [ready, setReady] = useState(false);
+
+  useViewportHeight();
 
   // Preload immagini
   useEffect(() => {
@@ -147,36 +150,36 @@ export default function Hero({ resizeTick = 0 }) {
       render();
     };
     window.addEventListener('resize', onResize);
+    window.visualViewport?.addEventListener('resize', onResize);
+    window.visualViewport?.addEventListener('scroll', onResize);
 
     return () => {
       window.removeEventListener('resize', onResize);
+      window.visualViewport?.removeEventListener('resize', onResize);
+      window.visualViewport?.removeEventListener('scroll', onResize);
       ctx.revert();
     };
   }, [ready, resizeCanvas, render, resizeTick]);
 
-  useLayoutEffect(() => {
+  useFadeInUp(sectionRef, {
+    immediate: true,
+    once: true,
+    stagger: 0.18,
+    enabled: ready,
+  });
+
+  useEffect(() => {
     if (!ready) return;
-
-    const marquee = marqueeRef.current;
-    const section = sectionRef.current;
-    if (!marquee || !section) return;
-
-    const ctx = gsap.context(() => {
-      gsap.fromTo(
-        marquee,
-        { y: 200, x: 200, autoAlpha: 0 },
-        { y: 0, x: 0, autoAlpha: 1, duration: 1.2, ease: 'power3.out', delay: 0.3 }
-      );
-    }, section);
-
-    return () => ctx.revert();
-  }, [ready]);
+    resizeCanvas();
+    render();
+  }, [ready, resizeCanvas, render]);
 
   return (
     <section
       id="home"
       ref={sectionRef}
-      className="relative isolate h-[100svh] md:h-screen min-h-[700px] w-screen bg-black flex flex-col justify-end overflow-x-hidden overflow-y-visible z-10"
+      className="relative isolate flex w-screen flex-col justify-end overflow-x-hidden overflow-y-visible bg-black z-10 min-h-[700px] md:h-screen"
+      style={{ minHeight: 'calc(var(--app-vh, 1vh) * 100)' }}
     >
       {/* Canvas background (sotto al contenuto) */}
       <canvas
@@ -197,14 +200,14 @@ export default function Hero({ resizeTick = 0 }) {
       {/* Contenuto in basso, allineato con flex (niente absolute) */}
       <div className="w-full px-6 pb-20 flex flex-col gap-20 z-10">
         {/* 3 scritte sopra il marquee */}
-        <div className="hidden w-full mx-auto items-center justify-between text-[12px] font-spaceg tracking-wide md:flex">
+        <div className="fade-in-up hidden w-full mx-auto items-center justify-between text-[12px] font-spaceg tracking-wide md:flex">
           <span className="font-bold">LORENZO PICCOLO</span>
           <span className="opacity-90">PORTFOLIO 2025</span> 
           <span className="opacity-90">@2025 ALL RIGHTS RESERVED</span>
         </div>
 
         {/* Marquee */}
-        <div ref={marqueeRef} className="hero-marquee overflow-y-visible">
+        <div className="fade-in-up hero-marquee overflow-y-visible">
           <div className="whitespace-nowrap will-change-transform inline-block animate-[marqueeLeft_35s_linear_infinite]">
             <MarqueeChunk />
             <MarqueeChunk /> 

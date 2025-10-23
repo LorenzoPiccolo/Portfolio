@@ -8,11 +8,13 @@ import { ChevronRight } from 'lucide-react';
 import SelectedWorkCard from '../../../components/SelectedWorkCard.jsx';
 import DynamicButton from '../../../components/DynamicButton.jsx';
 import { WORKS } from '../../../data/works.js';
+import { useFadeInUp } from '../../../hooks/useFadeInUp.js';
 
 gsap.registerPlugin(ScrollTrigger);
 
 export default function FourthSection({ resizeTick = 0 }) {
   const sectionRef = useRef(null);
+  useFadeInUp(sectionRef, { trigger: sectionRef });
 
   useLayoutEffect(() => {
     const sectionEl = sectionRef.current;

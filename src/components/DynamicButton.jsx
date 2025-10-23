@@ -102,7 +102,7 @@ const DynamicButton = forwardRef(function DynamicButton(
 
     const scrollTrigger = {
       toggleActions: 'play reverse play reverse',
-      markers: true,
+      markers: false,
       start: 'bottom bottom',
       ...scrollTriggerConfig,
       trigger: triggerEl,
