@@ -163,7 +163,7 @@ export default function Footer({ resizeTick = 0 }) {
           id: 'footer-marquee',
           trigger: section,
           start: 'top 10%',
-          markers: true,
+          markers: false,
           toggleActions: 'play reverse play reverse',
         },
       });

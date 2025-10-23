@@ -101,7 +101,7 @@ export default function WorksHeroSection({ resizeTick = 0 }) {
           pinSpacing: true,
           anticipatePin: 1,
           invalidateOnRefresh: true,
-          markers: true,
+          markers: false,
         },
       });
 

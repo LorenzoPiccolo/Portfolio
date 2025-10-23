@@ -68,6 +68,34 @@
 }
 
 @layer utilities {
+  .section-full {
+    --section-full-extra-top: 0px;
+    --section-full-extra-bottom: 0px;
+    box-sizing: border-box;
+    min-height: 100vh;
+    min-height: -webkit-fill-available;
+    padding-top: calc(env(safe-area-inset-top, 0px) + var(--section-full-extra-top, 0px));
+    padding-bottom: calc(env(safe-area-inset-bottom, 0px) + var(--section-full-extra-bottom, 0px));
+  }
+
+  @supports (min-height: 100svh) {
+    .section-full {
+      min-height: 100svh;
+    }
+  }
+
+  @supports (min-height: 100dvh) {
+    .section-full {
+      min-height: 100dvh;
+    }
+  }
+
+  @supports (min-height: calc(var(--app-vh, 1vh) * 100)) {
+    .section-full {
+      min-height: calc(var(--app-vh, 1vh) * 100);
+    }
+  }
+
   .skill-active {
     color: var(--color-dark);
   } /* colore scuro quando una skill è “in focus” */

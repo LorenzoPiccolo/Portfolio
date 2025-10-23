@@ -38,7 +38,7 @@ export default function WorksSecondSection({ resizeTick = 0 }) {
             end: () => `+=${Math.max(600, window.innerHeight * 0.8)}`,
             scrub: true,
             invalidateOnRefresh: true,
-            markers: true,
+            markers: false,
           },
         })
         .to(words, {

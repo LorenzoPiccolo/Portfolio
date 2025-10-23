@@ -7,6 +7,7 @@ import { ChevronRight } from 'lucide-react';
 
 import DynamicButton from '../../../components/DynamicButton.jsx';
 import { useFadeInUp } from '../../../hooks/useFadeInUp.js';
+import useIntersectionObserver from '../../../hooks/useIntersectionObserver.js';
 import iconOne from '../../../../img/icona-01.svg';
 import iconTwoOne from '../../../../img/icona-02-1.svg';
 import iconTwoTwo from '../../../../img/icona-02-2.svg';
@@ -19,6 +20,11 @@ const COLOR_LIGHT = 'var(--color-light)';
 export default function SecondSection({ resizeTick = 0 }) {
   const sectionRef = useRef(null);
   useFadeInUp(sectionRef, { trigger: sectionRef });
+  const intersectionEntry = useIntersectionObserver(sectionRef, {
+    threshold: 0.35,
+    rootMargin: '0px 0px -20%',
+  });
+  const isInView = intersectionEntry?.isIntersecting ?? false;
 
   useLayoutEffect(() => {
     const el = sectionRef.current;
@@ -82,7 +88,8 @@ export default function SecondSection({ resizeTick = 0 }) {
     <section
       id="about-me"
       ref={sectionRef}
-      className="relative isolate min-h-[700px] bg-dark px-6 py-16 md:py-32 z-10 w-screen"
+      className="relative isolate min-h-[700px] bg-dark px-6 py-16 md:py-32 z-10 w-screen transition-opacity duration-500"
+      data-inview={isInView ? 'true' : 'false'}
     >
       {/* Testo introduttivo (64px Urbanist) */}
       <div className="w-[full] mx-auto font-normal title-44 md:title-64 leading-[110%] tracking-tight">
@@ -139,7 +146,7 @@ export default function SecondSection({ resizeTick = 0 }) {
         </div>
       </div>
 
-      <div className="pointer-events-none fixed bottom-16 left-1/2 z-30 flex -translate-x-1/2 justify-center">
+      {/* <div className="pointer-events-none fixed bottom-16 left-1/2 z-30 flex -translate-x-1/2 justify-center">
         <div className="pointer-events-auto transition-transform duration-300 hover:scale-[1.05]">
           <DynamicButton
             label="The process"
@@ -148,7 +155,7 @@ export default function SecondSection({ resizeTick = 0 }) {
             scrollTrigger={buttonScrollTrigger}
           />
         </div>
-      </div>
+      </div> */}
     </section>
   );
 }

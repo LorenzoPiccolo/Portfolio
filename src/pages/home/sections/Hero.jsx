@@ -5,6 +5,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import heroGradient from '../../../../img/gradient-2.png';
 import useViewportHeight from '../../../hooks/useViewportHeight.js';
 import { useFadeInUp } from '../../../hooks/useFadeInUp.js';
+import useResizeObserver from '../../../hooks/useResizeObserver.js';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -168,6 +169,14 @@ export default function Hero({ resizeTick = 0 }) {
     enabled: ready,
   });
 
+  const handleSectionResize = useCallback(() => {
+    if (!ready) return;
+    resizeCanvas();
+    render();
+  }, [ready, resizeCanvas, render]);
+
+  useResizeObserver(sectionRef, handleSectionResize);
+
   useEffect(() => {
     if (!ready) return;
     resizeCanvas();
@@ -178,8 +187,7 @@ export default function Hero({ resizeTick = 0 }) {
     <section
       id="home"
       ref={sectionRef}
-      className="relative isolate flex w-screen flex-col justify-end overflow-x-hidden overflow-y-visible bg-black z-10 min-h-[700px] md:h-screen"
-      style={{ minHeight: 'calc(var(--app-vh, 1vh) * 100)' }}
+      className="section-full relative isolate flex w-screen flex-col justify-end overflow-x-hidden overflow-y-visible bg-black z-10 min-h-[700px] md:h-screen"
     >
       {/* Canvas background (sotto al contenuto) */}
       <canvas

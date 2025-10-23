@@ -112,7 +112,7 @@ export default function FourthSection({ resizeTick = 0 }) {
     <section
       id="works"
       ref={sectionRef}
-      className="relative isolate min-h-[700px] bg-light text-dark z-10 fourthSection"
+      className="section-full relative isolate min-h-[700px] bg-light text-dark z-10 fourthSection"
     >
       <div className="absolute bottom-12 left-1/2 z-20 -translate-x-1/2 transition-transform duration-300 hover:scale-[1.05]">
         <DynamicButton
@@ -122,7 +122,7 @@ export default function FourthSection({ resizeTick = 0 }) {
           scrollTrigger={buttonScrollTrigger}
         />
       </div>
-      <div className="flex h-screen w-full flex-col items-center justify-center gap-12">
+      <div className="flex min-h-full w-full flex-col items-center justify-center gap-12">
 
         <div className="relative flex w-full justify-center">
           <div className="relative w-[90vw] md:w-[70vw] max-w-[1400px] aspect-[9/16] md:aspect-[4/5] lg:aspect-[16/9]">

@@ -193,12 +193,12 @@ export default function ThirdSection({ resizeTick = 0 }) {
     <section
       id="process"
       ref={sectionRef}
-      className="relative isolate md:h-[100vh] min-h-[700px] min-w-screen bg-light text-dark px-6 py-0 z-10 flex items-center justify-center"
+      className="section-full relative isolate min-h-[700px] min-w-screen bg-light text-dark px-6 py-0 z-10 flex items-center justify-center"
     >
       {isMobile ? (
         <div
           ref={mobileSectionRef}
-          className="relative flex h-screen w-full items-center justify-center px-6"
+          className="relative flex min-h-full w-full grow items-center justify-center px-6"
         >
 
           <div
@@ -232,7 +232,7 @@ export default function ThirdSection({ resizeTick = 0 }) {
 
           <div
             ref={wrapRef}
-            className="relative flex h-full max-h-screen min-h-[320px] w-full max-w-[520px] mx-auto flex-1 items-center justify-center"
+            className="relative flex h-full max-h-[100dvh] min-h-[320px] w-full max-w-[520px] mx-auto flex-1 items-center justify-center"
           >
             <ul
               ref={listRef}
