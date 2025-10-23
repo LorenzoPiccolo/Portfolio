@@ -173,7 +173,7 @@ export default function Footer({ resizeTick = 0 }) {
   }, [resizeTick]);
 
   return (
-    <section ref={sectionRef} className="relative z-10 h-screen min-h-[700px] w-screen overflow-hidden text-light">
+    <section ref={sectionRef} className="section-full relative z-10 min-h-[700px] w-screen overflow-hidden text-light">
       <div className="absolute inset-0 -z-20">
         <img
           src={footerBackground}

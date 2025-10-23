@@ -203,7 +203,7 @@ export default function FifthSection({ resizeTick = 0 }) {
     >
       <div
         ref={headingRef}
-        className="fixed w-screen left-0 right-0 top-0 w-full z-10 flex h-screen items-center justify-center px-6"
+        className="fixed left-0 right-0 top-0 z-10 flex w-screen items-center justify-center px-6 vh-fill"
       >
         <h4 className="md:title-32 title-24 w-[60%] md:max-w-[30vw] text-center font-normal leading-tight">
           Full-time perfection seeker.

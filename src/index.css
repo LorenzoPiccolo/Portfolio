@@ -96,6 +96,31 @@
     }
   }
 
+  .vh-fill {
+    box-sizing: border-box;
+    height: 100vh;
+    min-height: 100vh;
+    height: -webkit-fill-available;
+  }
+
+  @supports (height: 100svh) {
+    .vh-fill {
+      height: 100svh;
+    }
+  }
+
+  @supports (height: 100dvh) {
+    .vh-fill {
+      height: 100dvh;
+    }
+  }
+
+  @supports (height: calc(var(--app-vh, 1vh) * 100)) {
+    .vh-fill {
+      height: calc(var(--app-vh, 1vh) * 100);
+    }
+  }
+
   .skill-active {
     color: var(--color-dark);
   } /* colore scuro quando una skill è “in focus” */

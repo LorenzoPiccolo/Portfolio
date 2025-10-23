@@ -17,6 +17,7 @@ const FRAME_SOURCES = Object.keys(FRAME_MODULES)
   .sort((a, b) => a.localeCompare(b))
   .map((key) => FRAME_MODULES[key]);
 const FRAME_COUNT = FRAME_SOURCES.length;
+const INITIAL_FRAME = FRAME_COUNT ? FRAME_SOURCES[0] : null;
 
 export default function Hero({ resizeTick = 0 }) {
   const sectionRef = useRef(null);
@@ -27,33 +28,6 @@ export default function Hero({ resizeTick = 0 }) {
   const [ready, setReady] = useState(false);
 
   useViewportHeight();
-
-  // Preload immagini
-  useEffect(() => {
-    if (!FRAME_COUNT) {
-      setReady(true);
-      imagesRef.current = [];
-      return;
-    }
-
-    const imgs = [];
-    let loaded = 0;
-
-    for (let i = 0; i < FRAME_COUNT; i++) {
-      const img = new Image();
-      img.src = FRAME_SOURCES[i];
-      img.decode?.(); // hint ai browser moderni
-      img.onload = () => {
-        loaded++;
-        if (loaded === 1) {
-          // appena c'è la prima, possiamo rendere
-          setReady(true);
-        }
-      };
-      imgs.push(img);
-    }
-    imagesRef.current = imgs;
-  }, []);
 
   // Ridimensiona canvas al container e ridisegna
   const resizeCanvas = useCallback(() => {
@@ -101,6 +75,36 @@ export default function Hero({ resizeTick = 0 }) {
     ctx.imageSmoothingQuality = 'high';
     ctx.drawImage(img, dx, dy, dw, dh);
   }, []);
+
+  // Preload immagini
+  useEffect(() => {
+    if (!FRAME_COUNT) {
+      setReady(true);
+      imagesRef.current = [];
+      return;
+    }
+
+    const imgs = [];
+    let loaded = 0;
+
+    for (let i = 0; i < FRAME_COUNT; i++) {
+      const img = new Image();
+      img.src = FRAME_SOURCES[i];
+      img.decode?.(); // hint ai browser moderni
+      img.onload = () => {
+        loaded++;
+        if (loaded === 1) {
+          setReady(true);
+          requestAnimationFrame(() => {
+            resizeCanvas();
+            render();
+          });
+        }
+      };
+      imgs.push(img);
+    }
+    imagesRef.current = imgs;
+  }, [resizeCanvas, render]);
 
   // Setup ScrollTrigger + tween progress-driven
   useLayoutEffect(() => {
@@ -187,16 +191,25 @@ export default function Hero({ resizeTick = 0 }) {
     <section
       id="home"
       ref={sectionRef}
-      className="section-full relative isolate flex w-screen flex-col justify-end overflow-x-hidden overflow-y-visible bg-black z-10 min-h-[700px] md:h-screen"
+      className="section-full relative isolate flex w-screen flex-col justify-end overflow-x-hidden overflow-y-visible bg-black z-10 min-h-[700px]"
     >
       {/* Canvas background (sotto al contenuto) */}
       <canvas
         ref={canvasRef}
         id="hero-lightpass"
-        className="absolute inset-0 z-0 block"
+        className="absolute inset-0 z-[2] block"
       />
 
-      <div className="absolute bottom-0 select-none">
+      {INITIAL_FRAME && (
+        <img
+          src={INITIAL_FRAME}
+          alt=""
+          className="absolute inset-0 z-[1] h-full w-full object-cover transition-opacity duration-500"
+          style={{ opacity: ready ? 0 : 1 }}
+        />
+      )}
+
+      <div className="absolute bottom-0 select-none z-[3]">
         <img
           ref={gradientRef}
           src={heroGradient}

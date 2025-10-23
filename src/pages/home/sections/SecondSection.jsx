@@ -1,5 +1,5 @@
 // src/pages/home/sections/SecondSection.jsx
-import { useLayoutEffect, useRef, useMemo } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
@@ -24,7 +24,14 @@ export default function SecondSection({ resizeTick = 0 }) {
     threshold: 0.35,
     rootMargin: '0px 0px -20%',
   });
+  const [buttonVisible, setButtonVisible] = useState(false);
   const isInView = intersectionEntry?.isIntersecting ?? false;
+
+  useEffect(() => {
+    if (!intersectionEntry) return;
+    const visible = intersectionEntry.isIntersecting && (intersectionEntry.intersectionRatio ?? 0) > 0.2;
+    setButtonVisible(visible);
+  }, [intersectionEntry]);
 
   useLayoutEffect(() => {
     const el = sectionRef.current;
@@ -66,17 +73,6 @@ export default function SecondSection({ resizeTick = 0 }) {
 
     return () => ctx.revert();
   }, [resizeTick]);
-
-  const buttonScrollTrigger = useMemo(
-    () => ({
-      trigger: () => sectionRef.current,
-      start: 'top center',
-      end: 'bottom bottom+=100',
-      toggleActions: 'play reverse play reverse',
-      markers: false,
-    }),
-    [resizeTick],
-  );
 
   // helper: wrappa ogni parola
   const renderText = (text) =>
@@ -146,16 +142,19 @@ export default function SecondSection({ resizeTick = 0 }) {
         </div>
       </div>
 
-      {/* <div className="pointer-events-none fixed bottom-16 left-1/2 z-30 flex -translate-x-1/2 justify-center">
+      <div
+        className={`pointer-events-none fixed bottom-16 left-1/2 z-30 flex -translate-x-1/2 justify-center transition-all duration-500 ${
+          buttonVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'
+        }`}
+      >
         <div className="pointer-events-auto transition-transform duration-300 hover:scale-[1.05]">
           <DynamicButton
             label="The process"
             href="/process.html"
             icon={ChevronRight}
-            scrollTrigger={buttonScrollTrigger}
           />
         </div>
-      </div> */}
+      </div>
     </section>
   );
 }
