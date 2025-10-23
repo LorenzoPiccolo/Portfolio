@@ -96,6 +96,53 @@
     }
   }
 
+  @media (max-width: 767px) {
+    .section-full {
+      --section-full-mobile-extra: 10vh;
+      min-height: calc(100vh + 10vh);
+      min-height: calc(-webkit-fill-available + 10vh);
+    }
+
+    .vh-fill {
+      height: calc(100vh + 10vh);
+      min-height: calc(100vh + 10vh);
+      height: calc(-webkit-fill-available + 10vh);
+    }
+
+    @supports (min-height: 100svh) {
+      .section-full {
+        min-height: calc(100svh + 10vh);
+      }
+
+      .vh-fill {
+        height: calc(100svh + 10vh);
+        min-height: calc(100svh + 10vh);
+      }
+    }
+
+    @supports (min-height: 100dvh) {
+      .section-full {
+        min-height: calc(100dvh + 10vh);
+      }
+
+      .vh-fill {
+        height: calc(100dvh + 10vh);
+        min-height: calc(100dvh + 10vh);
+      }
+    }
+
+    @supports (min-height: calc(var(--app-vh, 1vh) * 100)) {
+      .section-full {
+        min-height: calc(var(--app-vh, 1vh) * 100 + 10vh);
+      }
+
+      .vh-fill {
+        height: calc(var(--app-vh, 1vh) * 100 + 10vh);
+        min-height: calc(var(--app-vh, 1vh) * 100 + 10vh);
+      }
+    }
+  }
+
   .vh-fill {
     box-sizing: border-box;
     height: 100vh;

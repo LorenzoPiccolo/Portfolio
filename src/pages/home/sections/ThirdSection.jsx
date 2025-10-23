@@ -3,6 +3,7 @@ import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useFadeInUp } from '../../../hooks/useFadeInUp.js';
+
 gsap.registerPlugin(ScrollTrigger);
 
 const SKILLS = [
@@ -18,6 +19,7 @@ const SKILLS = [
 ];
 
 const ROW_COLOR = 'dark';
+const DIM_COLOR = '#181818';
 const INACTIVE_OPACITY = 0.2;
 
 export default function ThirdSection({ resizeTick = 0 }) {
@@ -51,7 +53,16 @@ export default function ThirdSection({ resizeTick = 0 }) {
   useLayoutEffect(() => {
     if (typeof window === 'undefined') return undefined;
 
-    const buildAnimation = ({ section, wrap, list, triggerId, start }) => {
+    const buildAnimation = ({
+      section,
+      wrap,
+      list,
+      triggerId,
+      start,
+      pin = true,
+      scrub = true,
+      scrollOptions = {},
+    }) => {
       if (!section || !wrap || !list) return () => {};
 
       let rows = Array.from(list.querySelectorAll('.skill-row'));
@@ -70,16 +81,19 @@ export default function ThirdSection({ resizeTick = 0 }) {
         const cy = centerY();
         let min = Infinity;
         let idx = 0;
-        for (let i = 0; i < rows.length; i++) {
+        for (let i = 0; i < rows.length; i += 1) {
           const c = rowCenter(rows[i]) + y;
           const d = Math.abs(cy - c);
-          if (d < min) { min = d; idx = i; }
+          if (d < min) {
+            min = d;
+            idx = i;
+          }
         }
         if (idx !== activeIdx) {
           if (activeIdx >= 0) {
             gsap.to(rows[activeIdx], {
               opacity: INACTIVE_OPACITY,
-              color: '#181818',
+              color: DIM_COLOR,
               duration: 0.2,
               ease: 'none',
               overwrite: 'auto',
@@ -99,12 +113,25 @@ export default function ThirdSection({ resizeTick = 0 }) {
       gsap.set(list, { y: yStart() });
       updateActive();
 
+      const resetColors = () => {
+        rows.forEach((row) => {
+          gsap.to(row, {
+            opacity: INACTIVE_OPACITY,
+            color: DIM_COLOR,
+            duration: 0.2,
+            ease: 'none',
+            overwrite: 'auto',
+          });
+        });
+        activeIdx = -1;
+      };
+
       let tweenInstance = null;
 
       const ctx = gsap.context(() => {
         tweenInstance = gsap.to(list, {
           y: () => yStart() - travel(),
-          ease: 'none',
+          ease: pin ? 'none' : 'power1.out',
           onUpdate: updateActive,
           invalidateOnRefresh: true,
           scrollTrigger: {
@@ -112,11 +139,14 @@ export default function ThirdSection({ resizeTick = 0 }) {
             trigger: section,
             start,
             end: () => `+=${travel()}`,
-            scrub: true,
-            pin: true,
-            pinSpacing: true,
+            scrub,
+            pin,
+            pinSpacing: pin,
             invalidateOnRefresh: true,
             markers: false,
+            ...scrollOptions,
+            onLeave: () => resetColors(),
+            onLeaveBack: () => resetColors(),
           },
         });
       }, section);
@@ -125,9 +155,8 @@ export default function ThirdSection({ resizeTick = 0 }) {
         rows = Array.from(list.querySelectorAll('.skill-row'));
         if (!rows.length) return;
 
-        const currentProgress = typeof tweenInstance?.progress === 'function'
-          ? tweenInstance.progress()
-          : null;
+        const currentProgress =
+          typeof tweenInstance?.progress === 'function' ? tweenInstance.progress() : null;
 
         ScrollTrigger.refresh();
 
@@ -166,7 +195,9 @@ export default function ThirdSection({ resizeTick = 0 }) {
           wrap: mobileWrapRef.current,
           list: mobileListRef.current,
           triggerId: 'third-section-skills-mobile',
-          start: 'top top',
+          start: 'center center',
+          pin: true,
+          scrub: true,
         }),
       '(min-width: 768px) and (max-width: 1023px)': () =>
         buildAnimation({
@@ -175,6 +206,7 @@ export default function ThirdSection({ resizeTick = 0 }) {
           list: listRef.current,
           triggerId: 'third-section-skills-tablet',
           start: 'center center',
+          scrub: 0.5,
         }),
       '(min-width: 1024px)': () =>
         buildAnimation({
@@ -183,6 +215,7 @@ export default function ThirdSection({ resizeTick = 0 }) {
           list: listRef.current,
           triggerId: 'third-section-skills-desktop',
           start: 'top top',
+          scrub: 0.6,
         }),
     });
 
@@ -200,7 +233,6 @@ export default function ThirdSection({ resizeTick = 0 }) {
           ref={mobileSectionRef}
           className="relative flex min-h-full w-full grow items-center justify-center px-6"
         >
-
           <div
             ref={mobileWrapRef}
             className="relative flex h-full w-full items-center justify-center"
@@ -254,3 +286,4 @@ export default function ThirdSection({ resizeTick = 0 }) {
     </section>
   );
 }
+

@@ -10,7 +10,7 @@ gsap.registerPlugin(ScrollTrigger);
 
 const MENU_LINKS = [
   { label: 'Home', href: '/' },
-  { label: 'Works', href: '/#works' },
+  { label: 'Works', href: '/works.html' },
   { label: 'About me', href: '/#about-me' },
   { label: 'Process', href: '/#process' },
 ];
