@@ -25,7 +25,9 @@ export default function Hero({ resizeTick = 0 }) {
   const imagesRef = useRef([]);
   const gradientRef = useRef(null);
   const stateRef = useRef({ frame: 0 });
+  const scrollStartedRef = useRef(false);
   const [ready, setReady] = useState(false);
+  const [scrollStarted, setScrollStarted] = useState(false);
 
   useViewportHeight();
 
@@ -143,8 +145,20 @@ export default function Hero({ resizeTick = 0 }) {
         invalidateOnRefresh: true,
         refreshPriority: 1,
         onUpdate: (self) => {
-          scrubTween.progress(self.progress);
-          gradientTween?.progress(self.progress);
+          const progress = self.progress;
+          scrubTween.progress(progress);
+          gradientTween?.progress(progress);
+
+          const started = progress > 0.001;
+          if (scrollStartedRef.current !== started) {
+            scrollStartedRef.current = started;
+            setScrollStarted(started);
+          }
+        },
+        onRefresh: (self) => {
+          const started = self.progress > 0.001;
+          scrollStartedRef.current = started;
+          setScrollStarted(started);
         },
       });
     }, sectionRef);
@@ -192,6 +206,16 @@ export default function Hero({ resizeTick = 0 }) {
       id="home"
       ref={sectionRef}
       className="section-full relative isolate flex w-screen flex-col justify-end overflow-x-hidden overflow-y-visible bg-black z-10 min-h-[700px]"
+      style={
+        !scrollStarted && INITIAL_FRAME
+          ? {
+              backgroundImage: `url(${INITIAL_FRAME})`,
+              backgroundSize: 'cover',
+              backgroundPosition: 'center',
+              backgroundRepeat: 'no-repeat',
+            }
+          : undefined
+      }
     >
       {/* Canvas background (sotto al contenuto) */}
       <canvas
@@ -205,7 +229,7 @@ export default function Hero({ resizeTick = 0 }) {
           src={INITIAL_FRAME}
           alt=""
           className="absolute inset-0 z-[1] h-full w-full object-cover transition-opacity duration-500"
-          style={{ opacity: ready ? 0 : 1 }}
+          style={{ opacity: !ready || !scrollStarted ? 1 : 0 }}
         />
       )}
 
