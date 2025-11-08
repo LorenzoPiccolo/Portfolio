@@ -10,9 +10,11 @@ import FourthSection from './pages/home/sections/FourthSection.jsx';
 import FifthSection from './pages/home/sections/FifthSection.jsx';
 import Footer from './components/Footer.jsx';
 import useResizeTick from './hooks/useResizeTick.js';
+import useAttentionTitle from './hooks/useAttentionTitle.js';
 
 export default function App() {
   const resizeTick = useResizeTick();
+  useAttentionTitle();
 
   useEffect(() => {
     ScrollTrigger.refresh();

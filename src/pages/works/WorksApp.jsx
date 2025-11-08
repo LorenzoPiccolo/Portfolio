@@ -4,6 +4,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 import Header from '../../components/Header.jsx';
 import useResizeTick from '../../hooks/useResizeTick.js';
+import useAttentionTitle from '../../hooks/useAttentionTitle.js';
 import Footer from '../../components/Footer.jsx';
 import WorksHeroSection from './sections/Hero.jsx';
 import WorksSecondSection from './sections/SecondSection.jsx';
@@ -11,6 +12,7 @@ import WorksThirdSection from './sections/ThirdSection.jsx';
 
 export default function WorksApp() {
   const resizeTick = useResizeTick();
+  useAttentionTitle();
 
   useEffect(() => {
     ScrollTrigger.refresh();
