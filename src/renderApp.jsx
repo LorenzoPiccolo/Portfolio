@@ -2,10 +2,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import Lenis from '@studio-freight/lenis';
-import { gsap } from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
-
-gsap.registerPlugin(ScrollTrigger);
+import { gsap, ScrollTrigger } from './utils/gsapConfig.js';
 
 export default function renderApp(RootComponent) {
   const prefersTouchScrolling =

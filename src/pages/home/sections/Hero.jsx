@@ -1,13 +1,10 @@
 // src/pages/home/sections/Hero.jsx
 import { useEffect, useLayoutEffect, useRef, useState, useCallback } from 'react';
-import { gsap } from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { gsap, ScrollTrigger } from '../../../utils/gsapConfig.js';
 import heroGradient from '../../../../img/gradient-2.png';
 import useViewportHeight from '../../../hooks/useViewportHeight.js';
 import { useFadeInUp } from '../../../hooks/useFadeInUp.js';
 import useResizeObserver from '../../../hooks/useResizeObserver.js';
-
-gsap.registerPlugin(ScrollTrigger);
 
 const FRAME_MODULES = import.meta.glob('../../../../img/frames/*.jpg', {
   eager: true,
@@ -134,6 +131,7 @@ export default function Hero({ resizeTick = 0 }) {
         : null;
 
       // smoothing dello scroll + pin della sezione
+      ScrollTrigger.getById('hero-scroll')?.kill();
       ScrollTrigger.create({
         id: 'hero-scroll',
         trigger: sectionRef.current,

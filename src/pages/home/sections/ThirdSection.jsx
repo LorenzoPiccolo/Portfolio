@@ -1,10 +1,7 @@
 // src/pages/home/sections/ThirdSection.jsx
 import { useEffect, useLayoutEffect, useRef, useState } from 'react';
-import { gsap } from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { gsap, ScrollTrigger } from '../../../utils/gsapConfig.js';
 import { useFadeInUp } from '../../../hooks/useFadeInUp.js';
-
-gsap.registerPlugin(ScrollTrigger);
 
 const SKILLS = [
   'Gsap',
@@ -128,12 +125,13 @@ export default function ThirdSection({ resizeTick = 0 }) {
 
       let tweenInstance = null;
 
+      ScrollTrigger.getById(triggerId)?.kill();
+
       const ctx = gsap.context(() => {
         tweenInstance = gsap.to(list, {
           y: () => yStart() - travel(),
           ease: pin ? 'none' : 'power1.out',
           onUpdate: updateActive,
-          invalidateOnRefresh: true,
           scrollTrigger: {
             id: triggerId,
             trigger: section,
@@ -286,4 +284,3 @@ export default function ThirdSection({ resizeTick = 0 }) {
     </section>
   );
 }
-

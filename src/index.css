@@ -98,47 +98,47 @@
 
   @media (max-width: 767px) {
     .section-full {
-      --section-full-mobile-extra: 10vh;
-      min-height: calc(100vh + 10vh);
-      min-height: calc(-webkit-fill-available + 10vh);
+      --section-full-mobile-extra: 0vh;
+      min-height: 100vh;
+      min-height: -webkit-fill-available;
     }
 
     .vh-fill {
-      height: calc(100vh + 10vh);
-      min-height: calc(100vh + 10vh);
-      height: calc(-webkit-fill-available + 10vh);
+      height: 100vh;
+      min-height: 100vh;
+      height: -webkit-fill-available;
     }
 
     @supports (min-height: 100svh) {
       .section-full {
-        min-height: calc(100svh + 10vh);
+        min-height: 100svh;
       }
 
       .vh-fill {
-        height: calc(100svh + 10vh);
-        min-height: calc(100svh + 10vh);
+        height: 100svh;
+        min-height: 100svh;
       }
     }
 
     @supports (min-height: 100dvh) {
       .section-full {
-        min-height: calc(100dvh + 10vh);
+        min-height: 100dvh;
       }
 
       .vh-fill {
-        height: calc(100dvh + 10vh);
-        min-height: calc(100dvh + 10vh);
+        height: 100dvh;
+        min-height: 100dvh;
       }
     }
 
     @supports (min-height: calc(var(--app-vh, 1vh) * 100)) {
       .section-full {
-        min-height: calc(var(--app-vh, 1vh) * 100 + 10vh);
+        min-height: calc(var(--app-vh, 1vh) * 100);
       }
 
       .vh-fill {
-        height: calc(var(--app-vh, 1vh) * 100 + 10vh);
-        min-height: calc(var(--app-vh, 1vh) * 100 + 10vh);
+        height: calc(var(--app-vh, 1vh) * 100);
+        min-height: calc(var(--app-vh, 1vh) * 100);
       }
     }
   }

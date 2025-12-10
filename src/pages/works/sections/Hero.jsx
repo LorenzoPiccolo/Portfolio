@@ -1,7 +1,6 @@
 // src/pages/works/sections/Hero.jsx
 import { useLayoutEffect, useRef } from 'react';
-import { gsap } from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { gsap, ScrollTrigger } from '../../../utils/gsapConfig.js';
 
 import imageA from '../../../../img/image-footer-02.jpg';
 import imageB from '../../../../img/image-footer-03.jpg';
@@ -10,8 +9,6 @@ import imageD from '../../../../img/image-footer-05.jpg';
 import imageE from '../../../../img/footer-image.jpg';
 import imageF from '../../../../img/project-03.jpg';
 import imageG from '../../../../img/gradient-footer.png';
-
-gsap.registerPlugin(ScrollTrigger);
 
 const COLUMNS = [
   {
@@ -61,6 +58,7 @@ const SIZE_TO_CLASS = {
 
 const COLUMN_ROTATIONS = [-15, -10, -5, 0, 5, 10, 15];
 const CLUSTER_SWING = 10;
+const HERO_SCROLL_ID = 'works-hero-columns';
 
 export default function WorksHeroSection({ resizeTick = 0 }) {
   const sectionRef = useRef(null);
@@ -91,8 +89,11 @@ export default function WorksHeroSection({ resizeTick = 0 }) {
         });
       });
 
+      ScrollTrigger.getById(HERO_SCROLL_ID)?.kill();
+
       const timeline = gsap.timeline({
         scrollTrigger: {
+          id: HERO_SCROLL_ID,
           trigger: sectionEl,
           start: 'top top',
           end: () => `+=${window.innerHeight * 2.1}`,

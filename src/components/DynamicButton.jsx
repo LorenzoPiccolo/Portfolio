@@ -1,8 +1,7 @@
 // src/components/DynamicButton.jsx
 import { forwardRef, isValidElement, cloneElement, useLayoutEffect, useRef } from 'react';
 import { ArrowUpRight } from 'lucide-react';
-import { gsap } from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { gsap, ScrollTrigger } from '../utils/gsapConfig.js';
 
 const baseBtnClasses =
   'relative flex items-center gap-4 rounded-full border border-gray600 bg-dark/70 backdrop-blur-lg pl-4 pr-2 py-2 text-light transform transition-transform duration-300 hover:scale-[1.05] group';
@@ -88,8 +87,6 @@ const DynamicButton = forwardRef(function DynamicButton(
     const triggerEl = resolveTrigger();
     if (!triggerEl) return;
 
-    gsap.registerPlugin(ScrollTrigger);
-
     const fromVars = { autoAlpha: 0, scale: 0, y: -80, ...(reveal.from ?? {}) };
     const toVars = {
       autoAlpha: 1,
@@ -110,6 +107,9 @@ const DynamicButton = forwardRef(function DynamicButton(
 
     const ctx = gsap.context(() => {
       gsap.set(el, fromVars);
+      if (scrollTrigger.id) {
+        ScrollTrigger.getById(scrollTrigger.id)?.kill();
+      }
       gsap.to(el, { ...toVars, scrollTrigger });
     }, el);
 

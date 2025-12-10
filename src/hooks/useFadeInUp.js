@@ -1,8 +1,6 @@
 // src/hooks/useFadeInUp.js
 import { useLayoutEffect } from 'react';
-import { gsap } from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
-gsap.registerPlugin(ScrollTrigger);
+import { gsap, ScrollTrigger } from '../utils/gsapConfig.js';
 
 /**
  * rootRef: ref al contenitore del componente (section/div)

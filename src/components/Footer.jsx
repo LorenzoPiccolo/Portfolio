@@ -1,12 +1,9 @@
 // src/components/Footer.jsx
 import { useEffect, useLayoutEffect, useRef, useState } from 'react';
-import { gsap } from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { gsap, ScrollTrigger } from '../utils/gsapConfig.js';
 import footerBackground from '../../img/image-footer-05.jpg';
 import logo from '../../img/logo.svg';
 import gradientOverlay from '../../img/gradient-footer.png';
-
-gsap.registerPlugin(ScrollTrigger);
 
 const MENU_LINKS = [
   { label: 'Home', href: '/' },
@@ -126,6 +123,8 @@ export default function Footer({ resizeTick = 0 }) {
     const ctx = gsap.context(() => {
       gsap.set(gradient, { scaleY: 0, transformOrigin: 'top center' });
 
+      ScrollTrigger.getById('footer-gradient')?.kill();
+
       gsap
         .timeline({
           defaults: { ease: 'none' },
@@ -152,6 +151,8 @@ export default function Footer({ resizeTick = 0 }) {
 
     const ctx = gsap.context(() => {
       gsap.set(marquee, { y: 200, autoAlpha: 0, x: 200 });
+
+      ScrollTrigger.getById('footer-marquee')?.kill();
 
       gsap.to(marquee, {
         x: 0,

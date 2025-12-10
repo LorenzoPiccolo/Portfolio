@@ -1,6 +1,6 @@
 // src/App.jsx
 import { useEffect } from 'react';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { ScrollTrigger } from './utils/gsapConfig.js';
 
 import Header from './components/Header.jsx';
 import Hero from './pages/home/sections/Hero.jsx';

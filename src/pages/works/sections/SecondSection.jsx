@@ -1,9 +1,6 @@
 // src/pages/works/sections/SecondSection.jsx
 import { useLayoutEffect, useRef } from 'react';
-import { gsap } from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
-
-gsap.registerPlugin(ScrollTrigger);
+import { gsap, ScrollTrigger } from '../../../utils/gsapConfig.js';
 
 const INACTIVE_OPACITY = 0.2;
 const COLOR_LIGHT = 'var(--color-light, rgba(255, 255, 255, 1))';
@@ -28,6 +25,8 @@ export default function WorksSecondSection({ resizeTick = 0 }) {
       if (!words.length) return;
 
       gsap.set(words, { opacity: INACTIVE_OPACITY, color: COLOR_LIGHT });
+
+      ScrollTrigger.getById('works-overview-text')?.kill();
 
       gsap
         .timeline({

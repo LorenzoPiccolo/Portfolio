@@ -1,7 +1,6 @@
 // src/pages/home/sections/FourthSection.jsx
 import { useLayoutEffect, useRef, useMemo } from 'react';
-import { gsap } from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { gsap, ScrollTrigger } from '../../../utils/gsapConfig.js';
 
 import { ChevronRight } from 'lucide-react';
 
@@ -9,8 +8,6 @@ import SelectedWorkCard from '../../../components/SelectedWorkCard.jsx';
 import DynamicButton from '../../../components/DynamicButton.jsx';
 import { WORKS } from '../../../data/works.js';
 import { useFadeInUp } from '../../../hooks/useFadeInUp.js';
-
-gsap.registerPlugin(ScrollTrigger);
 
 export default function FourthSection({ resizeTick = 0 }) {
   const sectionRef = useRef(null);
@@ -73,6 +70,7 @@ export default function FourthSection({ resizeTick = 0 }) {
         });
       };
 
+      ScrollTrigger.getById('fourth-section-works')?.kill();
       const trigger = ScrollTrigger.create({
         id: 'fourth-section-works',
         trigger: sectionEl,
@@ -101,6 +99,7 @@ export default function FourthSection({ resizeTick = 0 }) {
 
   const buttonScrollTrigger = useMemo(
     () => ({
+      id: 'fourth-section-button',
       trigger: () => sectionRef.current,
       start: 'top top',
       end: 'bottom top-=800',

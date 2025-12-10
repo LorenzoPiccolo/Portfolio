@@ -1,7 +1,6 @@
 // src/pages/home/sections/SecondSection.jsx
 import { useEffect, useLayoutEffect, useRef, useState } from 'react';
-import { gsap } from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { gsap, ScrollTrigger } from '../../../utils/gsapConfig.js';
 
 import { ChevronRight } from 'lucide-react';
 
@@ -13,8 +12,6 @@ import iconTwoOne from '../../../../img/icona-02-1.svg';
 import iconTwoTwo from '../../../../img/icona-02-2.svg';
 import iconTwoThree from '../../../../img/icona-02-3.svg';
 import iconThree from '../../../../img/icona-03.svg';
-gsap.registerPlugin(ScrollTrigger);
-
 const COLOR_LIGHT = 'var(--color-light)';
 
 export default function SecondSection({ resizeTick = 0 }) {
@@ -46,6 +43,7 @@ export default function SecondSection({ resizeTick = 0 }) {
       gsap.set(words, { color: COLOR_LIGHT, opacity: 0.2 });
 
       // timeline unica: il progress dello scroll colora parola-per-parola
+      ScrollTrigger.getById('second-section-text')?.kill();
       gsap.timeline({
         scrollTrigger: {
           id: 'second-section-text',

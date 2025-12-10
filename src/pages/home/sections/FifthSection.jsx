@@ -1,7 +1,6 @@
 // src/pages/home/sections/FifthSection.jsx
 import { useEffect, useLayoutEffect, useRef, useState } from 'react';
-import { gsap } from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { gsap, ScrollTrigger } from '../../../utils/gsapConfig.js';
 import gradientImage from '../../../../img/gradient-2.png';
 import sticker8 from '../../../../img/stickers/sticker-8.svg';
 import sticker7 from '../../../../img/stickers/sticker-7.svg';
@@ -12,8 +11,6 @@ import sticker2 from '../../../../img/stickers/sticker-2.svg';
 import sticker3 from '../../../../img/stickers/sticker-3.svg';
 import sticker1 from '../../../../img/stickers/sticker-1.svg';
 import { useFadeInUp } from '../../../hooks/useFadeInUp.js';
-
-gsap.registerPlugin(ScrollTrigger);
 
 const STICKERS = [
   {
@@ -159,6 +156,8 @@ export default function FifthSection({ resizeTick = 0 }) {
 
       gsap.set(heading, { scale: 1.2, transformOrigin: '50% 50%' });
       gsap.set(boxes, { willChange: 'transform' });
+
+      ScrollTrigger.getById('fifth-section-gallery')?.kill();
 
       const timeline = gsap.timeline({
         defaults: { ease: 'none' },

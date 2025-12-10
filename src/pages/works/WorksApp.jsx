@@ -1,6 +1,6 @@
 // src/pages/works/WorksApp.jsx
 import { useEffect } from 'react';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { ScrollTrigger } from '../../utils/gsapConfig.js';
 
 import Header from '../../components/Header.jsx';
 import useResizeTick from '../../hooks/useResizeTick.js';
