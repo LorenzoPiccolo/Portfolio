@@ -31,7 +31,7 @@ export default function App() {
 
       <SecondSection resizeTick={resizeTick} /> 
 
-      <ThirdSection resizeTick={resizeTick} /> 
+      {/* <ThirdSection resizeTick={resizeTick} />  */}
       
       <FourthSection resizeTick={resizeTick} />
 
