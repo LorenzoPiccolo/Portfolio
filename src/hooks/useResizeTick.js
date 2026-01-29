@@ -20,8 +20,8 @@ export default function useResizeTick(delay = 200) {
       }, delay);
     };
 
-    window.addEventListener('resize', scheduleTick);
-    window.addEventListener('orientationchange', scheduleTick);
+    window.addEventListener('resize', scheduleTick, { passive: true });
+    window.addEventListener('orientationchange', scheduleTick, { passive: true });
 
     return () => {
       window.removeEventListener('resize', scheduleTick);

@@ -27,6 +27,17 @@
   #root {
     height: 100%;
   }
+
+  /* Mobile scroll performance optimizations */
+  html {
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior-y: none;
+  }
+
+  body {
+    touch-action: pan-y;
+    overscroll-behavior-y: none;
+  }
 }
 
 @layer components {

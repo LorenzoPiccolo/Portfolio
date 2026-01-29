@@ -124,10 +124,10 @@ export default function Hero({ resizeTick = 0 }) {
 
       const gradientTween = gradientRef.current
         ? gsap.fromTo(
-            gradientRef.current,
-            { scaleY: 0, transformOrigin: 'bottom center' },
-            { scaleY: 1, ease: 'none', paused: true }
-          )
+          gradientRef.current,
+          { scaleY: 0, transformOrigin: 'bottom center' },
+          { scaleY: 1, ease: 'none', paused: true }
+        )
         : null;
 
       // smoothing dello scroll + pin della sezione
@@ -161,19 +161,23 @@ export default function Hero({ resizeTick = 0 }) {
       });
     }, sectionRef);
 
-    // resize handler
+    // resize handler - use passive listeners and debounce for performance
+    let resizeRafId = null;
     const onResize = () => {
-      resizeCanvas();
-      render();
+      if (resizeRafId) cancelAnimationFrame(resizeRafId);
+      resizeRafId = requestAnimationFrame(() => {
+        resizeCanvas();
+        render();
+      });
     };
-    window.addEventListener('resize', onResize);
-    window.visualViewport?.addEventListener('resize', onResize);
-    window.visualViewport?.addEventListener('scroll', onResize);
+    window.addEventListener('resize', onResize, { passive: true });
+    window.visualViewport?.addEventListener('resize', onResize, { passive: true });
+    // NOTE: Removed visualViewport scroll listener - it fires every frame and causes mobile lag
 
     return () => {
+      if (resizeRafId) cancelAnimationFrame(resizeRafId);
       window.removeEventListener('resize', onResize);
       window.visualViewport?.removeEventListener('resize', onResize);
-      window.visualViewport?.removeEventListener('scroll', onResize);
       ctx.revert();
     };
   }, [ready, resizeCanvas, render, resizeTick]);
@@ -207,11 +211,11 @@ export default function Hero({ resizeTick = 0 }) {
       style={
         !scrollStarted && INITIAL_FRAME
           ? {
-              backgroundImage: `url(${INITIAL_FRAME})`,
-              backgroundSize: 'cover',
-              backgroundPosition: 'center',
-              backgroundRepeat: 'no-repeat',
-            }
+            backgroundImage: `url(${INITIAL_FRAME})`,
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            backgroundRepeat: 'no-repeat',
+          }
           : undefined
       }
     >
@@ -235,6 +239,8 @@ export default function Hero({ resizeTick = 0 }) {
         <img
           ref={gradientRef}
           src={heroGradient}
+          alt=""
+          aria-hidden="true"
           className="w-[100vw]"
           style={{ transformOrigin: 'bottom center', transform: 'scaleY(0)' }}
         />
@@ -245,7 +251,7 @@ export default function Hero({ resizeTick = 0 }) {
         {/* 3 scritte sopra il marquee */}
         <div className="fade-in-up hidden w-full mx-auto items-center justify-between text-[12px] font-spaceg tracking-wide md:flex">
           <span className="font-bold">LORENZO PICCOLO</span>
-          <span className="opacity-90">PORTFOLIO 2025</span> 
+          <span className="opacity-90">PORTFOLIO 2025</span>
           <span className="opacity-90">@2025 ALL RIGHTS RESERVED</span>
         </div>
 
@@ -253,7 +259,7 @@ export default function Hero({ resizeTick = 0 }) {
         <div className="fade-in-up hero-marquee overflow-y-visible">
           <div className="whitespace-nowrap will-change-transform inline-block animate-[marqueeLeft_35s_linear_infinite]">
             <MarqueeChunk />
-            <MarqueeChunk /> 
+            <MarqueeChunk />
           </div>
         </div>
       </div>

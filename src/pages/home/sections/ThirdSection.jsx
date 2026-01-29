@@ -60,10 +60,10 @@ export default function ThirdSection({ resizeTick = 0 }) {
       scrub = true,
       scrollOptions = {},
     }) => {
-      if (!section || !wrap || !list) return () => {};
+      if (!section || !wrap || !list) return () => { };
 
       let rows = Array.from(list.querySelectorAll('.skill-row'));
-      if (!rows.length) return () => {};
+      if (!rows.length) return () => { };
 
       gsap.set(rows, { color: ROW_COLOR, opacity: INACTIVE_OPACITY });
 
@@ -170,16 +170,24 @@ export default function ThirdSection({ resizeTick = 0 }) {
         });
       };
 
-      window.addEventListener('resize', refreshAll);
+      // Debounced resize handler for performance
+      let resizeRafId = null;
+      const debouncedRefresh = () => {
+        if (resizeRafId) cancelAnimationFrame(resizeRafId);
+        resizeRafId = requestAnimationFrame(refreshAll);
+      };
+
+      window.addEventListener('resize', debouncedRefresh, { passive: true });
       let resizeObserver = null;
       if (typeof ResizeObserver !== 'undefined') {
-        resizeObserver = new ResizeObserver(refreshAll);
+        resizeObserver = new ResizeObserver(debouncedRefresh);
         resizeObserver.observe(wrap);
       }
       if (document.fonts?.ready) document.fonts.ready.then(refreshAll);
 
       return () => {
-        window.removeEventListener('resize', refreshAll);
+        if (resizeRafId) cancelAnimationFrame(resizeRafId);
+        window.removeEventListener('resize', debouncedRefresh);
         resizeObserver?.disconnect();
         tweenInstance?.kill();
         ctx.revert();

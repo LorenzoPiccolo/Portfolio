@@ -220,10 +220,10 @@ export default function FifthSection({ resizeTick = 0 }) {
           className="relative h-[300vh] z-10 w-full"
         >
           {STICKERS.map((sticker, index) => {
-          const frameBase = sticker.frame
-            ? 'overflow-hidden rounded-[28px] border border-gray600/80 bg-gray850/70 backdrop-blur-[18px] shadow-[0_0_60px_rgba(24,24,24,0.6)]'
-            : '';
-          const padding = sticker.frame ? sticker.paddingClass ?? 'p-6' : sticker.paddingClass ?? '';
+            const frameBase = sticker.frame
+              ? 'overflow-hidden rounded-[28px] border border-gray600/80 bg-gray850/70 backdrop-blur-[18px] shadow-[0_0_60px_rgba(24,24,24,0.6)]'
+              : '';
+            const padding = sticker.frame ? sticker.paddingClass ?? 'p-6' : sticker.paddingClass ?? '';
 
             const innerClasses = [
               'flex items-center justify-center w-full',
@@ -283,10 +283,10 @@ export default function FifthSection({ resizeTick = 0 }) {
             );
           })}
           <div className="w-full absolute bottom-0 left-0 right-0">
-            <img src={gradientImage} className="w-full origin-bottom" />
+            <img src={gradientImage} alt="" aria-hidden="true" className="w-full origin-bottom" />
           </div>
         </div>
-        
+
       </div>
     </section>
   );
