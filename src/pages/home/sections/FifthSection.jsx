@@ -199,11 +199,13 @@ export default function FifthSection({ resizeTick = 0 }) {
   return (
     <section
       ref={sectionRef}
-      className="relative isolate h-[200vh] md:h-[200vh] min-h-[700px] bg-dark px-6 text-light overflow-hidden"
+      className="relative isolate min-h-[200svh] bg-dark px-6 text-light overflow-hidden"
     >
+      {/* Sticky heading that stays in view while scrolling through section */}
       <div
         ref={headingRef}
-        className="fixed left-0 right-0 top-0 z-10 flex w-screen items-center justify-center px-6 vh-fill"
+        className="sticky top-0 left-0 right-0 z-10 flex h-screen items-center justify-center px-6"
+        style={{ height: '100svh' }}
       >
         <h4 className="md:title-32 title-24 w-[60%] md:max-w-[30vw] text-center font-normal leading-tight">
           Full-time perfection seeker.
@@ -218,7 +220,7 @@ export default function FifthSection({ resizeTick = 0 }) {
 
         <div
           ref={stickersRef}
-          className="relative h-[300vh] z-10 w-full"
+          className="relative min-h-[250svh] z-10 w-full"
         >
           {STICKERS.map((sticker, index) => {
             const frameBase = sticker.frame

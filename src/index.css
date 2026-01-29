@@ -19,7 +19,6 @@
     --color-gray850: #191919;
     --blurBg: rgba(25, 25, 25, 0.72);
     --blurStroke: rgba(72, 72, 72, 0.85);
-    --app-vh: 1vh;
   }
 
   html,
@@ -61,7 +60,7 @@
     @apply font-urbanist text-[24px];
   }
 
-   .text-20 {
+  .text-20 {
     @apply font-urbanist text-[20px];
   }
 
@@ -79,109 +78,39 @@
 }
 
 @layer utilities {
+
+  /* Section that fills viewport height - simplified with svh priority */
   .section-full {
-    --section-full-extra-top: 0px;
-    --section-full-extra-bottom: 0px;
     box-sizing: border-box;
-    min-height: 100vh;
-    min-height: -webkit-fill-available;
-    padding-top: calc(env(safe-area-inset-top, 0px) + var(--section-full-extra-top, 0px));
-    padding-bottom: calc(env(safe-area-inset-bottom, 0px) + var(--section-full-extra-bottom, 0px));
+    min-height: 100svh;
+    padding-top: env(safe-area-inset-top, 0px);
+    padding-bottom: env(safe-area-inset-bottom, 0px);
   }
 
-  @supports (min-height: 100svh) {
+  /* Fallback for browsers without svh support */
+  @supports not (min-height: 100svh) {
     .section-full {
-      min-height: 100svh;
-    }
-  }
-
-  @supports (min-height: 100dvh) {
-    .section-full {
-      min-height: 100dvh;
-    }
-  }
-
-  @supports (min-height: calc(var(--app-vh, 1vh) * 100)) {
-    .section-full {
-      min-height: calc(var(--app-vh, 1vh) * 100);
-    }
-  }
-
-  @media (max-width: 767px) {
-    .section-full {
-      --section-full-mobile-extra: 0vh;
       min-height: 100vh;
       min-height: -webkit-fill-available;
     }
-
-    .vh-fill {
-      height: 100vh;
-      min-height: 100vh;
-      height: -webkit-fill-available;
-    }
-
-    @supports (min-height: 100svh) {
-      .section-full {
-        min-height: 100svh;
-      }
-
-      .vh-fill {
-        height: 100svh;
-        min-height: 100svh;
-      }
-    }
-
-    @supports (min-height: 100dvh) {
-      .section-full {
-        min-height: 100dvh;
-      }
-
-      .vh-fill {
-        height: 100dvh;
-        min-height: 100dvh;
-      }
-    }
-
-    @supports (min-height: calc(var(--app-vh, 1vh) * 100)) {
-      .section-full {
-        min-height: calc(var(--app-vh, 1vh) * 100);
-      }
-
-      .vh-fill {
-        height: calc(var(--app-vh, 1vh) * 100);
-        min-height: calc(var(--app-vh, 1vh) * 100);
-      }
-    }
   }
 
+  /* Element that fills viewport height */
   .vh-fill {
     box-sizing: border-box;
-    height: 100vh;
-    min-height: 100vh;
-    height: -webkit-fill-available;
+    height: 100svh;
   }
 
-  @supports (height: 100svh) {
+  @supports not (height: 100svh) {
     .vh-fill {
-      height: 100svh;
-    }
-  }
-
-  @supports (height: 100dvh) {
-    .vh-fill {
-      height: 100dvh;
-    }
-  }
-
-  @supports (height: calc(var(--app-vh, 1vh) * 100)) {
-    .vh-fill {
-      height: calc(var(--app-vh, 1vh) * 100);
+      height: 100vh;
+      height: -webkit-fill-available;
     }
   }
 
   .skill-active {
     color: var(--color-dark);
-  } /* colore scuro quando una skill è “in focus” */
+  }
 
   .fade-in-up {
     opacity: 0;

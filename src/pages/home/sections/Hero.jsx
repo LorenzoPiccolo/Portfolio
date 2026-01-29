@@ -2,7 +2,6 @@
 import { useEffect, useLayoutEffect, useRef, useState, useCallback } from 'react';
 import { gsap, ScrollTrigger } from '../../../utils/gsapConfig.js';
 import heroGradient from '../../../../img/gradient-2.png';
-import useViewportHeight from '../../../hooks/useViewportHeight.js';
 import { useFadeInUp } from '../../../hooks/useFadeInUp.js';
 import useResizeObserver from '../../../hooks/useResizeObserver.js';
 
@@ -25,8 +24,6 @@ export default function Hero({ resizeTick = 0 }) {
   const scrollStartedRef = useRef(false);
   const [ready, setReady] = useState(false);
   const [scrollStarted, setScrollStarted] = useState(false);
-
-  useViewportHeight();
 
   // Ridimensiona canvas al container e ridisegna
   const resizeCanvas = useCallback(() => {
