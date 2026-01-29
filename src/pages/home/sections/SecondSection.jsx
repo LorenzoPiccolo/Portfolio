@@ -37,7 +37,7 @@ export default function SecondSection({ resizeTick = 0 }) {
     const ctx = gsap.context(() => {
       const q = gsap.utils.selector(el);
       const words = q('.reveal-word');
-      if (!words.length) return; 
+      if (!words.length) return;
 
       // colore iniziale: light con opacità 20%
       gsap.set(words, { color: COLOR_LIGHT, opacity: 0.2 });
@@ -57,9 +57,10 @@ export default function SecondSection({ resizeTick = 0 }) {
             return window.scrollY + rect.top - window.innerHeight;
           },
           end: () => `+=${Math.max(800, window.innerHeight * 1)}`,
-          scrub: true,
+          scrub: 0.5,
           invalidateOnRefresh: true,
-          markers: false, 
+          refreshPriority: 0,
+          markers: false,
         },
       }).to(words, {
         opacity: 1,
@@ -88,12 +89,12 @@ export default function SecondSection({ resizeTick = 0 }) {
       {/* Testo introduttivo (64px Urbanist) */}
       <div className="w-[full] mx-auto font-normal title-44 md:title-64 leading-[110%] tracking-tight">
         <p className="w-[100%] md:w-[80%]">{renderText('Digital & Web Designer based in Italy.')}
-        {renderText('Design, for me, is not about what appears first.')}
-        
+          {renderText('Design, for me, is not about what appears first.')}
+
           {renderText(
             'It’s about what lasts quietly. Each interface, each brand, each visual layer is shaped through observation, balance, and a respect for space.'
           )}
-        </p> 
+        </p>
       </div>
 
       {/* --- Design focus --- */}
@@ -141,9 +142,8 @@ export default function SecondSection({ resizeTick = 0 }) {
       </div>
 
       <div
-        className={`pointer-events-none fixed bottom-16 left-1/2 z-30 flex -translate-x-1/2 justify-center transition-all duration-500 ${
-          buttonVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'
-        }`}
+        className={`pointer-events-none fixed bottom-16 left-1/2 z-30 flex -translate-x-1/2 justify-center transition-all duration-500 ${buttonVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'
+          }`}
       >
         <div className="pointer-events-auto transition-transform duration-300 hover:scale-[1.05]">
           <DynamicButton

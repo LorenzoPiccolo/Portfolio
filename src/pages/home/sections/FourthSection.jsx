@@ -81,10 +81,11 @@ export default function FourthSection({ resizeTick = 0 }) {
           const steps = Math.max(1, cards.length - 1);
           return `+=${stepDistance * steps}`;
         },
-        scrub: true,
+        scrub: 0.5,
         pin: true,
         pinSpacing: true,
         invalidateOnRefresh: true,
+        refreshPriority: -1,
         markers: false,
         onUpdate: (self) => applyState(self.progress),
         onRefresh: (self) => applyState(self?.progress ?? 0, true),

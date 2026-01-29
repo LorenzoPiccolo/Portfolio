@@ -58,14 +58,12 @@ function FooterNavList({ title, links }) {
                   hoverTimeoutRef.current = window.setTimeout(resetHover, 120);
                 }}
                 onBlur={resetHover}
-                className={`group relative flex items-center gap-3 transition-all duration-300 ease-out ${
-                  isDimmed ? 'text-gray400' : 'text-light'
-                } ${isHovered ? 'translate-x-2' : 'translate-x-0'}`}
+                className={`group relative flex items-center gap-3 transition-all duration-300 ease-out ${isDimmed ? 'text-gray400' : 'text-light'
+                  } ${isHovered ? 'translate-x-2' : 'translate-x-0'}`}
               >
                 <span
-                  className={`w-2 text-[20px] leading-none text-light transition-opacity duration-300 ${
-                    isHovered ? 'opacity-100' : 'opacity-0'
-                  }`}
+                  className={`w-2 text-[20px] leading-none text-light transition-opacity duration-300 ${isHovered ? 'opacity-100' : 'opacity-0'
+                    }`}
                 >
                   ·
                 </span>
@@ -81,7 +79,7 @@ function FooterNavList({ title, links }) {
 
 function FooterMarquee({ marqueeRef }) {
   return (
-    <a href="mailto:lorenzopikkolo@gmail.com"> 
+    <a href="mailto:lorenzopikkolo@gmail.com">
       <div ref={marqueeRef} className="absolute inset-x-0 bottom-10 z-10 px-6">
         <div className="whitespace-nowrap">
           <div className="inline-block will-change-transform animate-[marqueeLeft_35s_linear_infinite]">
@@ -133,9 +131,11 @@ export default function Footer({ resizeTick = 0 }) {
             trigger: section,
             start: 'top top',
             end: () => `+=${Math.max(window.innerHeight * 1, 1200)}`,
+            scrub: 0.5,
             pin: true,
             pinSpacing: true,
             invalidateOnRefresh: true,
+            refreshPriority: -3,
           },
         })
         .to(gradient, { scaleY: 1 }, 0);
@@ -183,7 +183,7 @@ export default function Footer({ resizeTick = 0 }) {
         />
       </div>
 
-    {/* <div className="absolute w-full inset-x-0 top-0 z-0 select-none">
+      {/* <div className="absolute w-full inset-x-0 top-0 z-0 select-none">
         <img
           ref={gradientRef}
           src={gradientOverlay}

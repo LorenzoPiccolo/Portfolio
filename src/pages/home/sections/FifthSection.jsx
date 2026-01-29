@@ -166,8 +166,9 @@ export default function FifthSection({ resizeTick = 0 }) {
           trigger: section,
           start: 'top 40%',
           end: () => `+=${scrollDistance()} -=1000px`,
-          scrub: true,
+          scrub: 0.5,
           invalidateOnRefresh: true,
+          refreshPriority: -2,
           markers: false,
         },
       });
