@@ -143,6 +143,8 @@ export default function FifthSection({ resizeTick = 0 }) {
     const heading = headingRef.current;
     if (!section || !heading) return;
 
+    const isMobileDevice = window.matchMedia('(max-width: 767px)').matches;
+
     const ctx = gsap.context(() => {
       const boxes = gsap.utils.toArray(section.querySelectorAll('[data-fifth-box]'));
       if (!boxes.length) return;
@@ -150,6 +152,22 @@ export default function FifthSection({ resizeTick = 0 }) {
       gsap.set(boxes, { willChange: 'transform' });
 
       ScrollTrigger.getById('fifth-section-gallery')?.kill();
+      ScrollTrigger.getById('fifth-section-heading')?.kill();
+
+      // Pin the heading for the duration of the section (only on desktop)
+      // On mobile, we keep it simple with no pinning to avoid conflicts
+      if (!isMobileDevice) {
+        ScrollTrigger.create({
+          id: 'fifth-section-heading',
+          trigger: section,
+          start: 'top top',
+          end: 'bottom bottom',
+          pin: heading,
+          pinSpacing: false,
+          invalidateOnRefresh: true,
+          refreshPriority: -2,
+        });
+      }
 
       const timeline = gsap.timeline({
         defaults: { ease: 'none' },
@@ -158,7 +176,7 @@ export default function FifthSection({ resizeTick = 0 }) {
           trigger: section,
           start: 'top center',
           end: 'bottom top', // Continue parallax until section is completely off screen
-          scrub: 0.5,
+          scrub: isMobileDevice ? true : 0.5, // Immediate on mobile
           invalidateOnRefresh: true,
           refreshPriority: -2,
           markers: false,
@@ -172,7 +190,7 @@ export default function FifthSection({ resizeTick = 0 }) {
           trigger: section,
           start: 'top 80%',
           end: 'bottom 20%',
-          scrub: 1,
+          scrub: isMobileDevice ? true : 1,
           invalidateOnRefresh: true,
           refreshPriority: -2,
           markers: false,
@@ -202,10 +220,11 @@ export default function FifthSection({ resizeTick = 0 }) {
       ref={sectionRef}
       className="relative isolate h-[200svh] bg-dark md:px-6 text-light overflow-hidden"
     >
-      {/* Sticky heading stays fixed in viewport center while scrolling */}
+      {/* Heading - sticky on mobile, pinned via ScrollTrigger on desktop */}
       <div
         ref={headingRef}
-        className="fixed w-full top-0 flex h-[100svh] items-center justify-center md:px-6 z-0"
+        className={`w-full top-0 flex h-[100svh] items-center justify-center md:px-6 z-0 ${isMobile ? 'sticky' : 'fixed'
+          }`}
       >
         <h4 className="md:title-32 title-24 w-[60%] md:max-w-[30vw] text-center font-normal leading-tight fifth-section-heading">
           Full-time perfection seeker.

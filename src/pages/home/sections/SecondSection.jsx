@@ -35,6 +35,7 @@ export default function SecondSection({ resizeTick = 0 }) {
     if (!el) return;
 
     const ctx = gsap.context(() => {
+      const isMobileDevice = window.matchMedia('(max-width: 767px)').matches;
       const q = gsap.utils.selector(el);
       const words = q('.reveal-word');
       if (!words.length) return;
@@ -57,7 +58,7 @@ export default function SecondSection({ resizeTick = 0 }) {
             return window.scrollY + rect.top - window.innerHeight;
           },
           end: () => `+=${Math.max(800, window.innerHeight * 1)}`,
-          scrub: 0.5,
+          scrub: isMobileDevice ? true : 0.5, // Immediate on mobile
           invalidateOnRefresh: true,
           refreshPriority: 0,
           markers: false,

@@ -99,12 +99,13 @@
 
 @layer utilities {
 
-  /* Section that fills viewport height - simplified with svh priority */
+  /* Section that fills viewport height - extends under safe areas */
   .section-full {
     box-sizing: border-box;
-    min-height: 100svh;
-    padding-top: env(safe-area-inset-top, 0px);
-    padding-bottom: env(safe-area-inset-bottom, 0px);
+    /* Extend min-height to fill under bottom safe area */
+    min-height: calc(100svh + env(safe-area-inset-bottom, 0px));
+    /* Remove padding so backgrounds extend fully under safe areas */
+    /* Content padding should be handled by child elements where needed */
   }
 
   /* Fallback for browsers without svh support */

@@ -128,13 +128,14 @@ export default function Hero({ resizeTick = 0 }) {
         : null;
 
       // smoothing dello scroll + pin della sezione
+      const isMobileDevice = window.matchMedia('(max-width: 767px)').matches;
       ScrollTrigger.getById('hero-scroll')?.kill();
       ScrollTrigger.create({
         id: 'hero-scroll',
         trigger: sectionRef.current,
         start: 'top top',
         end: () => `+=${Math.max(2000, window.innerHeight * 1.5)}`, // lunghezza scrub
-        scrub: 0.5,    // 0.2–1 per più/meno morbido
+        scrub: isMobileDevice ? true : 0.5, // Immediate on mobile for smooth scrolling
         pin: true,
         pinSpacing: true,
         invalidateOnRefresh: true,
