@@ -4,7 +4,7 @@ import { ArrowUpRight } from 'lucide-react';
 import { gsap, ScrollTrigger } from '../utils/gsapConfig.js';
 
 const baseBtnClasses =
-  'relative flex items-center gap-4 rounded-full border border-gray600 bg-dark/70 backdrop-blur-lg pl-4 pr-2 py-2 text-light transform transition-transform duration-300 hover:scale-[1.05] group';
+  'relative flex items-center gap-4 rounded-full border border-gray600 bg-dark/70 backdrop-blur-lg pl-4 pr-2 py-2 text-light transform transition-transform duration-300 hover:scale-[1.05] group whitespace-nowrap w-fit';
 
 const iconWrapClasses =
   'flex h-12 w-12 md:h-10  md:w-10 shrink-0 items-center justify-center rounded-full bg-primary transition-transform duration-300';
@@ -35,10 +35,10 @@ const DynamicButton = forwardRef(function DynamicButton(
   const computedRel = rel ?? (href && target === '_blank' ? 'noopener noreferrer' : undefined);
   const tagProps = href
     ? {
-        href,
-        ...(target ? { target } : {}),
-        ...(computedRel ? { rel: computedRel } : {}),
-      }
+      href,
+      ...(target ? { target } : {}),
+      ...(computedRel ? { rel: computedRel } : {}),
+    }
     : { type: 'button' };
 
   let iconContent = null;

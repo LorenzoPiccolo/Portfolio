@@ -111,7 +111,7 @@ export default function ThirdSection({ resizeTick = 0 }) {
     >
       {isMobile ? (
         /* Mobile: Simple scrolling list */
-        <div className="flex min-h-screen w-full flex-col items-center justify-start px-6 py-[50vh]">
+        <div className="flex min-h-screen w-full flex-col items-center justify-start px-6 py-[15vh] md:py-[50vh]">
           <ul
             ref={mobileListRef}
             className="m-0 flex w-full max-w-[360px] flex-col items-center gap-5 text-center"

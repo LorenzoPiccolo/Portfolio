@@ -166,7 +166,7 @@ export default function Footer({ resizeTick = 0 }) {
           id: 'footer-marquee',
           trigger: section,
           start: 'top 80%',
-          markers: true,
+          markers: false,
           toggleActions: 'play none none reset',
         },
       });

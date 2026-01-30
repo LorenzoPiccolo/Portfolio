@@ -1,5 +1,5 @@
 // src/pages/home/sections/FourthSection.jsx
-import { useLayoutEffect, useRef, useMemo } from 'react';
+import { useLayoutEffect, useRef, useMemo, useState, useEffect } from 'react';
 import { gsap, ScrollTrigger } from '../../../utils/gsapConfig.js';
 
 import { ChevronRight } from 'lucide-react';
@@ -11,17 +11,39 @@ import { useFadeInUp } from '../../../hooks/useFadeInUp.js';
 
 export default function FourthSection({ resizeTick = 0 }) {
   const sectionRef = useRef(null);
+  const [isMobile, setIsMobile] = useState(() => {
+    if (typeof window === 'undefined') return false;
+    return window.matchMedia('(max-width: 767px)').matches;
+  });
   useFadeInUp(sectionRef, { trigger: sectionRef });
 
+  // Track mobile state
+  useEffect(() => {
+    if (typeof window === 'undefined') return undefined;
+    const mq = window.matchMedia('(max-width: 767px)');
+    const update = () => setIsMobile(mq.matches);
+    update();
+    mq.addEventListener('change', update);
+    return () => mq.removeEventListener('change', update);
+  }, []);
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    const mq = window.matchMedia('(max-width: 767px)');
+    setIsMobile(mq.matches);
+  }, [resizeTick]);
+
+  // Desktop-only animation logic
   useLayoutEffect(() => {
     const sectionEl = sectionRef.current;
     if (!sectionEl) return;
 
-    const isMobile = window.matchMedia('(max-width: 767px)').matches;
+    // Skip all animation on mobile - just use simple column layout
+    if (isMobile) return;
 
     const ctx = gsap.context(() => {
       const cards = Array.from(sectionEl.querySelectorAll('[data-work-card]'));
-      const cardsContainer = sectionEl.querySelector('.relative.flex.w-full.justify-center');
+      const cardsContainer = sectionEl.querySelector('[data-cards-container]');
       if (!cards.length) return;
 
       // First card visible, all others start outside viewport (below)
@@ -68,14 +90,8 @@ export default function FourthSection({ resizeTick = 0 }) {
             scale = 1;
           }
 
-          const vars = {
-            yPercent,
-            scale,
-          };
-
-          // On mobile, always use immediate set for smooth scrub
-          // On desktop, use tween only for non-scrub updates
-          if (immediate || isMobile) {
+          const vars = { yPercent, scale };
+          if (immediate) {
             gsap.set(card, vars);
           } else {
             gsap.to(card, { ...vars, duration: 0.4, ease: 'power2.out', overwrite: true });
@@ -93,13 +109,13 @@ export default function FourthSection({ resizeTick = 0 }) {
         return stepDistance * steps;
       };
 
-      // Main stacking animation
+      // Main stacking animation (desktop only)
       const trigger = ScrollTrigger.create({
         id: 'fourth-section-works',
         trigger: sectionEl,
         start: 'top top',
         end: () => `+=${getScrollDistance()}`,
-        scrub: isMobile ? true : 0.6, // true = immediate on mobile (no delay), smoother on desktop
+        scrub: 0.6,
         pin: true,
         pinSpacing: true,
         invalidateOnRefresh: true,
@@ -109,11 +125,10 @@ export default function FourthSection({ resizeTick = 0 }) {
         onRefresh: (self) => applyState(self?.progress ?? 0, true),
       });
 
-      // Exit parallax - cards move up faster as section leaves (desktop only)
-      // Disabled on mobile to prevent scroll conflicts with pinning
-      if (cardsContainer && !isMobile) {
+      // Exit parallax - cards move up faster as section leaves
+      if (cardsContainer) {
         gsap.to(cardsContainer, {
-          yPercent: -30, // Move cards up faster than scroll
+          yPercent: -30,
           ease: 'none',
           scrollTrigger: {
             id: 'fourth-section-exit',
@@ -132,25 +147,30 @@ export default function FourthSection({ resizeTick = 0 }) {
     }, sectionEl);
 
     return () => ctx.revert();
-  }, [resizeTick]);
+  }, [resizeTick, isMobile]);
 
   const buttonScrollTrigger = useMemo(
     () => ({
       id: 'fourth-section-button',
       trigger: () => sectionRef.current,
-      start: 'top top',
-      end: 'bottom top-=800',
+      start: isMobile ? 'top 80%' : 'top top',
+      end: isMobile ? 'bottom bottom-=20%' : 'bottom top-=800',
     }),
-    [resizeTick],
+    [resizeTick, isMobile],
   );
 
   return (
     <section
       id="works"
       ref={sectionRef}
-      className="section-full relative isolate min-h-[700px] bg-light text-dark z-10 fourthSection"
+      className={`relative isolate bg-light text-dark z-10 fourthSection ${isMobile ? 'py-16 px-4' : 'section-full min-h-[700px]'
+        }`}
     >
-      <div className="absolute bottom-12 left-1/2 z-20 -translate-x-1/2 transition-transform duration-300 hover:scale-[1.05]">
+      {/* Button - fixed at bottom on mobile, absolute bottom on desktop */}
+      <div className={`z-20 transition-transform duration-300 hover:scale-[1.05] ${isMobile
+        ? 'fixed bottom-6 left-1/2 -translate-x-1/2'
+        : 'absolute bottom-12 left-1/2 -translate-x-1/2'
+        }`}>
         <DynamicButton
           label="More projects"
           href="/works.html"
@@ -158,23 +178,35 @@ export default function FourthSection({ resizeTick = 0 }) {
           scrollTrigger={buttonScrollTrigger}
         />
       </div>
-      <div className="flex min-h-full w-full flex-col items-center justify-center gap-12">
 
-        <div className="relative flex w-full justify-center">
-          <div className="relative w-[90vw] md:w-[70vw] max-w-[1400px] aspect-[9/16] md:aspect-[4/5] lg:aspect-[16/9]">
-            {WORKS.map((work, index) => (
-              <div
-                key={work.id}
-                data-work-card
-                className="selected-work-card absolute inset-0 flex items-center justify-center will-change-transform"
-                style={{ zIndex: index + 1 }}
-              >
-                <SelectedWorkCard {...work} />
-              </div>
-            ))}
+      {isMobile ? (
+        /* Mobile: Simple column layout, no overlapping */
+        <div className="flex flex-col gap-6 w-full">
+          {WORKS.map((work) => (
+            <div key={work.id} className="w-full aspect-[4/5]">
+              <SelectedWorkCard {...work} />
+            </div>
+          ))}
+        </div>
+      ) : (
+        /* Desktop: Overlapping stacking animation */
+        <div className="flex min-h-full w-full flex-col items-center justify-center gap-12">
+          <div data-cards-container className="relative flex w-full justify-center">
+            <div className="relative w-[70vw] max-w-[1400px] aspect-[4/5] lg:aspect-[16/9]">
+              {WORKS.map((work, index) => (
+                <div
+                  key={work.id}
+                  data-work-card
+                  className="selected-work-card absolute inset-0 flex items-center justify-center will-change-transform"
+                  style={{ zIndex: index + 1 }}
+                >
+                  <SelectedWorkCard {...work} />
+                </div>
+              ))}
+            </div>
           </div>
         </div>
-      </div>
+      )}
     </section>
   );
 }

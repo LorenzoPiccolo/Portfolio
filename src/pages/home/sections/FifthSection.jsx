@@ -154,20 +154,7 @@ export default function FifthSection({ resizeTick = 0 }) {
       ScrollTrigger.getById('fifth-section-gallery')?.kill();
       ScrollTrigger.getById('fifth-section-heading')?.kill();
 
-      // Pin the heading for the duration of the section (only on desktop)
-      // On mobile, we keep it simple with no pinning to avoid conflicts
-      if (!isMobileDevice) {
-        ScrollTrigger.create({
-          id: 'fifth-section-heading',
-          trigger: section,
-          start: 'top top',
-          end: 'bottom bottom',
-          pin: heading,
-          pinSpacing: false,
-          invalidateOnRefresh: true,
-          refreshPriority: -2,
-        });
-      }
+      // Heading is CSS fixed - no ScrollTrigger needed, it stays in center naturally
 
       const timeline = gsap.timeline({
         defaults: { ease: 'none' },
@@ -220,11 +207,10 @@ export default function FifthSection({ resizeTick = 0 }) {
       ref={sectionRef}
       className="relative isolate h-[200svh] bg-dark md:px-6 text-light overflow-hidden"
     >
-      {/* Heading - sticky on mobile, pinned via ScrollTrigger on desktop */}
+      {/* Heading - pinned via ScrollTrigger for both mobile and desktop */}
       <div
         ref={headingRef}
-        className={`w-full top-0 flex h-[100svh] items-center justify-center md:px-6 z-0 ${isMobile ? 'sticky' : 'fixed'
-          }`}
+        className="w-full top-0 flex h-[100svh] items-center justify-center md:px-6 fixed z-10"
       >
         <h4 className="md:title-32 title-24 w-[60%] md:max-w-[30vw] text-center font-normal leading-tight fifth-section-heading">
           Full-time perfection seeker.

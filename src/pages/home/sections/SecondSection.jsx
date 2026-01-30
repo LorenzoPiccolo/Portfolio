@@ -50,6 +50,11 @@ export default function SecondSection({ resizeTick = 0 }) {
           id: 'second-section-text',
           trigger: el,
           start: () => {
+            // On mobile, start when section top reaches center of viewport
+            if (isMobileDevice) {
+              return 'top 30%';
+            }
+            // On desktop, start after hero animation ends
             const heroTrigger = ScrollTrigger.getById('hero-scroll');
             if (heroTrigger) {
               return heroTrigger.end;
@@ -57,7 +62,7 @@ export default function SecondSection({ resizeTick = 0 }) {
             const rect = el.getBoundingClientRect();
             return window.scrollY + rect.top - window.innerHeight;
           },
-          end: () => `+=${Math.max(800, window.innerHeight * 1)}`,
+          end: () => `+=${isMobileDevice ? Math.max(600, window.innerHeight * 0.8) : Math.max(800, window.innerHeight * 1)}`,
           scrub: isMobileDevice ? true : 0.5, // Immediate on mobile
           invalidateOnRefresh: true,
           refreshPriority: 0,

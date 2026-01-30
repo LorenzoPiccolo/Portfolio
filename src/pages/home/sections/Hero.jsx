@@ -24,6 +24,20 @@ export default function Hero({ resizeTick = 0 }) {
   const scrollStartedRef = useRef(false);
   const [ready, setReady] = useState(false);
   const [scrollStarted, setScrollStarted] = useState(false);
+  const [isMobile, setIsMobile] = useState(() => {
+    if (typeof window === 'undefined') return false;
+    return window.matchMedia('(max-width: 767px)').matches;
+  });
+
+  // Track mobile state
+  useEffect(() => {
+    if (typeof window === 'undefined') return undefined;
+    const mq = window.matchMedia('(max-width: 767px)');
+    const update = () => setIsMobile(mq.matches);
+    update();
+    mq.addEventListener('change', update);
+    return () => mq.removeEventListener('change', update);
+  }, []);
 
   // Ridimensiona canvas al container e ridisegna
   const resizeCanvas = useCallback(() => {
@@ -104,8 +118,42 @@ export default function Hero({ resizeTick = 0 }) {
 
   // Setup ScrollTrigger + tween progress-driven
   useLayoutEffect(() => {
-    if (!ready || !sectionRef.current || !canvasRef.current) return;
-    if (!FRAME_COUNT) return;
+    if (!ready || !sectionRef.current) return;
+
+    const isMobileDevice = window.matchMedia('(max-width: 767px)').matches;
+
+    // On mobile: simple gradient animation only, no pinning, no frame sequence
+    if (isMobileDevice) {
+      if (!gradientRef.current) return;
+
+      const ctx = gsap.context(() => {
+        ScrollTrigger.getById('hero-scroll')?.kill();
+
+        // Simple gradient reveal on scroll (no pinning)
+        gsap.fromTo(
+          gradientRef.current,
+          { scaleY: 0, transformOrigin: 'bottom center' },
+          {
+            scaleY: 1,
+            ease: 'none',
+            scrollTrigger: {
+              id: 'hero-scroll',
+              trigger: sectionRef.current,
+              start: 'top top',
+              end: 'bottom top',
+              scrub: true,
+              invalidateOnRefresh: true,
+              refreshPriority: 1,
+            },
+          }
+        );
+      }, sectionRef);
+
+      return () => ctx.revert();
+    }
+
+    // Desktop: full canvas animation with pinning
+    if (!canvasRef.current || !FRAME_COUNT) return;
 
     resizeCanvas();
     render();
@@ -127,15 +175,14 @@ export default function Hero({ resizeTick = 0 }) {
         )
         : null;
 
-      // smoothing dello scroll + pin della sezione
-      const isMobileDevice = window.matchMedia('(max-width: 767px)').matches;
+      // Desktop: smoothing dello scroll + pin della sezione
       ScrollTrigger.getById('hero-scroll')?.kill();
       ScrollTrigger.create({
         id: 'hero-scroll',
         trigger: sectionRef.current,
         start: 'top top',
-        end: () => `+=${Math.max(2000, window.innerHeight * 1.5)}`, // lunghezza scrub
-        scrub: isMobileDevice ? true : 0.5, // Immediate on mobile for smooth scrolling
+        end: () => `+=${Math.max(2000, window.innerHeight * 1.5)}`,
+        scrub: 0.5,
         pin: true,
         pinSpacing: true,
         invalidateOnRefresh: true,
@@ -217,19 +264,22 @@ export default function Hero({ resizeTick = 0 }) {
           : undefined
       }
     >
-      {/* Canvas background (sotto al contenuto) */}
-      <canvas
-        ref={canvasRef}
-        id="hero-lightpass"
-        className="absolute inset-0 z-[2] block"
-      />
+      {/* Canvas background (desktop only) */}
+      {!isMobile && (
+        <canvas
+          ref={canvasRef}
+          id="hero-lightpass"
+          className="absolute inset-0 z-[2] block"
+        />
+      )}
 
+      {/* Static first frame image - always visible on mobile, fades out on desktop when scrolling */}
       {INITIAL_FRAME && (
         <img
           src={INITIAL_FRAME}
           alt=""
           className="absolute inset-0 z-[1] h-full w-full object-cover transition-opacity duration-500"
-          style={{ opacity: !ready || !scrollStarted ? 1 : 0 }}
+          style={{ opacity: isMobile ? 1 : (!ready || !scrollStarted ? 1 : 0) }}
         />
       )}
 
