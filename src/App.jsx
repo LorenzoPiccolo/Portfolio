@@ -22,23 +22,23 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-black text-white">
-      
+
       {/* Header in alto */}
       <Header currentPage="Home" />
 
       {/* Hero come prima sezione del sito */}
       <Hero resizeTick={resizeTick} />
 
-      <SecondSection resizeTick={resizeTick} /> 
+      <SecondSection resizeTick={resizeTick} />
 
-      {/* <ThirdSection resizeTick={resizeTick} />  */}
-      
+      <ThirdSection resizeTick={resizeTick} />
+
       <FourthSection resizeTick={resizeTick} />
 
       <FifthSection resizeTick={resizeTick} />
 
       <Footer resizeTick={resizeTick} />
-      
+
     </div>
   );
 }

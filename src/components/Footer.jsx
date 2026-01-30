@@ -163,9 +163,9 @@ export default function Footer({ resizeTick = 0 }) {
         scrollTrigger: {
           id: 'footer-marquee',
           trigger: section,
-          start: 'top 10%',
-          markers: false,
-          toggleActions: 'play reverse play reverse',
+          start: 'top 80%',
+          markers: true,
+          toggleActions: 'play none none reset',
         },
       });
     }, section);

@@ -13,18 +13,20 @@ const SKILLS = [
   'Firefly',
   'Midjourney',
   'CSS',
+  'Claude',
+  'Nano Banana',
+  'React',
+  'Vercel',
 ];
 
-const ROW_COLOR = 'dark';
-const DIM_COLOR = '#181818';
-const INACTIVE_OPACITY = 0.2;
+const ROW_COLOR = '#1a1a1a';
+const DIM_COLOR = '#d0d0d0';
+const INACTIVE_OPACITY = 0.25;
+const ACTIVE_OPACITY = 1;
 
 export default function ThirdSection({ resizeTick = 0 }) {
   const sectionRef = useRef(null);
-  const wrapRef = useRef(null);
   const listRef = useRef(null);
-  const mobileSectionRef = useRef(null);
-  const mobileWrapRef = useRef(null);
   const mobileListRef = useRef(null);
   const [isMobile, setIsMobile] = useState(() => {
     if (typeof window === 'undefined') return false;
@@ -50,237 +52,105 @@ export default function ThirdSection({ resizeTick = 0 }) {
   useLayoutEffect(() => {
     if (typeof window === 'undefined') return undefined;
 
-    const buildAnimation = ({
-      section,
-      wrap,
-      list,
-      triggerId,
-      start,
-      pin = true,
-      scrub = true,
-      scrollOptions = {},
-    }) => {
-      if (!section || !wrap || !list) return () => { };
+    const list = isMobile ? mobileListRef.current : listRef.current;
+    if (!list) return undefined;
 
-      let rows = Array.from(list.querySelectorAll('.skill-row'));
-      if (!rows.length) return () => { };
+    const rows = Array.from(list.querySelectorAll('.skill-row'));
+    if (!rows.length) return undefined;
 
-      gsap.set(rows, { color: ROW_COLOR, opacity: INACTIVE_OPACITY });
+    // Set all skills with the same color, only opacity differs
+    gsap.set(rows, { color: ROW_COLOR, opacity: INACTIVE_OPACITY });
 
-      const centerY = () => wrap.clientHeight / 2;
-      const rowCenter = (el) => el.offsetTop + el.offsetHeight / 2;
-      const yStart = () => centerY() - rowCenter(rows[0]);
-      const travel = () => rowCenter(rows[rows.length - 1]) - rowCenter(rows[0]);
+    // Activate first skill initially
+    gsap.set(rows[0], { opacity: ACTIVE_OPACITY });
 
-      let activeIdx = -1;
-      const updateActive = () => {
-        const y = gsap.getProperty(list, 'y');
-        const cy = centerY();
-        let min = Infinity;
-        let idx = 0;
-        for (let i = 0; i < rows.length; i += 1) {
-          const c = rowCenter(rows[i]) + y;
-          const d = Math.abs(cy - c);
-          if (d < min) {
-            min = d;
-            idx = i;
-          }
-        }
-        if (idx !== activeIdx) {
-          if (activeIdx >= 0) {
-            gsap.to(rows[activeIdx], {
-              opacity: INACTIVE_OPACITY,
-              color: DIM_COLOR,
-              duration: 0.2,
-              ease: 'none',
-              overwrite: 'auto',
-            });
-          }
-          gsap.to(rows[idx], {
-            opacity: 1,
-            color: ROW_COLOR,
-            duration: 0.2,
-            ease: 'none',
-            overwrite: 'auto',
-          });
-          activeIdx = idx;
-        }
-      };
+    const triggers = [];
+    const triggerId = isMobile ? 'third-mobile' : 'third-desktop';
 
-      gsap.set(list, { y: yStart() });
-      updateActive();
-
-      const resetColors = () => {
-        rows.forEach((row) => {
-          gsap.to(row, {
-            opacity: INACTIVE_OPACITY,
-            color: DIM_COLOR,
-            duration: 0.2,
-            ease: 'none',
-            overwrite: 'auto',
-          });
-        });
-        activeIdx = -1;
-      };
-
-      let tweenInstance = null;
-
-      ScrollTrigger.getById(triggerId)?.kill();
-
-      const ctx = gsap.context(() => {
-        tweenInstance = gsap.to(list, {
-          y: () => yStart() - travel(),
-          ease: pin ? 'none' : 'power1.out',
-          onUpdate: updateActive,
-          scrollTrigger: {
-            id: triggerId,
-            trigger: section,
-            start,
-            end: () => `+=${travel()}`,
-            scrub,
-            pin,
-            pinSpacing: pin,
-            invalidateOnRefresh: true,
-            markers: false,
-            ...scrollOptions,
-            onLeave: () => resetColors(),
-            onLeaveBack: () => resetColors(),
-          },
-        });
-      }, section);
-
-      const refreshAll = () => {
-        rows = Array.from(list.querySelectorAll('.skill-row'));
-        if (!rows.length) return;
-
-        const currentProgress =
-          typeof tweenInstance?.progress === 'function' ? tweenInstance.progress() : null;
-
-        ScrollTrigger.refresh();
-
-        requestAnimationFrame(() => {
-          if (!rows.length) return;
-
-          if (tweenInstance && currentProgress !== null) {
-            tweenInstance.progress(currentProgress);
-          }
-
-          activeIdx = -1;
-          updateActive();
-        });
-      };
-
-      // Debounced resize handler for performance
-      let resizeRafId = null;
-      const debouncedRefresh = () => {
-        if (resizeRafId) cancelAnimationFrame(resizeRafId);
-        resizeRafId = requestAnimationFrame(refreshAll);
-      };
-
-      window.addEventListener('resize', debouncedRefresh, { passive: true });
-      let resizeObserver = null;
-      if (typeof ResizeObserver !== 'undefined') {
-        resizeObserver = new ResizeObserver(debouncedRefresh);
-        resizeObserver.observe(wrap);
-      }
-      if (document.fonts?.ready) document.fonts.ready.then(refreshAll);
-
-      return () => {
-        if (resizeRafId) cancelAnimationFrame(resizeRafId);
-        window.removeEventListener('resize', debouncedRefresh);
-        resizeObserver?.disconnect();
-        tweenInstance?.kill();
-        ctx.revert();
-      };
-    };
-
-    const mm = ScrollTrigger.matchMedia({
-      '(max-width: 767px)': () =>
-        buildAnimation({
-          section: mobileSectionRef.current,
-          wrap: mobileWrapRef.current,
-          list: mobileListRef.current,
-          triggerId: 'third-section-skills-mobile',
-          start: 'center center',
-          pin: true,
-          scrub: true,
-        }),
-      '(min-width: 768px) and (max-width: 1023px)': () =>
-        buildAnimation({
-          section: sectionRef.current,
-          wrap: wrapRef.current,
-          list: listRef.current,
-          triggerId: 'third-section-skills-tablet',
-          start: 'center center',
-          scrub: 0.5,
-        }),
-      '(min-width: 1024px)': () =>
-        buildAnimation({
-          section: sectionRef.current,
-          wrap: wrapRef.current,
-          list: listRef.current,
-          triggerId: 'third-section-skills-desktop',
-          start: 'top top',
-          scrub: 0.6,
-        }),
+    // Kill existing triggers
+    rows.forEach((_, idx) => {
+      ScrollTrigger.getById(`${triggerId}-skill-${idx}`)?.kill();
     });
 
-    return () => mm.revert();
-  }, [resizeTick]);
+    const ctx = gsap.context(() => {
+      rows.forEach((row, idx) => {
+        // Create a ScrollTrigger for each skill item
+        // Each skill only handles its own activation/deactivation
+        const trigger = ScrollTrigger.create({
+          id: `${triggerId}-skill-${idx}`,
+          trigger: row,
+          start: 'top 50%', // Activate when top of skill reaches center
+          end: 'bottom 50%', // Deactivate when bottom passes center
+          markers: false,
+          onToggle: (self) => {
+            // Single callback for enter/leave in both directions
+            // Only animate opacity, color stays the same
+            gsap.to(row, {
+              opacity: self.isActive ? ACTIVE_OPACITY : INACTIVE_OPACITY,
+              duration: 0.3,
+              ease: 'power2.out',
+              overwrite: true,
+            });
+          },
+        });
+        triggers.push(trigger);
+      });
+    }, sectionRef.current);
+
+    return () => {
+      triggers.forEach(t => t.kill());
+      ctx.revert();
+    };
+  }, [resizeTick, isMobile]);
 
   return (
     <section
       id="process"
       ref={sectionRef}
-      className="section-full relative isolate min-h-[700px] min-w-screen bg-light text-dark px-6 py-0 z-10 flex items-center justify-center"
+      className="relative isolate min-w-screen bg-light text-dark z-10"
     >
       {isMobile ? (
-        <div
-          ref={mobileSectionRef}
-          className="relative flex min-h-full w-full grow items-center justify-center px-6"
-        >
-          <div
-            ref={mobileWrapRef}
-            className="relative flex h-full w-full items-center justify-center"
+        /* Mobile: Simple scrolling list */
+        <div className="flex min-h-screen w-full flex-col items-center justify-start px-6 py-[50vh]">
+          <ul
+            ref={mobileListRef}
+            className="m-0 flex w-full max-w-[360px] flex-col items-center gap-5 text-center"
           >
-            <ul
-              ref={mobileListRef}
-              className="m-0 flex w-full max-w-[360px] flex-col items-center gap-10 text-center will-change-transform"
-            >
-              {SKILLS.map((label, i) => (
-                <li
-                  key={`mobile-${i}`}
-                  className="skill-row font-urbanist font-normal leading-[0.7]"
-                  style={{ fontSize: 'clamp(2.5rem, 18vw, 4.5rem)' }}
-                >
-                  {label}
-                </li>
-              ))}
-            </ul>
-          </div>
+            {SKILLS.map((label, i) => (
+              <li
+                key={`mobile-${i}`}
+                className="skill-row font-urbanist font-normal leading-[0.9] transition-colors duration-300"
+                style={{ fontSize: 'clamp(2.5rem, 18vw, 4.5rem)' }}
+              >
+                {label}
+              </li>
+            ))}
+          </ul>
         </div>
       ) : (
-        <div className="flex h-full w-full max-w-[1400px] flex-col items-center justify-center gap-8 overflow-hidden lg:flex-row lg:items-center lg:justify-between lg:gap-16">
-          <div className="hidden w-full shrink-0 lg:block lg:w-[34%]">
-            <h3 className="title-32 font-normal leading-tight">
-              Different skills for
-              <br /> the best result
-            </h3>
+        /* Desktop: Two-column layout with sticky left heading */
+        <div className="flex w-full max-w-[1400px] mx-auto px-6 lg:px-12">
+          {/* Left column - Sticky heading */}
+          <div className="hidden lg:block lg:w-[40%] shrink-0">
+            <div className="sticky top-0 h-screen flex items-center">
+              <h3 className="title-32 font-normal leading-tight">
+                Different skills for
+                <br /> the best result
+              </h3>
+            </div>
           </div>
 
-          <div
-            ref={wrapRef}
-            className="relative flex h-full max-h-[100dvh] min-h-[320px] w-full max-w-[520px] mx-auto flex-1 items-center justify-center"
-          >
+          {/* Right column - Scrolling skill list */}
+          <div className="flex-1 py-[50vh]">
             <ul
               ref={listRef}
-              className="m-0 flex w-full flex-col items-center text-center gap-8 will-change-transform lg:items-start lg:text-left"
+              className="m-0 flex w-full flex-col gap-4 lg:gap-7"
             >
               {SKILLS.map((label, i) => (
                 <li
                   key={`desktop-${i}`}
-                  className="skill-row font-urbanist font-normal md:leading-[0.9] leading-[0.6]"
-                  style={{ fontSize: 'clamp(2.75rem, 12vw, 5rem)' }}
+                  className="skill-row font-urbanist font-normal leading-[0.9] transition-colors duration-300"
+                  style={{ fontSize: 'clamp(2.75rem, 5vw, 5rem)' }}
                 >
                   {label}
                 </li>

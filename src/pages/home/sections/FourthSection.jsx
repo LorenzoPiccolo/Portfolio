@@ -17,12 +17,20 @@ export default function FourthSection({ resizeTick = 0 }) {
     const sectionEl = sectionRef.current;
     if (!sectionEl) return;
 
+    const isMobile = window.matchMedia('(max-width: 767px)').matches;
+
     const ctx = gsap.context(() => {
       const cards = Array.from(sectionEl.querySelectorAll('[data-work-card]'));
+      const cardsContainer = sectionEl.querySelector('.relative.flex.w-full.justify-center');
       if (!cards.length) return;
 
-      cards.forEach((card) => {
-        gsap.set(card, { transformOrigin: 'center center' });
+      // First card visible, all others start outside viewport (below)
+      cards.forEach((card, idx) => {
+        gsap.set(card, {
+          transformOrigin: 'center center',
+          yPercent: idx === 0 ? 0 : 120, // First card visible, others hidden below
+          scale: 1,
+        });
       });
 
       const hiddenOffset = 120;
@@ -42,16 +50,20 @@ export default function FourthSection({ resizeTick = 0 }) {
           let scale;
 
           if (idx < activeIndex) {
+            // Cards that have already passed - stack them up
             const depth = activeIndex - idx + t;
             yPercent = -levelOffset * depth;
             scale = 0.9;
           } else if (idx === activeIndex) {
+            // Current active card - animate up as it becomes "previous"
             yPercent = -levelOffset * t;
             scale = 1 - 0.1 * t;
           } else if (idx === nextIndex && nextIndex !== activeIndex) {
+            // Next card - start animating in from below
             yPercent = hiddenOffset * (1 - t);
             scale = 1;
           } else {
+            // All other cards - stay hidden below
             yPercent = hiddenOffset;
             scale = 1;
           }
@@ -71,25 +83,47 @@ export default function FourthSection({ resizeTick = 0 }) {
       };
 
       ScrollTrigger.getById('fourth-section-works')?.kill();
+      ScrollTrigger.getById('fourth-section-exit')?.kill();
+
+      const getScrollDistance = () => {
+        const cardHeight = cards[0]?.offsetHeight || window.innerHeight;
+        const stepDistance = Math.max(320, Math.round(cardHeight * 0.75));
+        const steps = Math.max(1, cards.length - 1);
+        return stepDistance * steps;
+      };
+
+      // Main stacking animation
       const trigger = ScrollTrigger.create({
         id: 'fourth-section-works',
         trigger: sectionEl,
         start: 'top top',
-        end: () => {
-          const cardHeight = cards[0]?.offsetHeight || window.innerHeight;
-          const stepDistance = Math.max(320, Math.round(cardHeight * 0.75));
-          const steps = Math.max(1, cards.length - 1);
-          return `+=${stepDistance * steps}`;
-        },
-        scrub: 0.5,
-        pin: true,
-        pinSpacing: true,
+        end: () => `+=${getScrollDistance()}`,
+        scrub: isMobile ? 0.3 : 0.8, // Faster scrub on mobile for responsiveness
+        pin: !isMobile, // Disable pin on mobile to prevent lag
+        pinSpacing: !isMobile,
         invalidateOnRefresh: true,
         refreshPriority: -1,
         markers: false,
         onUpdate: (self) => applyState(self.progress),
         onRefresh: (self) => applyState(self?.progress ?? 0, true),
       });
+
+      // Exit parallax - cards move up faster as section leaves
+      if (cardsContainer) {
+        gsap.to(cardsContainer, {
+          yPercent: -30, // Move cards up faster than scroll
+          ease: 'none',
+          scrollTrigger: {
+            id: 'fourth-section-exit',
+            trigger: sectionEl,
+            start: () => `top+=${getScrollDistance()} top`,
+            end: () => `top+=${getScrollDistance() + window.innerHeight} top`,
+            scrub: 1,
+            invalidateOnRefresh: true,
+            markers: false,
+          },
+        });
+      }
 
       applyState(trigger.progress || 0, true);
 

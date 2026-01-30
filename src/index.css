@@ -36,6 +36,26 @@
   body {
     touch-action: pan-y;
     overscroll-behavior-y: none;
+    /* Safari: extend under safe areas for full-bleed display */
+    padding: env(safe-area-inset-top, 0) env(safe-area-inset-right, 0) env(safe-area-inset-bottom, 0) env(safe-area-inset-left, 0);
+  }
+
+  /* Safari: ensure content extends under the status bar and home indicator */
+  @supports (padding: max(0px)) {
+    body {
+      /* Remove default padding to allow full-bleed */
+      padding: 0;
+      /* Content will naturally extend under safe areas */
+    }
+
+    /* For elements that need safe area awareness */
+    .safe-area-top {
+      padding-top: env(safe-area-inset-top, 0);
+    }
+
+    .safe-area-bottom {
+      padding-bottom: env(safe-area-inset-bottom, 0);
+    }
   }
 }
 

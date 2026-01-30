@@ -78,7 +78,7 @@ const STICKERS = [
   {
     src: sticker2,
     alt: 'Torii sticker',
-    top: '90%',
+    top: '80%',
     left: '65%',
     width: '200px',
     aspect: '1 / 1',
@@ -147,14 +147,6 @@ export default function FifthSection({ resizeTick = 0 }) {
       const boxes = gsap.utils.toArray(section.querySelectorAll('[data-fifth-box]'));
       if (!boxes.length) return;
 
-      const scrollDistance = () => {
-        const container = stickersRef.current;
-        const containerHeight = container?.offsetHeight || section.offsetHeight || window.innerHeight * 2;
-        const travel = containerHeight - window.innerHeight;
-        return Math.max(travel, window.innerHeight * 0.8);
-      };
-
-      gsap.set(heading, { scale: 1.2, transformOrigin: '50% 50%' });
       gsap.set(boxes, { willChange: 'transform' });
 
       ScrollTrigger.getById('fifth-section-gallery')?.kill();
@@ -164,8 +156,8 @@ export default function FifthSection({ resizeTick = 0 }) {
         scrollTrigger: {
           id: 'fifth-section-gallery',
           trigger: section,
-          start: 'top 40%',
-          end: () => `+=${scrollDistance()} -=1000px`,
+          start: 'top center',
+          end: 'bottom top', // Continue parallax until section is completely off screen
           scrub: 0.5,
           invalidateOnRefresh: true,
           refreshPriority: -2,
@@ -173,12 +165,21 @@ export default function FifthSection({ resizeTick = 0 }) {
         },
       });
 
-      timeline.fromTo(
-        heading,
-        { scale: 1.5 },
-        { scale: 1, duration: 0.25, ease: 'power3.out' }
-      );
       timeline.add('stickers');
+
+      const headingAnimation = gsap.timeline({
+        scrollTrigger: {
+          trigger: section,
+          start: 'top 80%',
+          end: 'bottom 20%',
+          scrub: 1,
+          invalidateOnRefresh: true,
+          refreshPriority: -2,
+          markers: false,
+        }
+      })
+
+      headingAnimation.fromTo(heading, { scale: 1.5 }, { scale: 1, duration: 1 })
 
       boxes.forEach((box) => {
         const fromY = Number(box.getAttribute('data-from') || 40);
@@ -199,15 +200,14 @@ export default function FifthSection({ resizeTick = 0 }) {
   return (
     <section
       ref={sectionRef}
-      className="relative isolate min-h-[200svh] bg-dark px-6 text-light overflow-hidden"
+      className="relative isolate h-[200svh] bg-dark px-6 text-light overflow-hidden"
     >
-      {/* Sticky heading that stays in view while scrolling through section */}
+      {/* Sticky heading stays fixed in viewport center while scrolling */}
       <div
         ref={headingRef}
-        className="sticky top-0 left-0 right-0 z-10 flex h-screen items-center justify-center px-6"
-        style={{ height: '100svh' }}
+        className="fixed w-full top-0 flex h-[100svh] items-center justify-center px-6 z-0"
       >
-        <h4 className="md:title-32 title-24 w-[60%] md:max-w-[30vw] text-center font-normal leading-tight">
+        <h4 className="md:title-32 title-24 w-[60%] md:max-w-[30vw] text-center font-normal leading-tight fifth-section-heading">
           Full-time perfection seeker.
           <br />
           Love minimalism, Japan, space and Ferrari.
@@ -285,7 +285,7 @@ export default function FifthSection({ resizeTick = 0 }) {
               </div>
             );
           })}
-          <div className="w-full absolute bottom-0 left-0 right-0">
+          <div className="w-full absolute bottom-0 left-0 right-0 z-2">
             <img src={gradientImage} alt="" aria-hidden="true" className="w-full origin-bottom" />
           </div>
         </div>
