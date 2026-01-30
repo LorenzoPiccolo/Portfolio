@@ -200,12 +200,12 @@ export default function FifthSection({ resizeTick = 0 }) {
   return (
     <section
       ref={sectionRef}
-      className="relative isolate h-[200svh] bg-dark px-6 text-light overflow-hidden"
+      className="relative isolate h-[200svh] bg-dark md:px-6 text-light overflow-hidden"
     >
       {/* Sticky heading stays fixed in viewport center while scrolling */}
       <div
         ref={headingRef}
-        className="fixed w-full top-0 flex h-[100svh] items-center justify-center px-6 z-0"
+        className="fixed w-full top-0 flex h-[100svh] items-center justify-center md:px-6 z-0"
       >
         <h4 className="md:title-32 title-24 w-[60%] md:max-w-[30vw] text-center font-normal leading-tight fifth-section-heading">
           Full-time perfection seeker.

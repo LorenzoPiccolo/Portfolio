@@ -71,13 +71,14 @@ export default function FourthSection({ resizeTick = 0 }) {
           const vars = {
             yPercent,
             scale,
-            ease: 'power3.out',
           };
 
-          if (immediate) {
+          // On mobile, always use immediate set for smooth scrub
+          // On desktop, use tween only for non-scrub updates
+          if (immediate || isMobile) {
             gsap.set(card, vars);
           } else {
-            gsap.to(card, { ...vars, duration: 0.6, overwrite: true });
+            gsap.to(card, { ...vars, duration: 0.4, ease: 'power2.out', overwrite: true });
           }
         });
       };
@@ -98,9 +99,9 @@ export default function FourthSection({ resizeTick = 0 }) {
         trigger: sectionEl,
         start: 'top top',
         end: () => `+=${getScrollDistance()}`,
-        scrub: isMobile ? 0.3 : 0.8, // Faster scrub on mobile for responsiveness
-        pin: !isMobile, // Disable pin on mobile to prevent lag
-        pinSpacing: !isMobile,
+        scrub: isMobile ? true : 0.6, // true = immediate on mobile (no delay), smoother on desktop
+        pin: true,
+        pinSpacing: true,
         invalidateOnRefresh: true,
         refreshPriority: -1,
         markers: false,
@@ -108,8 +109,9 @@ export default function FourthSection({ resizeTick = 0 }) {
         onRefresh: (self) => applyState(self?.progress ?? 0, true),
       });
 
-      // Exit parallax - cards move up faster as section leaves
-      if (cardsContainer) {
+      // Exit parallax - cards move up faster as section leaves (desktop only)
+      // Disabled on mobile to prevent scroll conflicts with pinning
+      if (cardsContainer && !isMobile) {
         gsap.to(cardsContainer, {
           yPercent: -30, // Move cards up faster than scroll
           ease: 'none',

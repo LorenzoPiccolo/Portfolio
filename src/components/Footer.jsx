@@ -118,6 +118,8 @@ export default function Footer({ resizeTick = 0 }) {
     const gradient = gradientRef.current;
     if (!section || !gradient) return;
 
+    const isMobile = window.matchMedia('(max-width: 767px)').matches;
+
     const ctx = gsap.context(() => {
       gsap.set(gradient, { scaleY: 0, transformOrigin: 'top center' });
 
@@ -131,9 +133,9 @@ export default function Footer({ resizeTick = 0 }) {
             trigger: section,
             start: 'top top',
             end: () => `+=${Math.max(window.innerHeight * 1, 1200)}`,
-            scrub: 0.5,
-            pin: true,
-            pinSpacing: true,
+            scrub: isMobile ? true : 0.5,
+            pin: !isMobile, // Disable pinning on mobile to prevent scroll issues
+            pinSpacing: !isMobile,
             invalidateOnRefresh: true,
             refreshPriority: -3,
           },
