@@ -119,8 +119,8 @@ export default function ThirdSection({ resizeTick = 0 }) {
             {SKILLS.map((label, i) => (
               <li
                 key={`mobile-${i}`}
-                className="skill-row font-urbanist font-normal leading-[0.9] transition-colors duration-300"
-                style={{ fontSize: 'clamp(2.5rem, 18vw, 4.5rem)' }}
+                className="skill-row font-urbanist font-normal leading-[1] transition-colors duration-300"
+                style={{ fontSize: 'clamp(2.5rem, 15vw, 4.5rem)' }}
               >
                 {label}
               </li>
