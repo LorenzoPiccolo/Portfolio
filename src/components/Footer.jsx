@@ -4,6 +4,7 @@ import { gsap, ScrollTrigger } from '../utils/gsapConfig.js';
 import footerBackground from '../../img/image-footer-05.jpg';
 import logo from '../../img/logo.svg';
 import gradientOverlay from '../../img/gradient-footer.png';
+import useCursorGlow from '../hooks/useCursorGlow.js';
 
 const MENU_LINKS = [
   { label: 'Home', href: '/' },
@@ -79,16 +80,14 @@ function FooterNavList({ title, links }) {
 
 function FooterMarquee({ marqueeRef }) {
   return (
-    <a href="mailto:lorenzopikkolo@gmail.com">
-      <div ref={marqueeRef} className="absolute inset-x-0 bottom-10 z-10 px-6">
-        <div className="whitespace-nowrap">
-          <div className="inline-block will-change-transform animate-[marqueeLeft_35s_linear_infinite]">
-            <FooterMarqueeChunk />
-            <FooterMarqueeChunk />
-          </div>
+    <div ref={marqueeRef} className="absolute inset-x-0 bottom-10 z-10 px-6 pointer-events-none">
+      <div className="whitespace-nowrap">
+        <div className="inline-block will-change-transform animate-[marqueeLeft_35s_linear_infinite]">
+          <FooterMarqueeChunk />
+          <FooterMarqueeChunk />
         </div>
       </div>
-    </a>
+    </div>
   );
 }
 
@@ -112,6 +111,7 @@ export default function Footer({ resizeTick = 0 }) {
   const sectionRef = useRef(null);
   const gradientRef = useRef(null);
   const marqueeRef = useRef(null);
+  const { handlers: footerCardGlowHandlers, glowStyle: footerCardGlowStyle } = useCursorGlow({ glowSize: 600 });
 
   useLayoutEffect(() => {
     const section = sectionRef.current;
@@ -165,9 +165,9 @@ export default function Footer({ resizeTick = 0 }) {
         scrollTrigger: {
           id: 'footer-marquee',
           trigger: section,
-          start: 'top 80%',
+          start: 'top 20%',
           markers: false,
-          toggleActions: 'play none none reset',
+          toggleActions: 'play reverse play reverse',
         },
       });
     }, section);
@@ -198,12 +198,15 @@ export default function Footer({ resizeTick = 0 }) {
       <div className="absolute bottom-0 md:left-0 flex h-full w-full flex-col">
         <div className="flex flex-1 items-end justify-start">
           <div
-            className="flex md:h-[55%] h-[40vh] min-h-[370px] w-full max-w-[1180px] flex-col justify-between rounded-[0] rounded-tr-[64px] rounded-tl-[64px] md:rounded-tl-[0px] md:border-r-[1px] border-r-[0px] border-t-[1px] backdrop-blur-[18px] sm:w-[85vw] lg:w-[70vw]"
+            className="relative overflow-hidden flex md:h-[55%] h-[40vh] min-h-[370px] w-full max-w-[1180px] flex-col justify-between rounded-[0] rounded-tr-[64px] rounded-tl-[64px] md:rounded-tl-[0px] md:border-r-[1px] border-r-[0px] border-t-[1px] backdrop-blur-[18px] sm:w-[85vw] lg:w-[70vw]"
             style={{
               backgroundColor: 'var(--blurBg)',
               borderColor: 'var(--blurStroke)',
             }}
+            {...footerCardGlowHandlers}
           >
+            {/* Glow overlay */}
+            <div style={footerCardGlowStyle} aria-hidden="true" />
             <div className="flex flex-col md:flex-row gap-8 justify-between md:w-[90%] px-8 pt-10 text-light/80 md:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)_minmax(0,0.9fr)] md:px-12 md:pt-12">
               <div className="flex justify-between md:flex-col items-center justify-center md:justify-start md:items-start md:gap-6 gap-10 text-16 text-light">
                 <img src={logo} alt="Logo" className="h-16 md:h-14 w-auto" />

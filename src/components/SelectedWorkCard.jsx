@@ -1,9 +1,12 @@
 // src/components/SelectedWorkCard.jsx
-export default function SelectedWorkCard({ videoSrc, poster = undefined, title, subtitle, year }) {
+export default function SelectedWorkCard({ videoSrc, poster = undefined, title, subtitle, year, href }) {
+  const Wrapper = href ? 'a' : 'article';
+  const wrapperProps = href ? { href, className: "block relative h-full w-full rounded-[24px] overflow-hidden bg-dark origin-top group" } : { className: "relative h-full w-full rounded-[24px] overflow-hidden bg-dark origin-top group" };
+
   return (
-    <article className="relative h-full w-full rounded-[24px] overflow-hidden bg-dark origin-top">
+    <Wrapper {...wrapperProps}>
       <video
-        className="absolute inset-0 h-full w-full object-cover"
+        className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
         src={videoSrc}
         poster={poster}
         autoPlay
@@ -21,7 +24,7 @@ export default function SelectedWorkCard({ videoSrc, poster = undefined, title, 
         <p className="text-20 md:text-16 font-normal leading-tight opacity-90">{subtitle}</p>
       </div>
 
-      <div className="absolute inset-0 bg-dark/20" aria-hidden="true" />
-    </article>
+      <div className="absolute inset-0 bg-dark/20 transition-opacity duration-300 " aria-hidden="true" />
+    </Wrapper>
   );
 }

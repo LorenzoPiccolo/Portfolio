@@ -1,10 +1,11 @@
 // src/components/DynamicButton.jsx
-import { forwardRef, isValidElement, cloneElement, useLayoutEffect, useRef } from 'react';
+import { forwardRef, isValidElement, cloneElement, useLayoutEffect, useRef, useEffect } from 'react';
 import { ArrowUpRight } from 'lucide-react';
 import { gsap, ScrollTrigger } from '../utils/gsapConfig.js';
+import useCursorGlow from '../hooks/useCursorGlow.js';
 
 const baseBtnClasses =
-  'relative flex items-center gap-4 rounded-full border border-gray600 bg-dark/70 backdrop-blur-lg pl-4 pr-2 py-2 text-light transform transition-transform duration-300 hover:scale-[1.05] group whitespace-nowrap w-fit';
+  'relative overflow-hidden flex items-center gap-4 rounded-full border border-gray600 bg-dark/70 backdrop-blur-lg pl-4 pr-2 py-2 text-light transform transition-transform duration-300 hover:scale-[1.05] group whitespace-nowrap w-fit';
 
 const iconWrapClasses =
   'flex h-12 w-12 md:h-10  md:w-10 shrink-0 items-center justify-center rounded-full bg-primary transition-transform duration-300';
@@ -22,12 +23,13 @@ const DynamicButton = forwardRef(function DynamicButton(
     target,
     rel,
     scrollTrigger: scrollTriggerConfig,
-    reveal = {},
+    reveal,
     ...props
   },
   ref,
 ) {
   const innerRef = useRef(null);
+  const { handlers: glowHandlers, glowStyle } = useCursorGlow({ glowSize: 300 });
   const buttonClasses = `${baseBtnClasses}${className ? ` ${className}` : ''}`;
   const iconClasses = `${iconWrapClasses}${iconClassName ? ` ${iconClassName}` : ''}`;
   const Tag = href ? 'a' : 'button';
@@ -70,6 +72,11 @@ const DynamicButton = forwardRef(function DynamicButton(
     }
   }
 
+  const revealRef = useRef(reveal);
+  useEffect(() => {
+    revealRef.current = reveal;
+  }, [reveal]);
+
   useLayoutEffect(() => {
     if (!scrollTriggerConfig) return;
 
@@ -87,20 +94,22 @@ const DynamicButton = forwardRef(function DynamicButton(
     const triggerEl = resolveTrigger();
     if (!triggerEl) return;
 
-    const fromVars = { autoAlpha: 0, scale: 0, y: -80, ...(reveal.from ?? {}) };
+    const revealConfig = revealRef.current ?? {};
+    const fromVars = { autoAlpha: 0, scale: 0, y: -80, ...(revealConfig.from ?? {}) };
     const toVars = {
       autoAlpha: 1,
       scale: 1,
       y: 0,
       duration: 0.3,
       ease: 'easeOut',
-      ...(reveal.to ?? {}),
+      ...(revealConfig.to ?? {}),
     };
 
     const scrollTrigger = {
-      toggleActions: 'play reverse play reverse',
+      toggleActions: 'play none none none',
       markers: false,
       start: 'bottom bottom',
+      once: true,
       ...scrollTriggerConfig,
       trigger: triggerEl,
     };
@@ -114,7 +123,7 @@ const DynamicButton = forwardRef(function DynamicButton(
     }, el);
 
     return () => ctx.revert();
-  }, [scrollTriggerConfig, reveal]);
+  }, [scrollTriggerConfig]);
 
   const setRefs = (node) => {
     innerRef.current = node;
@@ -126,12 +135,16 @@ const DynamicButton = forwardRef(function DynamicButton(
   };
 
   return (
-    <Tag ref={setRefs} className={buttonClasses} {...tagProps} {...props}>
-      <div className="flex flex-col h-[18px] gap-1 overflow-hidden">
-        {label && <span className={labelClasses}>{label}</span>}
-        {label && <span className={labelClasses}>{label}</span>}
+    <Tag ref={setRefs} className={buttonClasses} {...tagProps} {...props} {...glowHandlers}>
+      {/* Glow overlay */}
+      <div style={glowStyle} aria-hidden="true" />
+      <div className="relative z-10 flex items-center gap-4">
+        <div className="flex flex-col h-[18px] gap-1 overflow-hidden">
+          {label && <span className={labelClasses}>{label}</span>}
+          {label && <span className={labelClasses}>{label}</span>}
+        </div>
+        {iconContent && <span className={iconClasses}>{iconContent}</span>}
       </div>
-      {iconContent && <span className={iconClasses}>{iconContent}</span>}
     </Tag>
   );
 });

@@ -2,7 +2,7 @@
 import { useEffect, useRef, useState } from 'react';
 import logo from '../../img/logo.svg';
 
-const NAV_LINKS = ['Home', 'Works', 'About me', 'Process', ];
+const NAV_LINKS = ['Home', 'Works', 'About me', 'Process',];
 
 export default function Header({ currentPage = 'Home' }) {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -56,57 +56,54 @@ export default function Header({ currentPage = 'Home' }) {
             </div>
           </button>
 
-          
+
         </div>
       </div>
       <div
-            className={`absolute right-0 lg:left-full top-[68px] lg:top-0 ml-2 w-[220px] rounded-[14px] border border-gray600 bg-gray850/70 backdrop-blur-[12px] px-6 py-5 transition-all duration-200 ease-out ${
-              menuOpen
-                ? 'opacity-100 pointer-events-auto translate-x-0'
-                : 'opacity-0 pointer-events-none -translate-x-2'
-            }`}
-            onMouseEnter={() => window.clearTimeout(hoverTimeoutRef.current)}
-            onMouseLeave={closeMenu}
-          >
-            <ul className="flex flex-col gap-4 text-16">
-              {NAV_LINKS.map((label, index) => {
-                const isHovered = hovered === label;
-                const isDimmed = hovered && hovered !== label;
+        className={`absolute right-0 lg:left-full top-[68px] lg:top-0 ml-2 w-[220px] rounded-[14px] border border-gray600 bg-gray850/70 backdrop-blur-[12px] px-6 py-5 transition-all duration-200 ease-out ${menuOpen
+          ? 'opacity-100 pointer-events-auto translate-x-0'
+          : 'opacity-0 pointer-events-none -translate-x-2'
+          }`}
+        onMouseEnter={() => window.clearTimeout(hoverTimeoutRef.current)}
+        onMouseLeave={closeMenu}
+      >
+        <ul className="flex flex-col gap-4 text-16">
+          {NAV_LINKS.map((label, index) => {
+            const isHovered = hovered === label;
+            const isDimmed = hovered && hovered !== label;
 
-                const transitionDelay = isDimmed ? `${index * 60}ms` : '0ms';
+            const transitionDelay = isDimmed ? `${index * 60}ms` : '0ms';
 
-                return (
-                  <li key={label}>
-                    <a
-                      href={resolveHref(label)}
-                      onMouseEnter={() => {
-                        window.clearTimeout(hoverTimeoutRef.current);
-                        setHovered(label);
-                      }}
-                      onFocus={() => setHovered(label)}
-                      onMouseLeave={() => {
-                        hoverTimeoutRef.current = window.setTimeout(resetHover, 120);
-                      }}
-                      onBlur={resetHover}
-                      className={`relative flex items-center gap-2 transform transition-transform transition-colors duration-300 ease-out ${
-                        isDimmed ? 'text-gray400' : 'text-light'
-                      } ${isHovered ? 'translate-x-2' : 'translate-x-0'}`}
-                      style={{ transitionDelay }}
-                    >
-                      <span
-                        className={`w-2 text-[20px] leading-none text-light transition-opacity duration-300 ${
-                          isHovered ? 'opacity-100' : 'opacity-0'
-                        }`}
-                      >
-                        ·
-                      </span>
-                      <span className="leading-tight">{label}</span>
-                    </a>
-                  </li>
-                );
-              })}
-            </ul>
-          </div>
+            return (
+              <li key={label}>
+                <a
+                  href={resolveHref(label)}
+                  onMouseEnter={() => {
+                    window.clearTimeout(hoverTimeoutRef.current);
+                    setHovered(label);
+                  }}
+                  onFocus={() => setHovered(label)}
+                  onMouseLeave={() => {
+                    hoverTimeoutRef.current = window.setTimeout(resetHover, 120);
+                  }}
+                  onBlur={resetHover}
+                  className={`relative flex items-center gap-2 transform transition-transform transition-colors duration-300 ease-out ${isDimmed ? 'text-gray400' : 'text-light'
+                    } ${isHovered ? 'translate-x-2' : 'translate-x-0'}`}
+                  style={{ transitionDelay }}
+                >
+                  <span
+                    className={`w-2 text-[20px] leading-none text-light transition-opacity duration-300 ${isHovered ? 'opacity-100' : 'opacity-0'
+                      }`}
+                  >
+                    ·
+                  </span>
+                  <span className="leading-tight">{label}</span>
+                </a>
+              </li>
+            );
+          })}
+        </ul>
+      </div>
     </header>
   );
 }

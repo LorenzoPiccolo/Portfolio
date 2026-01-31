@@ -5,6 +5,7 @@ import { gsap, ScrollTrigger } from '../../../utils/gsapConfig.js';
 import { ChevronRight } from 'lucide-react';
 
 import DynamicButton from '../../../components/DynamicButton.jsx';
+import GlassCard from '../../../components/GlassCard.jsx';
 import { useFadeInUp } from '../../../hooks/useFadeInUp.js';
 import useIntersectionObserver from '../../../hooks/useIntersectionObserver.js';
 import iconOne from '../../../../img/icona-01.svg';
@@ -112,9 +113,9 @@ export default function SecondSection({ resizeTick = 0 }) {
           {/* Blocco 1 - 50% width, 550px height */}
           <div className="md:basis-1/2 w-full">
             <a href="#" className="block transition-transform duration-300 hover:scale-[1.02] ease-out">
-              <div className="w-full h-[50vh] md:h-[550px] rounded-[14px] border border-gray600 bg-gray850/70 backdrop-blur-[12px] flex items-center justify-center">
+              <GlassCard className="w-full h-[50vh] md:h-[550px] rounded-[14px] bg-gray850/70 flex items-center justify-center">
                 <img src={iconOne} alt="icona 01" className="md:w-[400px] w-[250px]" />
-              </div>
+              </GlassCard>
               <div className="title-24 font-normal mt-2">Web design</div>
             </a>
           </div>
@@ -122,11 +123,13 @@ export default function SecondSection({ resizeTick = 0 }) {
           {/* Blocco 2 - 25% width, 300px height */}
           <div className="md:basis-1/4 w-full">
             <a href="#" className="block transition-transform duration-300 hover:scale-[1.02] ease-out">
-              <div className="w-full h-[50vh] md:h-[300px] rounded-[14px] border border-gray600 bg-gray850/70 backdrop-blur-[12px] flex gap-[32px] hover:gap-[64px] transition-all duration-300 ease-out items-center justify-center">
-                <img src={iconTwoOne} alt="icona 02" className="h-[60px]" />
-                <img src={iconTwoTwo} alt="icona 02" className="h-[150px]" />
-                <img src={iconTwoThree} alt="icona 02" className="h-[60px]" />
-              </div>
+              <GlassCard className="w-full h-[50vh] md:h-[300px] rounded-[14px] bg-gray850/70">
+                <div className="flex gap-[32px] hover:gap-[56px] transition-all duration-300 ease-out items-center justify-center">
+                  <img src={iconTwoOne} alt="icona 02" className="h-[60px]" />
+                  <img src={iconTwoTwo} alt="icona 02" className="h-[150px]" />
+                  <img src={iconTwoThree} alt="icona 02" className="h-[60px]" />
+                </div>
+              </GlassCard>
               <div className="title-24 font-normal mt-2">UX/UI Design</div>
             </a>
           </div>
@@ -134,13 +137,13 @@ export default function SecondSection({ resizeTick = 0 }) {
           {/* Blocco 3 - 25% width, 300px height */}
           <div className="md:basis-1/4 w-full">
             <a href="#" className="group block transition-transform duration-300 hover:scale-[1.03] ease-out">
-              <div className="w-full h-[50vh] md:h-[300px] rounded-[14px] border border-gray600 bg-gray850/70 backdrop-blur-[12px] flex items-center justify-center">
+              <GlassCard className="w-full h-[50vh] md:h-[300px] rounded-[14px] bg-gray850/70 flex items-center justify-center">
                 <img
                   src={iconThree}
                   alt="icona 03"
                   className="w-[140px] h-[140px] transform transition-transform duration-[5000ms] ease-out motion-reduce:transform-none motion-safe:group-hover:rotate-[360deg]"
                 />
-              </div>
+              </GlassCard>
               <div className="title-24 font-normal mt-2">AI visual</div>
             </a>
           </div>

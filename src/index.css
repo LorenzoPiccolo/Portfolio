@@ -137,3 +137,16 @@
     will-change: transform, opacity;
   }
 }
+
+/* Floating animation for scroll arrow */
+@keyframes floatUpDown {
+
+  0%,
+  100% {
+    transform: translateY(-3px);
+  }
+
+  50% {
+    transform: translateY(3px);
+  }
+}
