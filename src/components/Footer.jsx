@@ -151,25 +151,33 @@ export default function Footer({ resizeTick = 0 }) {
     const marquee = marqueeRef.current;
     if (!section || !marquee) return;
 
-    const ctx = gsap.context(() => {
-      gsap.set(marquee, { y: 200, autoAlpha: 0, x: 200 });
+    const isMobile = window.matchMedia('(max-width: 767px)').matches;
 
+    const ctx = gsap.context(() => {
       ScrollTrigger.getById('footer-marquee')?.kill();
 
-      gsap.to(marquee, {
-        x: 0,
-        y: 0,
-        autoAlpha: 1,
-        duration: 1.2,
-        ease: 'power3.out',
-        scrollTrigger: {
-          id: 'footer-marquee',
-          trigger: section,
-          start: 'top 20%',
-          markers: false,
-          toggleActions: 'play reverse play reverse',
-        },
-      });
+      if (isMobile) {
+        // On mobile, show marquee immediately without animation
+        gsap.set(marquee, { y: 0, autoAlpha: 1, x: 0 });
+      } else {
+        // On desktop, animate in on scroll
+        gsap.set(marquee, { y: 100, autoAlpha: 0, x: 100 });
+
+        gsap.to(marquee, {
+          x: 0,
+          y: 0,
+          autoAlpha: 1,
+          duration: 1.2,
+          ease: 'power3.out',
+          scrollTrigger: {
+            id: 'footer-marquee',
+            trigger: section,
+            start: 'top bottom',
+            markers: false,
+            toggleActions: 'play none none none',
+          },
+        });
+      }
     }, section);
 
     return () => ctx.revert();

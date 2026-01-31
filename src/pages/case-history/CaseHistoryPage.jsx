@@ -31,28 +31,27 @@ export default function CaseHistoryPage({ project }) {
         sections = [],
     } = project || {};
 
-    // Word-by-word text reveal animation (like SecondSection)
+    // Word-by-word text reveal animation (matching works page)
     useLayoutEffect(() => {
         const el = descriptionRef.current;
         if (!el) return;
 
         const ctx = gsap.context(() => {
-            const isMobileDevice = window.matchMedia('(max-width: 767px)').matches;
             const words = el.querySelectorAll('.reveal-word');
             if (!words.length) return;
 
             // Initial state: light color with 20% opacity
-            gsap.set(words, { color: COLOR_LIGHT, opacity: 0.2 });
+            gsap.set(words, { opacity: 0.2, color: COLOR_LIGHT });
 
-            // Timeline: scroll progress reveals word-by-word
             ScrollTrigger.getById('case-history-text')?.kill();
+
             gsap.timeline({
                 scrollTrigger: {
                     id: 'case-history-text',
                     trigger: el,
-                    start: 'top 80%',
-                    end: () => `+=${isMobileDevice ? 400 : 600}`,
-                    scrub: isMobileDevice ? true : 0.5,
+                    start: 'top 70%',
+                    end: () => `+=${Math.max(600, window.innerHeight * 0.8)}`,
+                    scrub: true,
                     invalidateOnRefresh: true,
                     markers: false,
                 },
@@ -87,7 +86,7 @@ export default function CaseHistoryPage({ project }) {
                         window.location.href = '/works.html';
                     }
                 }}
-                className="fixed top-4 left-4 z-50 w-11 h-11 md:top-6 md:left-6 md:w-12 md:h-12 aspect-square rounded-[14px] border border-gray600 backdrop-blur-[12px] flex items-center justify-center overflow-hidden transition-transform duration-300 hover:scale-105 cursor-pointer"
+                className="fixed top-[84px] left-4 z-50 w-[60px] h-[60px] md:top-6 md:left-6 md:w-12 md:h-12 aspect-square rounded-[14px] border border-gray600 backdrop-blur-[12px] flex items-center justify-center overflow-hidden transition-transform duration-300 hover:scale-105 cursor-pointer"
                 style={{ backgroundColor: 'var(--blurBg)' }}
                 {...backButtonGlowHandlers}
             >
@@ -112,7 +111,7 @@ export default function CaseHistoryPage({ project }) {
 
                 {/* Info Bar - 64px below marquee */}
                 <div className="mt-16 w-full px-6 md:px-12">
-                    <div className="flex justify-between items-center font-spaceg text-[12px] tracking-[0.1em] uppercase text-gray400">
+                    <div className="flex flex-col md:flex-row justify-between items-end gap-4 md:gap-none md:items-center font-spaceg text-[12px] tracking-[0.1em] uppercase text-gray400">
                         <span>{category}</span>
                         <div className="flex items-center gap-2">
                             <ArrowDown className="w-4 h-4 animate-[floatUpDown_1.5s_ease-in-out_infinite]" />
@@ -124,7 +123,7 @@ export default function CaseHistoryPage({ project }) {
 
                 {/* Hero Image - 64px below info bar, with radius and padding */}
                 {heroImage && (
-                    <div className="mt-16 w-full h-[100svh]" style={{ padding: IMAGE_PADDING }}>
+                    <div className="mt-16 w-full aspect-[9/16] md:aspect-auto md:h-[100svh]" style={{ padding: IMAGE_PADDING }}>
                         <img
                             src={heroImage}
                             alt={`${name} hero`}
@@ -154,8 +153,8 @@ export default function CaseHistoryPage({ project }) {
                 <section className="w-full bg-dark" style={{ padding: IMAGE_PADDING }}>
                     {/* Desktop: flex row, Mobile: flex column */}
                     <div className="flex flex-col md:flex-row md:justify-between gap-6">
-                        {/* Left image - 100svh, scrolls with page */}
-                        <div className="w-full md:w-[45vw] h-[100svh]">
+                        {/* Left image - 9:16 on mobile, 100svh on desktop */}
+                        <div className="w-full md:w-[45vw] aspect-[9/16] md:aspect-auto md:h-[100svh]">
                             <img
                                 src={images[0].src}
                                 alt={images[0].alt || `${name} image 1`}
@@ -166,7 +165,7 @@ export default function CaseHistoryPage({ project }) {
                         {/* Right image - sticky at center when section reaches middle */}
                         <div className="w-full md:w-[45vw] md:h-[100svh] flex items-start">
                             <div
-                                className="w-full h-[40svh] md:sticky"
+                                className="w-full aspect-[9/16] md:aspect-auto md:h-[40svh] md:sticky"
                                 style={{ top: 'calc(50vh - 20svh)' }}
                             >
                                 <img

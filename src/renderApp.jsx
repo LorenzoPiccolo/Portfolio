@@ -5,12 +5,16 @@ import Lenis from '@studio-freight/lenis';
 import { gsap, ScrollTrigger } from './utils/gsapConfig.js';
 
 export default function renderApp(RootComponent) {
-  const prefersTouchScrolling =
+  // Always disable smooth scroll (Lenis) on mobile devices
+  const isMobile =
     typeof window !== 'undefined' &&
-    (window.matchMedia('(hover: none) and (pointer: coarse)').matches || window.innerWidth <= 768);
+    (window.matchMedia('(hover: none)').matches ||
+      window.matchMedia('(pointer: coarse)').matches ||
+      window.innerWidth <= 768 ||
+      /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent));
 
   let lenis;
-  if (!prefersTouchScrolling) {
+  if (!isMobile) {
     lenis = new Lenis({
       duration: 1.1,
       easing: (t) => 1 - Math.pow(1 - t, 3),

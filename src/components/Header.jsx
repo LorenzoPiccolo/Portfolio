@@ -1,6 +1,7 @@
 // src/components/Header.jsx
 import { useEffect, useRef, useState } from 'react';
 import logo from '../../img/logo.svg';
+import useCursorGlow from '../hooks/useCursorGlow.js';
 
 const NAV_LINKS = ['Home', 'Works', 'About me', 'Process',];
 
@@ -8,6 +9,7 @@ export default function Header({ currentPage = 'Home' }) {
   const [menuOpen, setMenuOpen] = useState(false);
   const [hovered, setHovered] = useState(null);
   const hoverTimeoutRef = useRef(null);
+  const { handlers: glowHandlers, glowStyle } = useCursorGlow({ glowSize: 400 });
 
   const resolveHref = (label) => {
     if (label === 'Home') return '/';
@@ -31,15 +33,17 @@ export default function Header({ currentPage = 'Home' }) {
   useEffect(() => () => window.clearTimeout(hoverTimeoutRef.current), []);
 
   return (
-    <header className="fixed top-4 inset-x-4 z-50 scale-[0.98] hover:scale-[1] transition-transform duration-300 ease-quad md:top-6 md:left-1/2 md:inset-x-auto md:-translate-x-1/2">
+    <header className="fixed top-4 left-4 w-[calc(100vw-32px)] z-50 hover:scale-[1] transition-transform duration-300 ease-quad md:top-6 md:left-1/2 md:w-auto md:origin-center md:scale-[0.98] md:-translate-x-1/2">
       <div
-        className="w-full rounded-[14px] border border-gray600 bg-gray850/70 backdrop-blur-[12px] px-2.5 py-2.5 flex items-center justify-between md:w-[460px]"
+        className="relative overflow-hidden w-full rounded-[14px] border border-gray600 bg-gray850/70 backdrop-blur-[12px] px-2.5 py-2.5 flex items-center justify-between md:w-[460px]"
+        {...glowHandlers}
       >
-        <a href="/" className="inline-flex items-center gap-2">
+        <div style={glowStyle} aria-hidden="true" />
+        <a href="/" className="inline-flex items-center gap-2 relative z-10">
           <img src={logo} alt="Logo" className="h-10 w-10 md:h-8 md:w-8" />
         </a>
 
-        <div className="relative inline-flex items-start">
+        <div className="relative inline-flex items-start z-10">
           <button
             aria-label="Apri menu"
             className="group inline-flex items-center transition-all"
