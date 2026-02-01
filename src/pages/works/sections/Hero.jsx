@@ -135,7 +135,7 @@ export default function WorksHeroSection({ resizeTick = 0 }) {
   return (
     <section
       ref={sectionRef}
-      className="flex w-full flex-col items-center gap-16 px-6 pb-6 text-light pt-[40vh] lg:pt-[16vw] overflow-x-hidden overflow-y-visible"
+      className="flex w-full flex-col items-center gap-16 px-6 pb-6 text-light pt-[40vh] lg:pt-[16vw] overflow-hidden"
     >
       <div className="text-center">
         <h1 className="title-80 leading-[1.05] tracking-[-0.02em]">Projects that breathe</h1>

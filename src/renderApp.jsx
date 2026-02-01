@@ -5,22 +5,38 @@ import Lenis from '@studio-freight/lenis';
 import { gsap, ScrollTrigger } from './utils/gsapConfig.js';
 
 export default function renderApp(RootComponent) {
-  // Always disable smooth scroll (Lenis) on mobile devices
-  const isMobile =
-    typeof window !== 'undefined' &&
-    (window.matchMedia('(hover: none)').matches ||
-      window.matchMedia('(pointer: coarse)').matches ||
-      window.innerWidth <= 768 ||
-      /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent));
+  // Robust touch device detection - disable Lenis on ANY touch device
+  const isTouchDevice = () => {
+    if (typeof window === 'undefined') return true; // SSR safety: assume touch
 
-  let lenis;
-  if (!isMobile) {
+    // Primary check: pointer capability (most reliable)
+    const hasCoarsePointer = window.matchMedia('(pointer: coarse)').matches;
+    const hasNoHover = window.matchMedia('(hover: none)').matches;
+
+    // Secondary check: touch points
+    const hasTouchPoints = navigator.maxTouchPoints > 0;
+
+    // Tertiary check: touch events support
+    const hasTouchEvents = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+
+    // Fallback: user agent (last resort)
+    const isMobileUA = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+
+    // Be aggressive: if ANY of these suggest touch, disable Lenis
+    return hasCoarsePointer || hasNoHover || hasTouchPoints || hasTouchEvents || isMobileUA;
+  };
+
+  let lenis = null;
+
+  // Only enable Lenis on non-touch devices
+  if (!isTouchDevice()) {
     lenis = new Lenis({
       duration: 1.1,
       easing: (t) => 1 - Math.pow(1 - t, 3),
       smoothWheel: true,
-      smoothTouch: false,
+      smoothTouch: false, // Never smooth touch scrolling
       wheelMultiplier: 1.0,
+      touchMultiplier: 0, // Disable touch handling entirely
     });
 
     gsap.ticker.add((time) => {
