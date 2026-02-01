@@ -8,6 +8,7 @@ import useAttentionTitle from '../../hooks/useAttentionTitle.js';
 import Footer from '../../components/Footer.jsx';
 import WorksHeroSection from './sections/Hero.jsx';
 import WorksSecondSection from './sections/SecondSection.jsx';
+import TextRevealSection from './sections/TextRevealSection.jsx';
 import WorksThirdSection from './sections/ThirdSection.jsx';
 
 export default function WorksApp() {
@@ -24,7 +25,8 @@ export default function WorksApp() {
 
       <main className="flex flex-col gap-32">
         <WorksHeroSection resizeTick={resizeTick} />
-        <WorksSecondSection resizeTick={resizeTick} />
+        {/* <WorksSecondSection resizeTick={resizeTick} /> */}
+        <TextRevealSection resizeTick={resizeTick} />
         <WorksThirdSection />
       </main>
       <Footer resizeTick={resizeTick} />

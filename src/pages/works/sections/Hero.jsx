@@ -141,7 +141,7 @@ export default function WorksHeroSection({ resizeTick = 0 }) {
         <h1 className="title-80 leading-[1.05] tracking-[-0.02em]">Projects that breathe</h1>
       </div>
 
-      <div className="flex w-screen justify-center mt-20 lg:mt-40 overflow-hidden">
+      <div className="flex w-screen justify-center mt-20 lg:mt-40">
         <div
           ref={railRef}
           className="mx-auto flex w-[150vw] max-w-none justify-center gap-6"

@@ -9,9 +9,9 @@ const PARAGRAPHS = [
   'White space creates focus. Silence holds meaning.',
   'In a landscape defined by speed and automation, design must remain thoughtful.',
   'AI adds power. Design brings restraint.',
-  'The goal is not complexity, but clarity.', 
+  'The goal is not complexity, but clarity.',
   'Not control, but connection.',
-  ];
+];
 
 export default function WorksSecondSection({ resizeTick = 0 }) {
   const sectionRef = useRef(null);
@@ -60,8 +60,8 @@ export default function WorksSecondSection({ resizeTick = 0 }) {
   return (
     <section
       ref={sectionRef}
-      className="relative isolate flex min-h-[700px] w-screen items-center justify-center bg-dark px-6 py-32 text-light"
-    >
+      className="relative isolate flex min-h-[700px] w-screen items-center justify-center bg-dark px-6 py-32 text-light">
+
       <div className="mx-auto flex max-w-5xl flex-col gap-8 text-center title-32 lg:title-44 leading-[1.25] md:leading-[1.2]">
         {PARAGRAPHS.map((paragraph, index) => (
           <p key={index} className="font-normal">

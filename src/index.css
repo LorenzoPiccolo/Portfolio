@@ -36,6 +36,9 @@
   body {
     /* Safari: extend under safe areas for full-bleed display */
     padding: env(safe-area-inset-top, 0) env(safe-area-inset-right, 0) env(safe-area-inset-bottom, 0) env(safe-area-inset-left, 0);
+    /* Global dark background */
+    background-color: var(--color-dark);
+    color: var(--color-light);
   }
 
   /* Safari: ensure content extends under the status bar and home indicator */
