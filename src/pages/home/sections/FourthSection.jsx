@@ -173,7 +173,7 @@ export default function FourthSection({ resizeTick = 0 }) {
         }`}>
         <DynamicButton
           label="More projects"
-          href="/works.html"
+          href="/works"
           icon={ChevronRight}
           scrollTrigger={buttonScrollTrigger}
         />

@@ -15,7 +15,7 @@ export const WORKS = [
     videoSrc: project01Video,
     poster: project03Poster,
     year: '2024',
-    href: '/build-zero.html',
+    href: '/case-history/build-zero',
   },
   {
     id: 'portfolio-website',
@@ -24,7 +24,7 @@ export const WORKS = [
     videoSrc: project02Video,
     poster: imageFooter02,
     year: '2025',
-    href: '/portfolio-website.html',
+    href: '/case-history/portfolio-website',
   },
   {
     id: 'alidays',
@@ -33,7 +33,7 @@ export const WORKS = [
     videoSrc: project01Video,
     poster: footerImage,
     year: '2024',
-    href: '/alidays.html',
+    href: '/case-history/alidays',
   },
   {
     id: 'redi-website',
@@ -42,6 +42,6 @@ export const WORKS = [
     videoSrc: project02Video,
     poster: imageFooter05,
     year: '2025',
-    href: '/redi-website.html',
+    href: '/case-history/redi',
   },
 ];

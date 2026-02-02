@@ -3,4 +3,12 @@ import App from './App.jsx';
 import './index.css';
 import renderApp from './renderApp.jsx';
 
-renderApp(App);
+import { BrowserRouter } from 'react-router-dom';
+
+const Root = () => (
+    <BrowserRouter>
+        <App />
+    </BrowserRouter>
+);
+
+renderApp(Root);

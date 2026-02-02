@@ -38,6 +38,7 @@ export default function renderApp(RootComponent) {
       wheelMultiplier: 1.0,
       touchMultiplier: 0, // Disable touch handling entirely
     });
+    window.lenis = lenis;
 
     gsap.ticker.add((time) => {
       lenis.raf(time * 1000);

@@ -157,7 +157,7 @@ export default function SecondSection({ resizeTick = 0 }) {
         <div className="pointer-events-auto transition-transform duration-300 hover:scale-[1.05]">
           <DynamicButton
             label="The process"
-            href="/process.html"
+            href="/#process"
             icon={ChevronRight}
           />
         </div>

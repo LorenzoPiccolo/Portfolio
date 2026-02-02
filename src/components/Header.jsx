@@ -1,5 +1,6 @@
 // src/components/Header.jsx
 import { useEffect, useRef, useState } from 'react';
+import { Link } from 'react-router-dom';
 import logo from '../../img/logo.svg';
 import useCursorGlow from '../hooks/useCursorGlow.js';
 
@@ -11,9 +12,9 @@ export default function Header({ currentPage = 'Home' }) {
   const hoverTimeoutRef = useRef(null);
   const { handlers: glowHandlers, glowStyle } = useCursorGlow({ glowSize: 400 });
 
-  const resolveHref = (label) => {
+  const resolvePath = (label) => {
     if (label === 'Home') return '/';
-    if (label === 'Works') return '/works.html';
+    if (label === 'Works') return '/works';
     const anchor = `#${label.toLowerCase().replace(/\s+/g, '-')}`;
     return currentPage === 'Home' ? anchor : `/${anchor}`;
   };
@@ -39,9 +40,9 @@ export default function Header({ currentPage = 'Home' }) {
         {...glowHandlers}
       >
         <div style={glowStyle} aria-hidden="true" />
-        <a href="/" className="inline-flex items-center gap-2 relative z-10">
+        <Link to="/" className="inline-flex items-center gap-2 relative z-10">
           <img src={logo} alt="Logo" className="h-10 w-10 md:h-8 md:w-8" />
-        </a>
+        </Link>
 
         <div className="relative inline-flex items-start z-10">
           <button
@@ -77,32 +78,60 @@ export default function Header({ currentPage = 'Home' }) {
             const isDimmed = hovered && hovered !== label;
 
             const transitionDelay = isDimmed ? `${index * 60}ms` : '0ms';
+            const path = resolvePath(label);
+            const isAnchor = path.startsWith('#');
 
             return (
               <li key={label}>
-                <a
-                  href={resolveHref(label)}
-                  onMouseEnter={() => {
-                    window.clearTimeout(hoverTimeoutRef.current);
-                    setHovered(label);
-                  }}
-                  onFocus={() => setHovered(label)}
-                  onMouseLeave={() => {
-                    hoverTimeoutRef.current = window.setTimeout(resetHover, 120);
-                  }}
-                  onBlur={resetHover}
-                  className={`relative flex items-center gap-2 transform transition-transform transition-colors duration-300 ease-out ${isDimmed ? 'text-gray400' : 'text-light'
-                    } ${isHovered ? 'translate-x-2' : 'translate-x-0'}`}
-                  style={{ transitionDelay }}
-                >
-                  <span
-                    className={`w-2 text-[20px] leading-none text-light transition-opacity duration-300 ${isHovered ? 'opacity-100' : 'opacity-0'
-                      }`}
+                {isAnchor ? (
+                  <a
+                    href={path}
+                    onMouseEnter={() => {
+                      window.clearTimeout(hoverTimeoutRef.current);
+                      setHovered(label);
+                    }}
+                    onFocus={() => setHovered(label)}
+                    onMouseLeave={() => {
+                      hoverTimeoutRef.current = window.setTimeout(resetHover, 120);
+                    }}
+                    onBlur={resetHover}
+                    className={`relative flex items-center gap-2 transform transition-transform transition-colors duration-300 ease-out ${isDimmed ? 'text-gray400' : 'text-light'
+                      } ${isHovered ? 'translate-x-2' : 'translate-x-0'}`}
+                    style={{ transitionDelay }}
                   >
-                    ·
-                  </span>
-                  <span className="leading-tight">{label}</span>
-                </a>
+                    <span
+                      className={`w-2 text-[20px] leading-none text-light transition-opacity duration-300 ${isHovered ? 'opacity-100' : 'opacity-0'
+                        }`}
+                    >
+                      ·
+                    </span>
+                    <span className="leading-tight">{label}</span>
+                  </a>
+                ) : (
+                  <Link
+                    to={path}
+                    onMouseEnter={() => {
+                      window.clearTimeout(hoverTimeoutRef.current);
+                      setHovered(label);
+                    }}
+                    onFocus={() => setHovered(label)}
+                    onMouseLeave={() => {
+                      hoverTimeoutRef.current = window.setTimeout(resetHover, 120);
+                    }}
+                    onBlur={resetHover}
+                    className={`relative flex items-center gap-2 transform transition-transform transition-colors duration-300 ease-out ${isDimmed ? 'text-gray400' : 'text-light'
+                      } ${isHovered ? 'translate-x-2' : 'translate-x-0'}`}
+                    style={{ transitionDelay }}
+                  >
+                    <span
+                      className={`w-2 text-[20px] leading-none text-light transition-opacity duration-300 ${isHovered ? 'opacity-100' : 'opacity-0'
+                        }`}
+                    >
+                      ·
+                    </span>
+                    <span className="leading-tight">{label}</span>
+                  </Link>
+                )}
               </li>
             );
           })}

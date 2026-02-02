@@ -1,4 +1,6 @@
 // src/components/CaseHistoryCard.jsx
+import { Link } from 'react-router-dom';
+
 const SIZE_CLASS = {
   lg: 'lg:col-span-8',
   md: 'lg:col-span-6',
@@ -24,17 +26,27 @@ export default function CaseHistoryCard({
   const titleClasses =
     'text-16 leading-tight transition-transform duration-300 group-hover:translate-y-[-24px]';
 
+  const isExternal = computedHref.startsWith('http') || computedHref.startsWith('mailto:');
+  const isAnchor = computedHref.startsWith('#');
+
+  let Tag = 'a';
+  if (!isExternal && !isAnchor) {
+    Tag = Link;
+  }
+
+  const tagProps = {
+    [Tag === Link ? 'to' : 'href']: computedHref,
+    ...(target ? { target } : {}),
+    ...(computedRel ? { rel: computedRel } : {}),
+    className: "group flex h-full flex-col gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-dark rounded-[16px]",
+  };
+
   return (
     <article
       className={`col-span-full lg:self-start ${sizeClass} ${className}`}
       {...(id ? { id } : {})}
     >
-      <a
-        href={computedHref}
-        {...(target ? { target } : {})}
-        {...(computedRel ? { rel: computedRel } : {})}
-        className="group flex h-full flex-col gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-dark rounded-[16px]"
-      >
+      <Tag {...tagProps}>
         <div className="relative overflow-hidden rounded-[16px] border border-light/10 bg-gray850">
           <div className="absolute left-2 top-2 z-10 rounded-full bg-dark/70 px-5 py-1.5 backdrop-blur-lg">
             <h6 className="text-14 text-light">{year}</h6>
@@ -58,7 +70,7 @@ export default function CaseHistoryCard({
             {type}
           </span>
         </div>
-      </a>
+      </Tag>
     </article>
   );
 }

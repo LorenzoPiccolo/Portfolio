@@ -1,5 +1,6 @@
 // src/components/Footer.jsx
 import { useEffect, useLayoutEffect, useRef, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { gsap, ScrollTrigger } from '../utils/gsapConfig.js';
 import footerBackground from '../../img/image-footer-05.jpg';
 import logo from '../../img/logo.svg';
@@ -8,7 +9,7 @@ import useCursorGlow from '../hooks/useCursorGlow.js';
 
 const MENU_LINKS = [
   { label: 'Home', href: '/' },
-  { label: 'Works', href: '/works.html' },
+  { label: 'Works', href: '/works' },
   { label: 'About me', href: '/#about-me' },
   { label: 'Process', href: '/#process' },
 ];
@@ -43,6 +44,36 @@ function FooterNavList({ title, links }) {
         {links.map(({ label, href, external }) => {
           const isHovered = hovered === label;
           const isDimmed = hovered && hovered !== label;
+          const isInternal = !external && !href.startsWith('#') && !href.startsWith('mailto:');
+
+          if (isInternal) {
+            return (
+              <li key={label}>
+                <Link
+                  to={href}
+                  onMouseEnter={() => {
+                    window.clearTimeout(hoverTimeoutRef.current);
+                    setHovered(label);
+                  }}
+                  onFocus={() => setHovered(label)}
+                  onMouseLeave={() => {
+                    hoverTimeoutRef.current = window.setTimeout(resetHover, 120);
+                  }}
+                  onBlur={resetHover}
+                  className={`group relative flex items-center gap-3 transition-all duration-300 ease-out ${isDimmed ? 'text-gray400' : 'text-light'
+                    } ${isHovered ? 'translate-x-2' : 'translate-x-0'}`}
+                >
+                  <span
+                    className={`w-2 text-[20px] leading-none text-light transition-opacity duration-300 ${isHovered ? 'opacity-100' : 'opacity-0'
+                      }`}
+                  >
+                    ·
+                  </span>
+                  <span className="leading-tight">{label}</span>
+                </Link>
+              </li>
+            );
+          }
 
           return (
             <li key={label}>

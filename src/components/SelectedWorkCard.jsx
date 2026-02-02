@@ -1,7 +1,20 @@
-// src/components/SelectedWorkCard.jsx
+import { Link } from 'react-router-dom';
+
 export default function SelectedWorkCard({ videoSrc, poster = undefined, title, subtitle, year, href }) {
-  const Wrapper = href ? 'a' : 'article';
-  const wrapperProps = href ? { href, className: "block relative h-full w-full rounded-[24px] overflow-hidden bg-dark origin-top group" } : { className: "relative h-full w-full rounded-[24px] overflow-hidden bg-dark origin-top group" };
+  const isExternal = href?.startsWith('http') || href?.startsWith('mailto:') || href?.startsWith('#');
+
+  let Wrapper = 'article';
+  let wrapperProps = { className: "relative h-full w-full rounded-[24px] overflow-hidden bg-dark origin-top group" };
+
+  if (href) {
+    if (isExternal) {
+      Wrapper = 'a';
+      wrapperProps = { href, className: "block relative h-full w-full rounded-[24px] overflow-hidden bg-dark origin-top group" };
+    } else {
+      Wrapper = Link;
+      wrapperProps = { to: href, className: "block relative h-full w-full rounded-[24px] overflow-hidden bg-dark origin-top group" };
+    }
+  }
 
   return (
     <Wrapper {...wrapperProps}>

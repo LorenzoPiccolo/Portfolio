@@ -1,6 +1,7 @@
 // src/components/DynamicButton.jsx
 import { forwardRef, isValidElement, cloneElement, useLayoutEffect, useRef, useEffect } from 'react';
 import { ArrowUpRight } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import { gsap, ScrollTrigger } from '../utils/gsapConfig.js';
 import useCursorGlow from '../hooks/useCursorGlow.js';
 
@@ -32,12 +33,24 @@ const DynamicButton = forwardRef(function DynamicButton(
   const { handlers: glowHandlers, glowStyle } = useCursorGlow({ glowSize: 300 });
   const buttonClasses = `${baseBtnClasses}${className ? ` ${className}` : ''}`;
   const iconClasses = `${iconWrapClasses}${iconClassName ? ` ${iconClassName}` : ''}`;
-  const Tag = href ? 'a' : 'button';
+
+  const isExternal = href?.startsWith('http') || href?.startsWith('mailto:');
+  const isAnchor = href?.startsWith('#');
+
+  // Decide which tag to use
+  let Tag = 'button';
+  if (href) {
+    if (isExternal || isAnchor) {
+      Tag = 'a';
+    } else {
+      Tag = Link;
+    }
+  }
 
   const computedRel = rel ?? (href && target === '_blank' ? 'noopener noreferrer' : undefined);
   const tagProps = href
     ? {
-      href,
+      [Tag === Link ? 'to' : 'href']: href,
       ...(target ? { target } : {}),
       ...(computedRel ? { rel: computedRel } : {}),
     }

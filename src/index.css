@@ -37,7 +37,8 @@
 
   body {
     /* Safari: extend under safe areas for full-bleed display */
-    padding: env(safe-area-inset-top, 0) env(safe-area-inset-right, 0) env(safe-area-inset-bottom, 0) env(safe-area-inset-left, 0);
+    /* Safari: extend under safe areas for full-bleed display */
+    padding: 0;
     /* Global dark background */
     background-color: var(--color-dark);
     color: var(--color-light);
@@ -106,7 +107,7 @@
   .section-full {
     box-sizing: border-box;
     /* Extend min-height to fill under bottom safe area */
-    min-height: calc(100svh + env(safe-area-inset-bottom, 0px));
+    min-height: 100svh;
     /* Remove padding so backgrounds extend fully under safe areas */
     /* Content padding should be handled by child elements where needed */
   }
