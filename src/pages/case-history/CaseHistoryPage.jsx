@@ -99,7 +99,7 @@ export default function CaseHistoryPage({ project }) {
             {/* Hero Section */}
             <section ref={heroRef} className="relative bg-dark pt-[300px]">
                 {/* Project Name Marquee - NO overflow hidden */}
-                <div className="w-full">
+                <div className="w-full overflow-x-hidden">
                     <div className="whitespace-nowrap">
                         <div className="inline-block will-change-transform animate-[marqueeLeft_25s_linear_infinite]">
                             <span className="font-urbanist font-normal text-[120px] md:text-[200px] leading-none text-light pr-16">
@@ -175,6 +175,51 @@ export default function CaseHistoryPage({ project }) {
                                     style={{ borderRadius: IMAGE_RADIUS }}
                                 />
                             </div>
+                        </div>
+                    </div>
+                </section>
+            )}
+
+            {/* Second Full Width Image */}
+            {images.length >= 3 && (
+                <section className="w-full bg-dark" style={{ padding: IMAGE_PADDING }}>
+                    <div className="w-full aspect-[9/16] md:aspect-auto md:h-[100svh]">
+                        <img
+                            src={images[2].src}
+                            alt={images[2].alt || `${name} image 3`}
+                            className="w-full h-full object-cover"
+                            style={{ borderRadius: IMAGE_RADIUS }}
+                        />
+                    </div>
+                </section>
+            )}
+
+            {/* Split Section - Long image on right, small sticky on left */}
+            {images.length >= 5 && (
+                <section className="w-full bg-dark" style={{ padding: IMAGE_PADDING }}>
+                    <div className="flex flex-col md:flex-row md:justify-between gap-6">
+                        {/* Left image - small, sticky at center */}
+                        <div className="w-full md:w-[45vw] md:h-[100svh] flex items-start">
+                            <div
+                                className="w-full aspect-[9/16] md:aspect-auto md:h-[40svh] md:sticky"
+                                style={{ top: 'calc(50vh - 20svh)' }}
+                            >
+                                <img
+                                    src={images[3].src}
+                                    alt={images[3].alt || `${name} image 4`}
+                                    className="w-full h-full object-cover"
+                                    style={{ borderRadius: IMAGE_RADIUS }}
+                                />
+                            </div>
+                        </div>
+                        {/* Right image - 9:16 on mobile, 100svh on desktop (long) */}
+                        <div className="w-full md:w-[45vw] aspect-[9/16] md:aspect-auto md:h-[100svh]">
+                            <img
+                                src={images[4].src}
+                                alt={images[4].alt || `${name} image 5`}
+                                className="w-full h-full object-cover"
+                                style={{ borderRadius: IMAGE_RADIUS }}
+                            />
                         </div>
                     </div>
                 </section>

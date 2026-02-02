@@ -4,6 +4,9 @@ import CaseHistoryPage from './CaseHistoryPage.jsx';
 import heroImage from '../../../img/image-footer-05.jpg';
 import image1 from '../../../img/project-03.jpg';
 import image2 from '../../../img/image-footer-02.jpg';
+import image3 from '../../../img/footer-image.jpg';
+import image4 from '../../../img/image-footer-03.jpg';
+import image5 from '../../../img/image-footer-04.jpg';
 
 const rediWebsite = {
     name: 'Redi Website',
@@ -12,8 +15,11 @@ const rediWebsite = {
     heroImage: heroImage,
     description: 'A modern web platform built with performance and accessibility in mind. Clean code meets beautiful design to create a seamless user experience.',
     images: [
-        { src: image1, alt: 'Development process', rounded: true },
-        { src: image2, alt: 'Final result', rounded: false },
+        { src: image1, alt: 'Development process' },
+        { src: image2, alt: 'Final result' },
+        { src: image3, alt: 'Performance metrics' },
+        { src: image4, alt: 'Responsive design' },
+        { src: image5, alt: 'Code architecture' },
     ],
     sections: [
         {

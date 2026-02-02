@@ -4,6 +4,9 @@ import CaseHistoryPage from './CaseHistoryPage.jsx';
 import heroImage from '../../../img/footer-image.jpg';
 import image1 from '../../../img/image-footer-03.jpg';
 import image2 from '../../../img/image-footer-04.jpg';
+import image3 from '../../../img/image-footer-02.jpg';
+import image4 from '../../../img/image-footer-05.jpg';
+import image5 from '../../../img/project-03.jpg';
 
 const alidays = {
     name: 'Alidays',
@@ -12,8 +15,11 @@ const alidays = {
     heroImage: heroImage,
     description: 'A complete brand identity system designed to capture the essence of travel and discovery. From logo to touchpoints, every element tells a cohesive story.',
     images: [
-        { src: image1, alt: 'Brand elements', rounded: true },
-        { src: image2, alt: 'Applications', rounded: false },
+        { src: image1, alt: 'Brand elements' },
+        { src: image2, alt: 'Applications' },
+        { src: image3, alt: 'Visual system' },
+        { src: image4, alt: 'Brand touchpoints' },
+        { src: image5, alt: 'Final deliverables' },
     ],
     sections: [
         {
