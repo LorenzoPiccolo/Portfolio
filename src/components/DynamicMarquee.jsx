@@ -45,7 +45,7 @@ export default function DynamicMarquee({ children, className = '', duration = '3
     // If we haven't measured yet, render a single invisible copy to measure width
     if (!isMeasured) {
         return (
-            <div ref={containerRef} className={`w-full overflow-x-hidden ${className}`}>
+            <div ref={containerRef} className={`w-full ${className}`}>
                 <div ref={contentRef} className="inline-block opacity-0">
                     {children}
                 </div>
@@ -54,7 +54,7 @@ export default function DynamicMarquee({ children, className = '', duration = '3
     }
 
     return (
-        <div ref={containerRef} className={`w-full overflow-x-hidden ${className}`}>
+        <div ref={containerRef} className={`w-full ${className}`}>
             <div
                 className="whitespace-nowrap will-change-transform inline-block animate-marqueeLeft"
                 style={{ animationDuration: duration }}

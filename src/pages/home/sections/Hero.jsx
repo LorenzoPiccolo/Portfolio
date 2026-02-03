@@ -306,7 +306,7 @@ export default function Hero({ resizeTick = 0 }) {
 
         {/* Marquee */}
         <div className="fade-in-up hero-marquee overflow-y-visible">
-          <DynamicMarquee duration="35s">
+          <DynamicMarquee duration="50s">
             <MarqueeChunk />
           </DynamicMarquee>
         </div>

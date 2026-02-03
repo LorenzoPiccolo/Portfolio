@@ -112,8 +112,8 @@ function FooterNavList({ title, links }) {
 
 function FooterMarquee({ marqueeRef }) {
   return (
-    <div ref={marqueeRef} className="absolute inset-x-0 bottom-10 z-10 px-6 pointer-events-none">
-      <DynamicMarquee duration="35s">
+    <div ref={marqueeRef} className="absolute inset-x-0 bottom-10 z-10 pointer-events-none">
+      <DynamicMarquee duration="50s">
         <FooterMarqueeChunk />
       </DynamicMarquee>
     </div>
