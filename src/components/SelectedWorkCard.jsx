@@ -9,10 +9,10 @@ export default function SelectedWorkCard({ videoSrc, poster = undefined, title, 
   if (href) {
     if (isExternal) {
       Wrapper = 'a';
-      wrapperProps = { href, className: "block relative h-full w-full rounded-[24px] overflow-hidden bg-dark origin-top group" };
+      wrapperProps = { href, className: "block relative h-full w-full rounded-[24px] overflow-hidden bg-dark origin-top group", 'data-follower-text': 'Discover more', style: { cursor: 'none' } };
     } else {
       Wrapper = Link;
-      wrapperProps = { to: href, className: "block relative h-full w-full rounded-[24px] overflow-hidden bg-dark origin-top group" };
+      wrapperProps = { to: href, className: "block relative h-full w-full rounded-[24px] overflow-hidden bg-dark origin-top group", 'data-follower-text': 'Discover more', style: { cursor: 'none' } };
     }
   }
 

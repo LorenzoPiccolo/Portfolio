@@ -1,12 +1,13 @@
 // src/pages/case-history/PortfolioWebsite.jsx
 import CaseHistoryPage from './CaseHistoryPage.jsx';
 
-import heroImage from '../../../img/image-footer-02.jpg';
-import image1 from '../../../img/image-footer-05.jpg';
-import image2 from '../../../img/footer-image.jpg';
-import image3 from '../../../img/image-footer-03.jpg';
-import image4 from '../../../img/image-footer-04.jpg';
-import image5 from '../../../img/project-03.jpg';
+import heroImage from '../../../img/portfolio/portfolio-01.jpg';
+import image2 from '../../../img/portfolio/portfolio-02.jpg';
+import image3 from '../../../img/portfolio/portfolio-03.jpg';
+import image4 from '../../../img/portfolio/portfolio-04.jpg';
+import image5 from '../../../img/portfolio/portfolio-05.jpg';
+import image6 from '../../../img/portfolio/portfolio-06.jpg';
+import image7 from '../../../img/portfolio/portfolio-07.jpg';
 
 const portfolioWebsite = {
     name: 'Portfolio Website',
@@ -15,11 +16,12 @@ const portfolioWebsite = {
     heroImage: heroImage,
     description: 'A personal portfolio website designed to showcase creative work through immersive animations and thoughtful typography. Every detail reflects a commitment to craft.',
     images: [
-        { src: image1, alt: 'Homepage design' },
         { src: image2, alt: 'Project showcase' },
         { src: image3, alt: 'Navigation system' },
         { src: image4, alt: 'Mobile responsive' },
         { src: image5, alt: 'Animation details' },
+        { src: image6, alt: 'Detail view' },
+        { src: image7, alt: 'Additional view' },
     ],
     sections: [
         {

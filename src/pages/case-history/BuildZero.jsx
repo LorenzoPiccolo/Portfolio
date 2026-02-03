@@ -1,12 +1,12 @@
 // src/pages/case-history/BuildZero.jsx
 import CaseHistoryPage from './CaseHistoryPage.jsx';
 
-import heroImage from '../../../img/project-03.jpg';
-import image1 from '../../../img/image-footer-02.jpg';
-import image2 from '../../../img/image-footer-03.jpg';
-import image3 from '../../../img/footer-image.jpg';
-import image4 from '../../../img/image-footer-04.jpg';
-import image5 from '../../../img/image-footer-05.jpg';
+import heroImage from '../../../img/build-zero/build-zero-01.jpg';
+import image2 from '../../../img/build-zero/build-zero-02.jpg';
+import image3 from '../../../img/build-zero/build-zero-03.jpg';
+import image4 from '../../../img/build-zero/build-zero-04.jpg';
+import image5 from '../../../img/build-zero/build-zero-05.jpg';
+import image6 from '../../../img/build-zero/build-zero-06.jpg';
 
 const buildZero = {
     name: 'Build Zero',
@@ -15,11 +15,11 @@ const buildZero = {
     heroImage: heroImage,
     description: 'A comprehensive UX/UI design project focused on creating intuitive user experiences. Every interaction was crafted to feel natural and purposeful.',
     images: [
-        { src: image1, alt: 'Interface design' },
         { src: image2, alt: 'User flow' },
         { src: image3, alt: 'Wireframes' },
         { src: image4, alt: 'Prototype screens' },
         { src: image5, alt: 'Final UI' },
+        { src: image6, alt: 'Design system' },
     ],
     sections: [
         {

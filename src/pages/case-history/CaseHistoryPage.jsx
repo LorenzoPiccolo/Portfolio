@@ -11,7 +11,7 @@ import arrow02Left from '../../../img/icons/arrow-02-left.svg';
 import DynamicMarquee from '../../components/DynamicMarquee.jsx';
 
 const COLOR_LIGHT = 'var(--color-light)';
-const IMAGE_RADIUS = '24px';
+const IMAGE_RADIUS = '16px';
 const IMAGE_PADDING = '24px';
 
 /**

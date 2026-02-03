@@ -7,13 +7,18 @@ import imageFooter04 from '../../../../img/image-footer-04.jpg';
 import imageFooter05 from '../../../../img/image-footer-05.jpg';
 import footerImage from '../../../../img/footer-image.jpg';
 import gradientImage from '../../../../img/gradient.png';
+import portfolioHero from '../../../../img/portfolio/portfolio-01.jpg';
+import romajiHero from '../../../../img/romaji/romaji-01.jpg';
+import rebornHero from '../../../../img/reborn/reborn-01.jpg';
+import buildZeroHero from '../../../../img/build-zero/build-zero-01.jpg';
+import atalusHero from '../../../../img/atalus/atalus-01.jpg';
 
 const CASE_HISTORY_CARDS = [
   {
     id: 'build-zero',
     title: 'Build Zero',
     type: 'UX/UI',
-    image: project03,
+    image: buildZeroHero,
     size: 'md',
     className: 'lg:row-start-1 lg:col-start-1',
     year: '2024',
@@ -23,7 +28,7 @@ const CASE_HISTORY_CARDS = [
     id: 'portfolio-website',
     title: 'Portfolio Website',
     type: 'Web Design',
-    image: imageFooter02,
+    image: portfolioHero,
     size: 'sm',
     className: 'lg:row-start-1 lg:col-start-7',
     year: '2025',
@@ -53,7 +58,7 @@ const CASE_HISTORY_CARDS = [
     id: 'romaji',
     title: 'Romaji',
     type: 'Magazine',
-    image: imageFooter03,
+    image: romajiHero,
     size: 'sm',
     className: 'lg:row-start-3 lg:col-start-1',
     year: '2024',
@@ -63,7 +68,7 @@ const CASE_HISTORY_CARDS = [
     id: 'atalus',
     title: 'Atalus',
     type: 'Brand Identity',
-    image: imageFooter04,
+    image: atalusHero,
     size: 'sm',
     className: 'lg:row-start-3 lg:col-start-4',
     year: '2025',
@@ -73,7 +78,7 @@ const CASE_HISTORY_CARDS = [
     id: 'reborn',
     title: 'Reborn',
     type: 'Vinyl',
-    image: gradientImage,
+    image: rebornHero,
     size: 'md',
     className: 'lg:row-start-3 lg:col-start-7',
     year: '2023',

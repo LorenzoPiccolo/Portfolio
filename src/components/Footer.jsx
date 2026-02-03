@@ -281,7 +281,7 @@ export default function Footer({ resizeTick = 0 }) {
                 </div>
               </div>
 
-              <div className="hidden md:block ">
+              <div className="hidden md:block">
                 <FooterNavList title="" links={MENU_LINKS} />
               </div>
 

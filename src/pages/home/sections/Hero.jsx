@@ -254,16 +254,18 @@ export default function Hero({ resizeTick = 0 }) {
       id="home"
       ref={sectionRef}
       className="section-full relative isolate flex w-screen flex-col justify-end overflow-x-hidden overflow-y-visible bg-black z-10 min-h-[700px]"
-      style={
-        !scrollStarted && INITIAL_FRAME
+      data-follower-text="Scroll down"
+      style={{
+        cursor: 'none',
+        ...(!scrollStarted && INITIAL_FRAME
           ? {
             backgroundImage: `url(${INITIAL_FRAME})`,
             backgroundSize: 'cover',
             backgroundPosition: 'center',
             backgroundRepeat: 'no-repeat',
           }
-          : undefined
-      }
+          : undefined)
+      }}
     >
       {/* Canvas background (desktop only) */}
       {!isMobile && (

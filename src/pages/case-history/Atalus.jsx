@@ -1,12 +1,12 @@
 // src/pages/case-history/Atalus.jsx
 import CaseHistoryPage from './CaseHistoryPage.jsx';
 
-import heroImage from '../../../img/image-footer-04.jpg';
-import image1 from '../../../img/footer-image.jpg';
-import image2 from '../../../img/project-03.jpg';
-import image3 from '../../../img/image-footer-02.jpg';
-import image4 from '../../../img/image-footer-03.jpg';
-import image5 from '../../../img/image-footer-05.jpg';
+import heroImage from '../../../img/atalus/atalus-01.jpg';
+import image2 from '../../../img/atalus/atalus-02.jpg';
+import image3 from '../../../img/atalus/atalus-03.jpg';
+import image4 from '../../../img/atalus/atalus-04.jpg';
+import image5 from '../../../img/atalus/atalus-05.jpg';
+import image6 from '../../../img/atalus/atalus-06.jpg';
 
 const atalus = {
     name: 'Atalus',
@@ -15,11 +15,11 @@ const atalus = {
     heroImage: heroImage,
     description: 'A sophisticated brand identity for a luxury service. Every element was designed to convey elegance, trust, and attention to detail.',
     images: [
-        { src: image1, alt: 'Logo development' },
         { src: image2, alt: 'Brand applications' },
         { src: image3, alt: 'Visual identity' },
         { src: image4, alt: 'Stationery design' },
         { src: image5, alt: 'Final presentation' },
+        { src: image6, alt: 'Detail view' },
     ],
     sections: [
         {

@@ -34,7 +34,7 @@ export default function Header({ currentPage = 'Home' }) {
   useEffect(() => () => window.clearTimeout(hoverTimeoutRef.current), []);
 
   return (
-    <header className="fixed top-4 left-4 w-[calc(100vw-32px)] z-50 hover:scale-[1] transition-transform duration-300 ease-quad md:top-6 md:left-1/2 md:w-auto md:origin-center md:scale-[0.98] md:-translate-x-1/2">
+    <header className="fixed top-4 left-4 w-[calc(100vw-32px)] z-50 hover:scale-[1] transition-transform duration-300 ease-quad md:top-6 md:left-1/2 md:w-auto md:origin-center md:scale-[0.98] md:-translate-x-1/2 cursor-auto">
       <div
         className="relative overflow-hidden w-full rounded-[14px] border border-gray600 bg-gray850/70 backdrop-blur-[12px] px-2.5 py-2.5 flex items-center justify-between md:w-[460px]"
         {...glowHandlers}
