@@ -4,6 +4,7 @@ import { gsap, ScrollTrigger } from '../../../utils/gsapConfig.js';
 import heroGradient from '../../../../img/gradient-2.png';
 import { useFadeInUp } from '../../../hooks/useFadeInUp.js';
 import useResizeObserver from '../../../hooks/useResizeObserver.js';
+import DynamicMarquee from '../../../components/DynamicMarquee.jsx';
 
 const FRAME_MODULES = import.meta.glob('../../../../img/frames/*.jpg', {
   eager: true,
@@ -305,10 +306,9 @@ export default function Hero({ resizeTick = 0 }) {
 
         {/* Marquee */}
         <div className="fade-in-up hero-marquee overflow-y-visible">
-          <div className="whitespace-nowrap will-change-transform inline-block animate-[marqueeLeft_35s_linear_infinite]">
+          <DynamicMarquee duration="35s">
             <MarqueeChunk />
-            <MarqueeChunk />
-          </div>
+          </DynamicMarquee>
         </div>
       </div>
     </section>

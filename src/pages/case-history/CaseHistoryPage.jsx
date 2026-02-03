@@ -8,6 +8,7 @@ import { gsap, ScrollTrigger } from '../../utils/gsapConfig.js';
 import useResizeTick from '../../hooks/useResizeTick.js';
 import useCursorGlow from '../../hooks/useCursorGlow.js';
 import arrow02Left from '../../../img/icons/arrow-02-left.svg';
+import DynamicMarquee from '../../components/DynamicMarquee.jsx';
 
 const COLOR_LIGHT = 'var(--color-light)';
 const IMAGE_RADIUS = '24px';
@@ -101,13 +102,11 @@ export default function CaseHistoryPage({ project }) {
             <section ref={heroRef} className="relative bg-dark pt-[300px]">
                 {/* Project Name Marquee - NO overflow hidden */}
                 <div className="w-full overflow-x-hidden">
-                    <div className="whitespace-nowrap">
-                        <div className="inline-block will-change-transform animate-[marqueeLeft_25s_linear_infinite]">
-                            <span className="font-urbanist font-normal text-[120px] md:text-[200px] leading-none text-light pr-16">
-                                {name}&nbsp;&nbsp;{name}&nbsp;&nbsp;{name}&nbsp;&nbsp;
-                            </span>
-                        </div>
-                    </div>
+                    <DynamicMarquee duration="25s">
+                        <span className="font-urbanist font-normal text-[120px] md:text-[200px] leading-none text-light pr-16">
+                            {name}&nbsp;&nbsp;{name}&nbsp;&nbsp;{name}&nbsp;&nbsp;
+                        </span>
+                    </DynamicMarquee>
                 </div>
 
                 {/* Info Bar - 64px below marquee */}

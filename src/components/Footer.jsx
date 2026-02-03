@@ -6,6 +6,7 @@ import footerBackground from '../../img/image-footer-05.jpg';
 import logo from '../../img/logo.svg';
 import gradientOverlay from '../../img/gradient-footer.png';
 import useCursorGlow from '../hooks/useCursorGlow.js';
+import DynamicMarquee from './DynamicMarquee.jsx';
 
 const MENU_LINKS = [
   { label: 'Home', href: '/' },
@@ -112,12 +113,9 @@ function FooterNavList({ title, links }) {
 function FooterMarquee({ marqueeRef }) {
   return (
     <div ref={marqueeRef} className="absolute inset-x-0 bottom-10 z-10 px-6 pointer-events-none">
-      <div className="whitespace-nowrap">
-        <div className="inline-block will-change-transform animate-[marqueeLeft_35s_linear_infinite]">
-          <FooterMarqueeChunk />
-          <FooterMarqueeChunk />
-        </div>
-      </div>
+      <DynamicMarquee duration="35s">
+        <FooterMarqueeChunk />
+      </DynamicMarquee>
     </div>
   );
 }
