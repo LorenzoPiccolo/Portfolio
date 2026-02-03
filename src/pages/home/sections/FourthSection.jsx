@@ -149,15 +149,30 @@ export default function FourthSection({ resizeTick = 0 }) {
     return () => ctx.revert();
   }, [resizeTick, isMobile]);
 
-  const buttonScrollTrigger = useMemo(
-    () => ({
-      id: 'fourth-section-button',
-      trigger: () => sectionRef.current,
-      start: isMobile ? 'top 80%' : 'top top',
-      end: isMobile ? 'bottom bottom-=20%' : 'bottom top-=800',
-    }),
-    [resizeTick, isMobile],
-  );
+  // Button visibility logic matching SecondSection
+  const [buttonVisible, setButtonVisible] = useState(false);
+  const cardsContainerRef = useRef(null);
+
+  useLayoutEffect(() => {
+    // We use the cards container as trigger if possible, or section fallback
+    const triggerEl = cardsContainerRef.current || sectionRef.current;
+    if (!triggerEl) return;
+
+    const ctx = gsap.context(() => {
+      ScrollTrigger.create({
+        trigger: triggerEl,
+        start: 'top 80%',
+        end: 'bottom 80%',
+        onEnter: () => setButtonVisible(true),
+        onLeaveBack: () => setButtonVisible(false),
+        onLeave: () => setButtonVisible(false), // Also hide when scrolling past
+        onEnterBack: () => setButtonVisible(true),
+        markers: false,
+      });
+    }, sectionRef);
+
+    return () => ctx.revert();
+  }, [resizeTick]);
 
   return (
     <section
@@ -167,21 +182,23 @@ export default function FourthSection({ resizeTick = 0 }) {
         }`}
     >
       {/* Button - fixed at bottom on mobile, absolute bottom on desktop */}
-      <div className={`z-20 transition-transform duration-300 hover:scale-[1.05] ${isMobile
+      <div className={`z-20 transition-all duration-500 ease-out origin-bottom ${buttonVisible ? 'scale-100 opacity-100' : 'scale-0 opacity-0'} ${isMobile
         ? 'fixed bottom-6 left-1/2 -translate-x-1/2'
-        : 'absolute bottom-12 left-1/2 -translate-x-1/2'
+        : 'fixed bottom-6 left-1/2 -translate-x-1/2'
         }`}>
-        <DynamicButton
-          label="More projects"
-          href="/works"
-          icon={ChevronRight}
-          scrollTrigger={buttonScrollTrigger}
-        />
+        <div className="pointer-events-auto transition-transform duration-300 hover:scale-[1.05]">
+          <DynamicButton
+            label="More projects"
+            href="/works"
+            icon={ChevronRight}
+          // Removed internal scrollTrigger prop as we handle visibility externally
+          />
+        </div>
       </div>
 
       {isMobile ? (
         /* Mobile: Simple column layout, no overlapping */
-        <div className="flex flex-col gap-6 w-full">
+        <div ref={cardsContainerRef} className="flex flex-col gap-6 w-full">
           {WORKS.map((work) => (
             <div key={work.id} className="w-full aspect-[4/5]">
               <SelectedWorkCard {...work} />
@@ -191,7 +208,7 @@ export default function FourthSection({ resizeTick = 0 }) {
       ) : (
         /* Desktop: Overlapping stacking animation */
         <div className="flex min-h-full w-full flex-col items-center justify-center gap-12">
-          <div data-cards-container className="relative flex w-full justify-center">
+          <div ref={cardsContainerRef} data-cards-container className="relative flex w-full justify-center">
             <div className="relative w-[70vw] max-w-[1400px] aspect-[4/5] lg:aspect-[16/9]">
               {WORKS.map((work, index) => (
                 <div

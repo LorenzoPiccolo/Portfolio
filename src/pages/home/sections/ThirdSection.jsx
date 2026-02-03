@@ -14,7 +14,6 @@ const SKILLS = [
   'Midjourney',
   'CSS',
   'Claude',
-  'Nano Banana',
   'React',
   'Vercel',
 ];
@@ -114,12 +113,12 @@ export default function ThirdSection({ resizeTick = 0 }) {
         <div className="flex min-h-screen w-full flex-col items-center justify-start px-6 py-[15vh] md:py-[50vh]">
           <ul
             ref={mobileListRef}
-            className="m-0 flex w-full max-w-[360px] flex-col items-center gap-5 text-center"
+            className="m-0 flex w-full max-w-[360px] flex-col items-center text-center"
           >
             {SKILLS.map((label, i) => (
               <li
                 key={`mobile-${i}`}
-                className="skill-row font-urbanist font-normal leading-[1] transition-colors duration-300"
+                className="skill-row font-urbanist font-normal leading-[1] transition-colors duration-300 py-[10px]"
                 style={{ fontSize: 'clamp(2.5rem, 15vw, 4.5rem)' }}
               >
                 {label}
@@ -144,12 +143,12 @@ export default function ThirdSection({ resizeTick = 0 }) {
           <div className="flex-1 py-[50vh]">
             <ul
               ref={listRef}
-              className="m-0 flex w-full flex-col gap-4 lg:gap-7"
+              className="m-0 flex w-full flex-col"
             >
               {SKILLS.map((label, i) => (
                 <li
                   key={`desktop-${i}`}
-                  className="skill-row font-urbanist font-normal leading-[0.9] transition-colors duration-300"
+                  className="skill-row font-urbanist font-normal leading-[0.9] transition-colors duration-300 py-[10px]"
                   style={{ fontSize: 'clamp(2.75rem, 5vw, 5rem)' }}
                 >
                   {label}

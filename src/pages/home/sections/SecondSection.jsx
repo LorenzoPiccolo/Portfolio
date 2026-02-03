@@ -7,7 +7,6 @@ import { ChevronRight } from 'lucide-react';
 import DynamicButton from '../../../components/DynamicButton.jsx';
 import GlassCard from '../../../components/GlassCard.jsx';
 import { useFadeInUp } from '../../../hooks/useFadeInUp.js';
-import useIntersectionObserver from '../../../hooks/useIntersectionObserver.js';
 import iconOne from '../../../../img/icona-01.svg';
 import iconTwoOne from '../../../../img/icona-02-1.svg';
 import iconTwoTwo from '../../../../img/icona-02-2.svg';
@@ -17,19 +16,30 @@ const COLOR_LIGHT = 'var(--color-light)';
 
 export default function SecondSection({ resizeTick = 0 }) {
   const sectionRef = useRef(null);
+  const blocksContainerRef = useRef(null); // Ref for the 3-block container
   useFadeInUp(sectionRef, { trigger: sectionRef });
-  const intersectionEntry = useIntersectionObserver(sectionRef, {
-    threshold: 0.35,
-    rootMargin: '0px 0px -20%',
-  });
-  const [buttonVisible, setButtonVisible] = useState(false);
-  const isInView = intersectionEntry?.isIntersecting ?? false;
 
-  useEffect(() => {
-    if (!intersectionEntry) return;
-    const visible = intersectionEntry.isIntersecting && (intersectionEntry.intersectionRatio ?? 0) > 0.2;
-    setButtonVisible(visible);
-  }, [intersectionEntry]);
+  const [buttonVisible, setButtonVisible] = useState(false);
+
+  // ScrollTrigger for button visibility
+  useLayoutEffect(() => {
+    if (!blocksContainerRef.current) return;
+
+    const ctx = gsap.context(() => {
+      ScrollTrigger.create({
+        trigger: blocksContainerRef.current,
+        start: 'top 80%',
+        end: 'bottom 80%',
+        onEnter: () => setButtonVisible(true),
+        onLeaveBack: () => setButtonVisible(false),
+        onLeave: () => setButtonVisible(false),
+        onEnterBack: () => setButtonVisible(true),
+        // markers: true, // Uncomment for debugging
+      });
+    }, sectionRef);
+
+    return () => ctx.revert();
+  }, [resizeTick]);
 
   useLayoutEffect(() => {
     const el = sectionRef.current;
@@ -91,7 +101,6 @@ export default function SecondSection({ resizeTick = 0 }) {
       id="about-me"
       ref={sectionRef}
       className="relative isolate min-h-[700px] bg-dark px-6 py-16 md:py-32 z-10 w-screen transition-opacity duration-500"
-      data-inview={isInView ? 'true' : 'false'}
     >
       {/* Testo introduttivo (64px Urbanist) */}
       <div className="w-[full] mx-auto font-normal title-44 md:title-64 leading-[110%] tracking-tight">
@@ -109,7 +118,7 @@ export default function SecondSection({ resizeTick = 0 }) {
         <h3 className="title-32 font-normal text-center mb-8">Design focus</h3>
 
         {/* Riga blocchi: flex, gap 24px, allineati top */}
-        <div className="flex md:flex-row flex-col items-start gap-6">
+        <div ref={blocksContainerRef} className="flex md:flex-row flex-col items-start gap-6">
           {/* Blocco 1 - 50% width, 550px height */}
           <div className="md:basis-1/2 w-full">
             <a href="#" className="block transition-transform duration-300 hover:scale-[1.02] ease-out">
@@ -151,7 +160,7 @@ export default function SecondSection({ resizeTick = 0 }) {
       </div>
 
       <div
-        className={`pointer-events-none fixed bottom-16 left-1/2 z-30 flex -translate-x-1/2 justify-center transition-all duration-500 ${buttonVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'
+        className={`pointer-events-none fixed bottom-6 left-1/2 z-30 flex -translate-x-1/2 justify-center transition-all duration-500 ease-out origin-bottom ${buttonVisible ? 'scale-100 opacity-100' : 'scale-0 opacity-0'
           }`}
       >
         <div className="pointer-events-auto transition-transform duration-300 hover:scale-[1.05]">

@@ -102,7 +102,7 @@ export default function CaseHistoryPage({ project }) {
             <section ref={heroRef} className="relative bg-dark pt-[300px]">
                 {/* Project Name Marquee - NO overflow hidden */}
                 <div className="w-full overflow-x-hidden">
-                    <DynamicMarquee duration="60s">
+                    <DynamicMarquee duration="70s">
                         <span className="font-urbanist font-normal text-[120px] md:text-[200px] leading-none text-light pr-16">
                             {name}&nbsp;&nbsp;{name}&nbsp;&nbsp;{name}&nbsp;&nbsp;
                         </span>

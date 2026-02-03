@@ -113,7 +113,7 @@ function FooterNavList({ title, links }) {
 function FooterMarquee({ marqueeRef }) {
   return (
     <div ref={marqueeRef} className="absolute inset-x-0 bottom-10 z-10 pointer-events-none">
-      <DynamicMarquee duration="50s">
+      <DynamicMarquee duration="45s">
         <FooterMarqueeChunk />
       </DynamicMarquee>
     </div>
@@ -142,6 +142,26 @@ export default function Footer({ resizeTick = 0 }) {
   const marqueeRef = useRef(null);
   const { handlers: footerCardGlowHandlers, glowStyle: footerCardGlowStyle } = useCursorGlow({ glowSize: 600 });
 
+  // Force ScrollTrigger refresh when page height changes (e.g. images loading above)
+  useEffect(() => {
+    if (!document.body) return;
+
+    let timeout;
+    const observer = new ResizeObserver(() => {
+      clearTimeout(timeout);
+      timeout = setTimeout(() => {
+        ScrollTrigger.refresh();
+      }, 200); // Debounce to avoid thrashing
+    });
+
+    observer.observe(document.body);
+
+    return () => {
+      observer.disconnect();
+      clearTimeout(timeout);
+    };
+  }, []);
+
   useLayoutEffect(() => {
     const section = sectionRef.current;
     const gradient = gradientRef.current;
@@ -167,6 +187,7 @@ export default function Footer({ resizeTick = 0 }) {
             pinSpacing: !isMobile,
             invalidateOnRefresh: true,
             refreshPriority: -3,
+
           },
         })
         .to(gradient, { scaleY: 1 }, 0);
@@ -201,7 +222,7 @@ export default function Footer({ resizeTick = 0 }) {
           scrollTrigger: {
             id: 'footer-marquee',
             trigger: section,
-            start: 'top bottom',
+            start: 'top center',
             markers: false,
             toggleActions: 'play none none none',
           },

@@ -72,7 +72,7 @@ export default function Header({ currentPage = 'Home' }) {
         onMouseEnter={() => window.clearTimeout(hoverTimeoutRef.current)}
         onMouseLeave={closeMenu}
       >
-        <ul className="flex flex-col gap-4 text-16">
+        <ul className="flex flex-col text-16">
           {NAV_LINKS.map((label, index) => {
             const isHovered = hovered === label;
             const isDimmed = hovered && hovered !== label;
@@ -95,7 +95,7 @@ export default function Header({ currentPage = 'Home' }) {
                       hoverTimeoutRef.current = window.setTimeout(resetHover, 120);
                     }}
                     onBlur={resetHover}
-                    className={`relative flex items-center gap-2 transform transition-transform transition-colors duration-300 ease-out ${isDimmed ? 'text-gray400' : 'text-light'
+                    className={`relative flex items-center gap-2 py-[8px] transform transition-transform transition-colors duration-300 ease-out ${isDimmed ? 'text-gray400' : 'text-light'
                       } ${isHovered ? 'translate-x-2' : 'translate-x-0'}`}
                     style={{ transitionDelay }}
                   >
@@ -119,7 +119,7 @@ export default function Header({ currentPage = 'Home' }) {
                       hoverTimeoutRef.current = window.setTimeout(resetHover, 120);
                     }}
                     onBlur={resetHover}
-                    className={`relative flex items-center gap-2 transform transition-transform transition-colors duration-300 ease-out ${isDimmed ? 'text-gray400' : 'text-light'
+                    className={`relative flex items-center gap-2 py-[8px] transform transition-transform transition-colors duration-300 ease-out ${isDimmed ? 'text-gray400' : 'text-light'
                       } ${isHovered ? 'translate-x-2' : 'translate-x-0'}`}
                     style={{ transitionDelay }}
                   >
