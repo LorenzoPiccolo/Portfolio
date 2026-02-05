@@ -256,7 +256,6 @@ export default function Hero({ resizeTick = 0 }) {
       className="section-full relative isolate flex w-screen flex-col justify-end overflow-x-hidden overflow-y-visible bg-black z-10 min-h-[700px]"
       data-follower-text="Scroll down"
       style={{
-        cursor: 'none',
         ...(!scrollStarted && INITIAL_FRAME
           ? {
             backgroundImage: `url(${INITIAL_FRAME})`,

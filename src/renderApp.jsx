@@ -31,7 +31,7 @@ export default function renderApp(RootComponent) {
   // Only enable Lenis on non-touch devices
   if (!isTouchDevice()) {
     lenis = new Lenis({
-      duration: 1.1,
+      duration: 0.7,
       easing: (t) => 1 - Math.pow(1 - t, 3),
       smoothWheel: true,
       smoothTouch: false, // Never smooth touch scrolling

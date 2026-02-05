@@ -40,7 +40,6 @@ export default function CaseHistoryCard({
     ...(computedRel ? { rel: computedRel } : {}),
     className: "group flex h-full flex-col gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-dark rounded-[16px]",
     'data-follower-text': 'Discover more',
-    style: { cursor: 'none' }, // Hide default cursor on this element
   };
 
   return (
