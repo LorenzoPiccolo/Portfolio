@@ -97,70 +97,10 @@ export default function SecondSection({ resizeTick = 0 }) {
     ));
 
   return (
-    <section
-      id="about-me"
-      ref={sectionRef}
-      className="relative isolate min-h-[700px] bg-dark px-6 py-16 md:py-32 z-10 w-screen transition-opacity duration-500"
-    >
-      {/* Testo introduttivo (64px Urbanist) */}
-      <div className="w-[full] mx-auto font-normal title-44 md:title-64 leading-[110%] tracking-tight">
-        <p className="w-[100%] md:w-[80%]">{renderText('Digital & Web Designer based in Italy.')}
-          {renderText('Design, for me, is not about what appears first.')}
-
-          {renderText(
-            'It’s about what lasts quietly. Each interface, each brand, each visual layer is shaped through observation, balance, and a respect for space.'
-          )}
-        </p>
-      </div>
-
-      {/* --- Design focus --- */}
-      <div className="w-full mt-32">
-        <h3 className="title-32 font-normal text-center mb-8">Design focus</h3>
-
-        {/* Riga blocchi: flex, gap 24px, allineati top */}
-        <div ref={blocksContainerRef} className="flex md:flex-row flex-col items-start gap-6">
-          {/* Blocco 1 - 50% width, 550px height */}
-          <div className="md:basis-1/2 w-full">
-            <a href="#" className="block transition-transform duration-300 hover:scale-[1.02] ease-out">
-              <GlassCard className="w-full h-[50vh] md:h-[550px] rounded-[14px] bg-gray850/70 flex items-center justify-center">
-                <img src={iconOne} alt="icona 01" className="md:w-[400px] w-[250px]" />
-              </GlassCard>
-              <div className="title-24 font-normal mt-2">Web design</div>
-            </a>
-          </div>
-
-          {/* Blocco 2 - 25% width, 300px height */}
-          <div className="md:basis-1/4 w-full">
-            <a href="#" className="block transition-transform duration-300 hover:scale-[1.02] ease-out">
-              <GlassCard className="w-full h-[50vh] md:h-[300px] rounded-[14px] bg-gray850/70">
-                <div className="flex gap-[32px] hover:gap-[56px] transition-all duration-300 ease-out items-center justify-center">
-                  <img src={iconTwoOne} alt="icona 02" className="h-[60px]" />
-                  <img src={iconTwoTwo} alt="icona 02" className="h-[150px]" />
-                  <img src={iconTwoThree} alt="icona 02" className="h-[60px]" />
-                </div>
-              </GlassCard>
-              <div className="title-24 font-normal mt-2">UX/UI Design</div>
-            </a>
-          </div>
-
-          {/* Blocco 3 - 25% width, 300px height */}
-          <div className="md:basis-1/4 w-full">
-            <a href="#" className="group block transition-transform duration-300 hover:scale-[1.03] ease-out">
-              <GlassCard className="w-full h-[50vh] md:h-[300px] rounded-[14px] bg-gray850/70 flex items-center justify-center">
-                <img
-                  src={iconThree}
-                  alt="icona 03"
-                  className="w-[140px] h-[140px] transform transition-transform duration-[5000ms] ease-out motion-reduce:transform-none motion-safe:group-hover:rotate-[360deg]"
-                />
-              </GlassCard>
-              <div className="title-24 font-normal mt-2">AI visual</div>
-            </a>
-          </div>
-        </div>
-      </div>
-
+    <>
+      {/* Button - fixed, OUTSIDE section to escape isolate stacking context */}
       <div
-        className={`pointer-events-none fixed bottom-6 left-1/2 z-30 flex -translate-x-1/2 justify-center transition-all duration-500 ease-out origin-bottom ${buttonVisible ? 'scale-100 opacity-100' : 'scale-0 opacity-0'
+        className={`pointer-events-none fixed bottom-6 left-1/2 z-[45] flex -translate-x-1/2 justify-center transition-all duration-500 ease-out origin-bottom ${buttonVisible ? 'scale-100 opacity-100' : 'scale-0 opacity-0'
           }`}
       >
         <div className="pointer-events-auto transition-transform duration-300 hover:scale-[1.05]">
@@ -171,6 +111,69 @@ export default function SecondSection({ resizeTick = 0 }) {
           />
         </div>
       </div>
-    </section>
+
+      <section
+        id="about-me"
+        ref={sectionRef}
+        className="relative isolate min-h-[700px] bg-dark px-6 py-16 md:py-32 z-10 w-screen transition-opacity duration-500"
+      >
+        {/* Testo introduttivo (64px Urbanist) */}
+        <div className="w-[full] mx-auto font-normal title-44 md:title-64 leading-[110%] tracking-tight">
+          <p className="w-[100%] md:w-[80%]">{renderText('Digital & Web Designer based in Italy.')}
+            {renderText('Design, for me, is not about what appears first.')}
+
+            {renderText(
+              "It's about what lasts quietly. Each interface, each brand, each visual layer is shaped through observation, balance, and a respect for space."
+            )}
+          </p>
+        </div>
+
+        {/* --- Design focus --- */}
+        <div className="w-full mt-32">
+          <h3 className="title-32 font-normal text-center mb-8">Design focus</h3>
+
+          {/* Riga blocchi: flex, gap 24px, allineati top */}
+          <div ref={blocksContainerRef} className="flex md:flex-row flex-col items-start gap-6">
+            {/* Blocco 1 - 50% width, 550px height */}
+            <div className="md:basis-1/2 w-full">
+              <a href="#" className="block transition-transform duration-300 hover:scale-[1.02] ease-out">
+                <GlassCard className="w-full h-[50vh] md:h-[550px] rounded-[14px] bg-gray850/70 flex items-center justify-center">
+                  <img src={iconOne} alt="icona 01" className="md:w-[400px] w-[250px]" />
+                </GlassCard>
+                <div className="title-24 font-normal mt-2">Web design</div>
+              </a>
+            </div>
+
+            {/* Blocco 2 - 25% width, 300px height */}
+            <div className="md:basis-1/4 w-full">
+              <a href="#" className="block transition-transform duration-300 hover:scale-[1.02] ease-out">
+                <GlassCard className="w-full h-[50vh] md:h-[300px] rounded-[14px] bg-gray850/70">
+                  <div className="flex gap-[32px] hover:gap-[56px] transition-all duration-300 ease-out items-center justify-center">
+                    <img src={iconTwoOne} alt="icona 02" className="h-[60px]" />
+                    <img src={iconTwoTwo} alt="icona 02" className="h-[150px]" />
+                    <img src={iconTwoThree} alt="icona 02" className="h-[60px]" />
+                  </div>
+                </GlassCard>
+                <div className="title-24 font-normal mt-2">UX/UI Design</div>
+              </a>
+            </div>
+
+            {/* Blocco 3 - 25% width, 300px height */}
+            <div className="md:basis-1/4 w-full">
+              <a href="#" className="group block transition-transform duration-300 hover:scale-[1.03] ease-out">
+                <GlassCard className="w-full h-[50vh] md:h-[300px] rounded-[14px] bg-gray850/70 flex items-center justify-center">
+                  <img
+                    src={iconThree}
+                    alt="icona 03"
+                    className="w-[140px] h-[140px] transform transition-transform duration-[5000ms] ease-out motion-reduce:transform-none motion-safe:group-hover:rotate-[360deg]"
+                  />
+                </GlassCard>
+                <div className="title-24 font-normal mt-2">AI visual</div>
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+    </>
   );
 }
