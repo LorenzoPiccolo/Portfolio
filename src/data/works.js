@@ -7,13 +7,13 @@ import imageFooter02 from '../../img/image-footer-02.jpg';
 import buildZeroHero from '../../img/build-zero/build-zero-01.jpg';
 import imageFooter05 from '../../img/image-footer-05.jpg';
 import portfolioHero from '../../img/portfolio/portfolio-01.jpg';
+import atalusHero from '../../img/atalus/atalus-01.jpg';
 
 export const WORKS = [
   {
     id: 'build-zero',
     title: 'Build Zero',
     subtitle: 'UX/UI Design',
-    videoSrc: project01Video,
     poster: buildZeroHero,
     year: '2024',
     href: '/case-history/build-zero',
@@ -22,7 +22,6 @@ export const WORKS = [
     id: 'portfolio-website',
     title: 'Portfolio Website',
     subtitle: 'Web Design',
-    videoSrc: project02Video,
     poster: portfolioHero,
     year: '2025',
     href: '/case-history/portfolio-website',
@@ -31,18 +30,16 @@ export const WORKS = [
     id: 'alidays',
     title: 'Alidays',
     subtitle: 'Brand Identity',
-    videoSrc: project01Video,
     poster: footerImage,
     year: '2024',
     href: '/case-history/alidays',
   },
   {
-    id: 'redi-website',
-    title: 'Redi Website',
-    subtitle: 'Web Development',
-    videoSrc: project02Video,
-    poster: imageFooter05,
-    year: '2025',
-    href: '/case-history/redi',
+    id: 'atalus',
+    title: 'Atalus',
+    subtitle: 'Digital Identity',
+    poster: atalusHero,
+    year: '2024',
+    href: '/case-history/atalus',
   },
 ];

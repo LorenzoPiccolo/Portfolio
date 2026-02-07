@@ -14,6 +14,7 @@ import RediWebsite from './pages/case-history/RediWebsite.jsx';
 import Romaji from './pages/case-history/Romaji.jsx';
 import Reborn from './pages/case-history/Reborn.jsx';
 import CustomCursor from './components/CustomCursor.jsx';
+import EdgeBlur from './components/EdgeBlur.jsx';
 
 function ScrollToTop() {
   const { pathname, key } = useLocation();
@@ -73,6 +74,7 @@ export default function App() {
     <>
       <ScrollToTop />
       <CustomCursor />
+      <EdgeBlur />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/works" element={<WorksApp />} />

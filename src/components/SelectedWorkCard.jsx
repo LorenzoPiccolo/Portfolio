@@ -18,21 +18,30 @@ export default function SelectedWorkCard({ videoSrc, poster = undefined, title, 
 
   return (
     <Wrapper {...wrapperProps}>
-      <video
-        className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-        src={videoSrc}
-        poster={poster}
-        autoPlay
-        loop
-        muted
-        playsInline
-        aria-label={`Video preview for ${title}`}
-      />
+      {videoSrc ? (
+        <video
+          className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+          src={videoSrc}
+          poster={poster}
+          autoPlay
+          loop
+          muted
+          playsInline
+          aria-label={`Video preview for ${title}`}
+        />
+      ) : (
+        <img
+          className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+          src={poster}
+          alt={`Preview for ${title}`}
+          draggable={false}
+        />
+      )}
       <div className="absolute top-4 left-4 bg-dark/70 backdrop-blur-lg rounded-full px-5 py-1.5 z-10">
         <h6 className="text-14 text-light">{year}</h6>
       </div>
 
-      <div className="relative z-10 flex h-full w-full flex-col items-center justify-center gap-4 text-center text-light">
+      <div className="relative z-10 flex h-full w-full flex-col items-center justify-center gap-4 text-center text-light opacity-0 scale-0 transition-all duration-300 group-hover:opacity-100 group-hover:scale-100">
         <h3 className="title-44 md:title-64 font-normal leading-none">{title}</h3>
         <p className="text-20 md:text-16 font-normal leading-tight opacity-90">{subtitle}</p>
       </div>

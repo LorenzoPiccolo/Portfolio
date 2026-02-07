@@ -39,6 +39,13 @@ export default function CustomCursor() {
         window.addEventListener('mousemove', moveCursor);
 
         const handleMouseOver = (e) => {
+            // Check if cursor is over header or any element with data-no-cursor
+            const isOverHeader = e.target.closest('header') || e.target.closest('[data-no-cursor]');
+            if (isOverHeader) {
+                setIsActive(false);
+                return;
+            }
+
             const target = e.target.closest('[data-follower-text]');
             if (target) {
                 const followerText = target.getAttribute('data-follower-text');

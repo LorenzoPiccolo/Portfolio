@@ -149,81 +149,94 @@ export default function FourthSection({ resizeTick = 0 }) {
     return () => ctx.revert();
   }, [resizeTick, isMobile]);
 
-  // Button visibility logic matching SecondSection
+  // Button visibility logic - match the pinned section's scroll duration
   const [buttonVisible, setButtonVisible] = useState(false);
   const cardsContainerRef = useRef(null);
 
   useLayoutEffect(() => {
-    // We use the cards container as trigger if possible, or section fallback
-    const triggerEl = cardsContainerRef.current || sectionRef.current;
+    const triggerEl = sectionRef.current;
     if (!triggerEl) return;
+
+    // Calculate total scroll distance (same logic as the main animation)
+    const getScrollDistance = () => {
+      const cards = triggerEl.querySelectorAll('[data-work-card]');
+      if (!cards.length) return window.innerHeight;
+      const cardHeight = cards[0]?.offsetHeight || window.innerHeight;
+      const stepDistance = Math.max(320, Math.round(cardHeight * 0.75));
+      const steps = Math.max(1, cards.length - 1);
+      return stepDistance * steps + window.innerHeight; // Add viewport for exit parallax
+    };
 
     const ctx = gsap.context(() => {
       ScrollTrigger.create({
         trigger: triggerEl,
         start: 'top 80%',
-        end: 'bottom 80%',
+        end: () => `+=${getScrollDistance()}`,
         onEnter: () => setButtonVisible(true),
         onLeaveBack: () => setButtonVisible(false),
-        onLeave: () => setButtonVisible(false), // Also hide when scrolling past
+        onLeave: () => setButtonVisible(false),
         onEnterBack: () => setButtonVisible(true),
+        invalidateOnRefresh: true,
         markers: false,
       });
     }, sectionRef);
 
     return () => ctx.revert();
-  }, [resizeTick]);
+  }, [resizeTick, isMobile]);
 
   return (
-    <section
-      id="works"
-      ref={sectionRef}
-      className={`relative isolate bg-light text-dark z-10 fourthSection ${isMobile ? 'py-16 px-4' : 'section-full min-h-[700px]'
-        }`}
-    >
-      {/* Button - fixed at bottom on mobile, absolute bottom on desktop */}
-      <div className={`z-20 transition-all duration-500 ease-out origin-bottom ${buttonVisible ? 'scale-100 opacity-100' : 'scale-0 opacity-0'} ${isMobile
-        ? 'fixed bottom-6 left-1/2 -translate-x-1/2'
-        : 'fixed bottom-6 left-1/2 -translate-x-1/2'
-        }`}>
-        <div className="pointer-events-auto transition-transform duration-300 hover:scale-[1.05]">
-          <DynamicButton
-            label="More projects"
-            href="/works"
-            icon={ChevronRight}
-          // Removed internal scrollTrigger prop as we handle visibility externally
-          />
+    <>
+      {/* Button - fixed at bottom, centered - OUTSIDE section to avoid isolate stacking context */}
+      <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-[45]">
+        <div
+          className={`transition-transform duration-500 ease-out will-change-transform ${buttonVisible ? 'scale-100' : 'scale-0'}`}
+          style={{ transformOrigin: 'center bottom' }}
+        >
+          <div className="pointer-events-auto transition-transform duration-300 hover:scale-[1.05]">
+            <DynamicButton
+              label="More projects"
+              href="/works"
+              icon={ChevronRight}
+            />
+          </div>
         </div>
       </div>
 
-      {isMobile ? (
-        /* Mobile: Simple column layout, no overlapping */
-        <div ref={cardsContainerRef} className="flex flex-col gap-6 w-full">
-          {WORKS.map((work) => (
-            <div key={work.id} className="w-full aspect-[4/5]">
-              <SelectedWorkCard {...work} />
-            </div>
-          ))}
-        </div>
-      ) : (
-        /* Desktop: Overlapping stacking animation */
-        <div className="flex min-h-full w-full flex-col items-center justify-center gap-12">
-          <div ref={cardsContainerRef} data-cards-container className="relative flex w-full justify-center">
-            <div className="relative w-[70vw] max-w-[1400px] aspect-[4/5] lg:aspect-[16/9]">
-              {WORKS.map((work, index) => (
-                <div
-                  key={work.id}
-                  data-work-card
-                  className="selected-work-card absolute inset-0 flex items-center justify-center will-change-transform"
-                  style={{ zIndex: index + 1 }}
-                >
-                  <SelectedWorkCard {...work} />
-                </div>
-              ))}
+      <section
+        id="works"
+        ref={sectionRef}
+        className={`relative isolate bg-light text-dark z-10 fourthSection ${isMobile ? 'py-16 px-4' : 'section-full min-h-[700px]'
+          }`}
+      >
+        {isMobile ? (
+          /* Mobile: Simple column layout, no overlapping */
+          <div ref={cardsContainerRef} className="flex flex-col gap-6 w-full">
+            {WORKS.map((work) => (
+              <div key={work.id} className="w-full aspect-[4/5]">
+                <SelectedWorkCard {...work} />
+              </div>
+            ))}
+          </div>
+        ) : (
+          /* Desktop: Overlapping stacking animation */
+          <div className="flex min-h-full w-full flex-col items-center justify-center gap-12">
+            <div ref={cardsContainerRef} data-cards-container className="relative flex w-full justify-center">
+              <div className="relative w-[70vw] max-w-[1400px] aspect-[4/5] lg:aspect-[16/9]">
+                {WORKS.map((work, index) => (
+                  <div
+                    key={work.id}
+                    data-work-card
+                    className="selected-work-card absolute inset-0 flex items-center justify-center will-change-transform"
+                    style={{ zIndex: index + 1 }}
+                  >
+                    <SelectedWorkCard {...work} />
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
-        </div>
-      )}
-    </section>
+        )}
+      </section>
+    </>
   );
 }
