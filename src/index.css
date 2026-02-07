@@ -45,7 +45,13 @@
     -webkit-overflow-scrolling: touch;
     /* Allow natural touch gestures for scrolling */
     touch-action: pan-y pan-x;
-    /* Note: Removed overscroll-behavior-y: none as it kills momentum on iOS Safari */
+    /* Prevent browser from hijacking scroll for pull-to-refresh etc */
+    overscroll-behavior: none;
+  }
+
+  /* Prevent 300ms tap delay and double-tap-to-zoom on mobile */
+  body {
+    touch-action: manipulation;
   }
 
   body {

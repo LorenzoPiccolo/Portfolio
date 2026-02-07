@@ -51,12 +51,20 @@ export default function renderApp(RootComponent) {
     ScrollTrigger.addEventListener('refresh', () => lenis?.resize());
   }
 
-  if (document.fonts && document.fonts.ready) {
-    document.fonts.ready.then(() => {
+  // Delay ScrollTrigger refresh to avoid interrupting first touch scroll on mobile
+  const safeRefresh = () => {
+    requestAnimationFrame(() => {
       ScrollTrigger.refresh();
     });
+  };
+
+  if (document.fonts && document.fonts.ready) {
+    document.fonts.ready.then(() => {
+      // Give mobile browsers time to settle before refreshing
+      setTimeout(safeRefresh, 300);
+    });
   } else {
-    setTimeout(() => ScrollTrigger.refresh(), 100);
+    setTimeout(safeRefresh, 400);
   }
 
   gsap.ticker.lagSmoothing(0);
