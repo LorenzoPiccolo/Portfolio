@@ -31,6 +31,7 @@ export default function CaseHistoryPage({ project }) {
         heroImage,
         description,
         images = [],
+        keyInfo = {},
         sections = [],
     } = project || {};
 
@@ -148,85 +149,212 @@ export default function CaseHistoryPage({ project }) {
                 </section>
             )}
 
-            {/* Two Images Section - Right image sticky in center */}
-            {images.length >= 2 && (
-                <section className="w-full bg-dark" style={{ padding: IMAGE_PADDING }}>
-                    {/* Desktop: flex row, Mobile: flex column */}
-                    <div className="flex flex-col md:flex-row md:justify-between gap-6">
-                        {/* Left image - 9:16 on mobile, 100svh on desktop */}
-                        <div className="w-full md:w-[45vw] aspect-[9/16] md:aspect-auto md:h-[100svh]">
-                            <img
-                                src={images[0].src}
-                                alt={images[0].alt || `${name} image 1`}
-                                className="w-full h-full object-cover"
-                                style={{ borderRadius: IMAGE_RADIUS }}
-                            />
-                        </div>
-                        {/* Right image - sticky at center when section reaches middle */}
-                        <div className="w-full md:w-[45vw] md:h-[100svh] flex items-start">
-                            <div
-                                className="w-full aspect-[9/16] md:aspect-auto md:h-[40svh] md:sticky"
-                                style={{ top: 'calc(50vh - 20svh)' }}
-                            >
-                                <img
-                                    src={images[1].src}
-                                    alt={images[1].alt || `${name} image 2`}
-                                    className="w-full h-full object-cover"
-                                    style={{ borderRadius: IMAGE_RADIUS }}
-                                />
-                            </div>
+            {/* Key Information Section */}
+            {Object.keys(keyInfo).length > 0 && (
+                <section className="w-full bg-dark px-6 md:px-12 pb-10">
+                    <div className="flex flex-col gap-10">
+                        <h2 className="font-urbanist text-[32px] font-normal text-light">
+                            Key information
+                        </h2>
+                        <div className="flex flex-wrap justify-between gap-6">
+                            {keyInfo.client && (
+                                <div className="flex flex-col gap-4">
+                                    <span className="font-spaceg text-[12px] uppercase text-light">Client</span>
+                                    <span className="font-urbanist text-[16px] text-light">{keyInfo.client}</span>
+                                </div>
+                            )}
+                            {keyInfo.timeSpan && (
+                                <div className="flex flex-col gap-4">
+                                    <span className="font-spaceg text-[12px] uppercase text-light">Time Span</span>
+                                    <span className="font-urbanist text-[16px] text-light">{keyInfo.timeSpan}</span>
+                                </div>
+                            )}
+                            {keyInfo.typeOfWork && (
+                                <div className="flex flex-col gap-4">
+                                    <span className="font-spaceg text-[12px] uppercase text-light">Type of Work</span>
+                                    <span className="font-urbanist text-[16px] text-light">{keyInfo.typeOfWork}</span>
+                                </div>
+                            )}
+                            {keyInfo.kpi && (
+                                <div className="flex flex-col gap-4">
+                                    <span className="font-spaceg text-[12px] uppercase text-light">KPI</span>
+                                    <span className="font-urbanist text-[16px] text-light">{keyInfo.kpi}</span>
+                                </div>
+                            )}
                         </div>
                     </div>
                 </section>
             )}
 
-            {/* Second Full Width Image */}
-            {images.length >= 3 && (
-                <section className="w-full bg-dark" style={{ padding: IMAGE_PADDING }}>
-                    <div className="w-full aspect-[9/16] md:aspect-auto md:h-[100svh]">
-                        <img
-                            src={images[2].src}
-                            alt={images[2].alt || `${name} image 3`}
-                            className="w-full h-full object-cover"
-                            style={{ borderRadius: IMAGE_RADIUS }}
-                        />
-                    </div>
-                </section>
-            )}
-
-            {/* Split Section - Long image on right, small sticky on left */}
-            {images.length >= 5 && (
-                <section className="w-full bg-dark" style={{ padding: IMAGE_PADDING }}>
-                    <div className="flex flex-col md:flex-row md:justify-between gap-6">
-                        {/* Left image - small, sticky at center */}
-                        <div className="w-full md:w-[45vw] md:h-[100svh] flex items-start">
-                            <div
-                                className="w-full aspect-[9/16] md:aspect-auto md:h-[40svh] md:sticky"
-                                style={{ top: 'calc(50vh - 20svh)' }}
-                            >
-                                <img
-                                    src={images[3].src}
-                                    alt={images[3].alt || `${name} image 4`}
-                                    className="w-full h-full object-cover"
-                                    style={{ borderRadius: IMAGE_RADIUS }}
-                                />
-                            </div>
-                        </div>
-                        {/* Right image - 9:16 on mobile, 100svh on desktop (long) */}
-                        <div className="w-full md:w-[45vw] aspect-[9/16] md:aspect-auto md:h-[100svh]">
-                            <img
-                                src={images[4].src}
-                                alt={images[4].alt || `${name} image 5`}
-                                className="w-full h-full object-cover"
-                                style={{ borderRadius: IMAGE_RADIUS }}
-                            />
-                        </div>
-                    </div>
-                </section>
+            {/* Dynamic Image Gallery */}
+            {images.length > 0 && (
+                <DynamicGallery images={images} name={name} />
             )}
 
             <Footer resizeTick={resizeTick} />
         </div>
+    );
+}
+
+/**
+ * DynamicGallery - Renders images in alternating layouts based on available assets
+ * Layout pattern: split-tall-left → full-width → split-short-left → repeat
+ */
+function DynamicGallery({ images, name }) {
+    const renderElements = [];
+    let imageIndex = 0;
+
+    // Keep adding layouts while we have images
+    while (imageIndex < images.length) {
+        const groupIndex = Math.floor(imageIndex / 5);
+        const positionInCycle = imageIndex % 5;
+
+        // Pattern: 0-1 = split (tall-left, short-right), 2 = full, 3-4 = split (short-left, tall-right)
+        if (positionInCycle === 0 && imageIndex + 1 < images.length) {
+            // Split: tall left, short right (needs 2 images)
+            renderElements.push(
+                <SplitSection
+                    key={`split-tall-${groupIndex}`}
+                    leftImage={images[imageIndex]}
+                    rightImage={images[imageIndex + 1]}
+                    name={name}
+                    leftTall={true}
+                    startIndex={imageIndex}
+                />
+            );
+            imageIndex += 2;
+        } else if (positionInCycle === 0 && imageIndex < images.length) {
+            // Only 1 image left at start - show as full width
+            renderElements.push(
+                <FullWidthImage
+                    key={`full-single-${groupIndex}`}
+                    image={images[imageIndex]}
+                    name={name}
+                    index={imageIndex}
+                />
+            );
+            imageIndex += 1;
+        } else if (positionInCycle === 2) {
+            // Full width image
+            renderElements.push(
+                <FullWidthImage
+                    key={`full-${groupIndex}`}
+                    image={images[imageIndex]}
+                    name={name}
+                    index={imageIndex}
+                />
+            );
+            imageIndex += 1;
+        } else if (positionInCycle === 3 && imageIndex + 1 < images.length) {
+            // Split: short left, tall right (needs 2 images)
+            renderElements.push(
+                <SplitSection
+                    key={`split-short-${groupIndex}`}
+                    leftImage={images[imageIndex]}
+                    rightImage={images[imageIndex + 1]}
+                    name={name}
+                    leftTall={false}
+                    startIndex={imageIndex}
+                />
+            );
+            imageIndex += 2;
+        } else {
+            // Single remaining image - show as full width
+            renderElements.push(
+                <FullWidthImage
+                    key={`full-remaining-${imageIndex}`}
+                    image={images[imageIndex]}
+                    name={name}
+                    index={imageIndex}
+                />
+            );
+            imageIndex += 1;
+        }
+    }
+
+    return <>{renderElements}</>;
+}
+
+/**
+ * SplitSection - Two images side by side with sticky effect
+ */
+function SplitSection({ leftImage, rightImage, name, leftTall, startIndex }) {
+    return (
+        <section className="w-full bg-dark" style={{ padding: IMAGE_PADDING }}>
+            <div className="flex flex-col md:flex-row md:justify-between gap-6">
+                {leftTall ? (
+                    <>
+                        {/* Left image - tall */}
+                        <div className="w-full md:w-[calc(50%-12px)] aspect-[9/16] md:aspect-auto md:h-[810px]">
+                            <img
+                                src={leftImage.src}
+                                alt={leftImage.alt || `${name} image ${startIndex + 1}`}
+                                className="w-full h-full object-cover"
+                                style={{ borderRadius: IMAGE_RADIUS }}
+                            />
+                        </div>
+                        {/* Right image - short, sticky */}
+                        <div className="w-full md:w-[calc(50%-12px)] md:h-[810px] flex items-start">
+                            <div
+                                className="w-full aspect-[9/16] md:aspect-auto md:h-[401px] md:sticky"
+                                style={{ top: 'calc(50vh - 200px)' }}
+                            >
+                                <img
+                                    src={rightImage.src}
+                                    alt={rightImage.alt || `${name} image ${startIndex + 2}`}
+                                    className="w-full h-full object-cover"
+                                    style={{ borderRadius: IMAGE_RADIUS }}
+                                />
+                            </div>
+                        </div>
+                    </>
+                ) : (
+                    <>
+                        {/* Left image - short, sticky */}
+                        <div className="w-full md:w-[calc(50%-12px)] md:h-[810px] flex items-start">
+                            <div
+                                className="w-full aspect-[9/16] md:aspect-auto md:h-[401px] md:sticky"
+                                style={{ top: 'calc(50vh - 200px)' }}
+                            >
+                                <img
+                                    src={leftImage.src}
+                                    alt={leftImage.alt || `${name} image ${startIndex + 1}`}
+                                    className="w-full h-full object-cover"
+                                    style={{ borderRadius: IMAGE_RADIUS }}
+                                />
+                            </div>
+                        </div>
+                        {/* Right image - tall */}
+                        <div className="w-full md:w-[calc(50%-12px)] aspect-[9/16] md:aspect-auto md:h-[810px]">
+                            <img
+                                src={rightImage.src}
+                                alt={rightImage.alt || `${name} image ${startIndex + 2}`}
+                                className="w-full h-full object-cover"
+                                style={{ borderRadius: IMAGE_RADIUS }}
+                            />
+                        </div>
+                    </>
+                )}
+            </div>
+        </section>
+    );
+}
+
+/**
+ * FullWidthImage - Single full-width image
+ */
+function FullWidthImage({ image, name, index }) {
+    return (
+        <section className="w-full bg-dark" style={{ padding: IMAGE_PADDING }}>
+            <div className="w-full aspect-[9/16] md:aspect-auto md:h-[820px]">
+                <img
+                    src={image.src}
+                    alt={image.alt || `${name} image ${index + 1}`}
+                    className="w-full h-full object-cover"
+                    style={{ borderRadius: IMAGE_RADIUS }}
+                />
+            </div>
+        </section>
     );
 }
 

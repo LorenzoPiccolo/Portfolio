@@ -14,6 +14,12 @@ const reborn = {
     year: '2023',
     heroImage: heroImage,
     description: 'A vinyl record design that captures the essence of rebirth and transformation through bold visual storytelling and tactile design elements.',
+    keyInfo: {
+        client: 'Personal Project',
+        timeSpan: '2023',
+        typeOfWork: 'Packaging Design',
+        kpi: 'Vinyl Artwork',
+    },
     images: [
         { src: image2, alt: 'Packaging details' },
         { src: image3, alt: 'Inner sleeve' },

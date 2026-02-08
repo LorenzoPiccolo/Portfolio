@@ -14,6 +14,12 @@ const atalus = {
     year: '2025',
     heroImage: heroImage,
     description: 'A sophisticated brand identity for a luxury service. Every element was designed to convey elegance, trust, and attention to detail.',
+    keyInfo: {
+        client: 'Atalus',
+        timeSpan: '2025',
+        typeOfWork: 'Brand Identity',
+        kpi: 'Visual Restyling',
+    },
     images: [
         { src: image2, alt: 'Brand applications' },
         { src: image3, alt: 'Visual identity' },

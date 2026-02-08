@@ -14,6 +14,12 @@ const romaji = {
     year: '2024',
     heroImage: heroImage,
     description: 'An editorial design project exploring the intersection of Japanese culture and contemporary typography. Each spread balances tradition with modern aesthetics.',
+    keyInfo: {
+        client: 'Personal Project',
+        timeSpan: '2024',
+        typeOfWork: 'Editorial Design',
+        kpi: 'Magazine Layout',
+    },
     images: [
         { src: image2, alt: 'Typography details' },
         { src: image3, alt: 'Cover design' },

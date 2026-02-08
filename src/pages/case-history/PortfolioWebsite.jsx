@@ -15,6 +15,12 @@ const portfolioWebsite = {
     year: '2025',
     heroImage: heroImage,
     description: 'A personal portfolio website designed to showcase creative work through immersive animations and thoughtful typography. Every detail reflects a commitment to craft.',
+    keyInfo: {
+        client: 'Personal Project',
+        timeSpan: '2025',
+        typeOfWork: 'Web Design',
+        kpi: 'Interactive Experience',
+    },
     images: [
         { src: image2, alt: 'Project showcase' },
         { src: image3, alt: 'Navigation system' },

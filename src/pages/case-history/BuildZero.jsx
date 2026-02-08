@@ -20,6 +20,7 @@ const buildZero = {
         { src: image4, alt: 'Prototype screens' },
         { src: image5, alt: 'Final UI' },
         { src: image6, alt: 'Design system' },
+
     ],
     sections: [
         {
