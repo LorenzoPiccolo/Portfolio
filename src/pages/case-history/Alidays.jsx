@@ -14,6 +14,12 @@ const alidays = {
     year: '2024',
     heroImage: heroImage,
     description: 'A complete brand identity system designed to capture the essence of travel and discovery. From logo to touchpoints, every element tells a cohesive story.',
+    keyInfo: {
+        client: 'Alidays',
+        timeSpan: '2024',
+        typeOfWork: 'Brand Identity',
+        kpi: 'Visual System',
+    },
     images: [
         { src: image1, alt: 'Brand elements' },
         { src: image2, alt: 'Applications' },

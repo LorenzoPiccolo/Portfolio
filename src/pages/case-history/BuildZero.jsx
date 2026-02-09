@@ -14,6 +14,12 @@ const buildZero = {
     year: '2024',
     heroImage: heroImage,
     description: 'A comprehensive UX/UI design project focused on creating intuitive user experiences. Every interaction was crafted to feel natural and purposeful.',
+    keyInfo: {
+        client: 'Build Zero',
+        timeSpan: '2024',
+        typeOfWork: 'UX/UI Design',
+        kpi: 'User Experience',
+    },
     images: [
         { src: image2, alt: 'User flow' },
         { src: image3, alt: 'Wireframes' },

@@ -1,6 +1,7 @@
 // src/components/Header.jsx
 import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
+import TransitionLink from './TransitionLink.jsx';
 import logo from '../../img/logo.svg';
 import useCursorGlow from '../hooks/useCursorGlow.js';
 
@@ -40,9 +41,9 @@ export default function Header({ currentPage = 'Home' }) {
         {...glowHandlers}
       >
         <div style={glowStyle} aria-hidden="true" />
-        <Link to="/" className="inline-flex items-center gap-2 relative z-10">
+        <TransitionLink to="/" className="inline-flex items-center gap-2 relative z-10">
           <img src={logo} alt="Logo" className="h-10 w-10 md:h-8 md:w-8" />
-        </Link>
+        </TransitionLink>
 
         <div className="relative inline-flex items-start z-10">
           <button
@@ -108,7 +109,7 @@ export default function Header({ currentPage = 'Home' }) {
                     <span className="leading-tight">{label}</span>
                   </a>
                 ) : (
-                  <Link
+                  <TransitionLink
                     to={path}
                     onMouseEnter={() => {
                       window.clearTimeout(hoverTimeoutRef.current);
@@ -130,7 +131,7 @@ export default function Header({ currentPage = 'Home' }) {
                       ·
                     </span>
                     <span className="leading-tight">{label}</span>
-                  </Link>
+                  </TransitionLink>
                 )}
               </li>
             );

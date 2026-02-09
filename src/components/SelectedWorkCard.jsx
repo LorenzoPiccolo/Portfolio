@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import TransitionLink from './TransitionLink.jsx';
 
 export default function SelectedWorkCard({ videoSrc, poster = undefined, title, subtitle, year, href }) {
   const isExternal = href?.startsWith('http') || href?.startsWith('mailto:') || href?.startsWith('#');
@@ -11,7 +11,7 @@ export default function SelectedWorkCard({ videoSrc, poster = undefined, title, 
       Wrapper = 'a';
       wrapperProps = { href, className: "block relative h-full w-full rounded-[24px] overflow-hidden bg-dark origin-top group", 'data-follower-text': 'Discover more' };
     } else {
-      Wrapper = Link;
+      Wrapper = TransitionLink;
       wrapperProps = { to: href, className: "block relative h-full w-full rounded-[24px] overflow-hidden bg-dark origin-top group", 'data-follower-text': 'Discover more' };
     }
   }

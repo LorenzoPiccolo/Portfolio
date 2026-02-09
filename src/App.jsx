@@ -15,6 +15,8 @@ import Romaji from './pages/case-history/Romaji.jsx';
 import Reborn from './pages/case-history/Reborn.jsx';
 import CustomCursor from './components/CustomCursor.jsx';
 import EdgeBlur from './components/EdgeBlur.jsx';
+import PageTransition from './components/PageTransition.jsx';
+import { TransitionProvider } from './context/TransitionContext.jsx';
 
 function ScrollToTop() {
   const { pathname, key } = useLocation();
@@ -71,10 +73,11 @@ function ScrollToTop() {
 
 export default function App() {
   return (
-    <>
+    <TransitionProvider>
       <ScrollToTop />
       <CustomCursor />
       <EdgeBlur />
+      <PageTransition />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/works" element={<WorksApp />} />
@@ -89,6 +92,7 @@ export default function App() {
         <Route path="/case-history/romaji" element={<Romaji />} />
         <Route path="/case-history/reborn" element={<Reborn />} />
       </Routes>
-    </>
+    </TransitionProvider>
   );
 }
+

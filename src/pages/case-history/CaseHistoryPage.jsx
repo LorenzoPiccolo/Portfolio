@@ -1,6 +1,6 @@
 // src/pages/case-history/CaseHistoryPage.jsx
 import { useLayoutEffect, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useTransition } from '../../context/TransitionContext.jsx';
 import Header from '../../components/Header.jsx';
 import Footer from '../../components/Footer.jsx';
 import { ArrowDown } from 'lucide-react';
@@ -18,7 +18,7 @@ const IMAGE_PADDING = '24px';
  * CaseHistoryPage - Reusable case history/project page template
  */
 export default function CaseHistoryPage({ project }) {
-    const navigate = useNavigate();
+    const { navigateTo } = useTransition();
     const resizeTick = useResizeTick();
     const heroRef = useRef(null);
     const descriptionRef = useRef(null);
@@ -82,12 +82,8 @@ export default function CaseHistoryPage({ project }) {
             {/* Back Button - Fixed position, same height as header */}
             <button
                 onClick={() => {
-                    // Navigate back to works page if history is empty or external
-                    if (window.history.state && window.history.state.idx > 0) {
-                        navigate(-1);
-                    } else {
-                        navigate('/works');
-                    }
+                    // Navigate back to works page
+                    navigateTo('/works');
                 }}
                 className="fixed top-[84px] left-4 z-50 w-[60px] h-[60px] md:top-6 md:left-6 md:w-12 md:h-12 aspect-square rounded-[14px] border border-gray600 backdrop-blur-[12px] flex items-center justify-center overflow-hidden transition-transform duration-300 hover:scale-105 cursor-pointer"
                 style={{ backgroundColor: 'var(--blurBg)' }}

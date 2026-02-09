@@ -5,14 +5,28 @@ import { useLocation } from 'react-router-dom';
 export default function CustomCursor() {
     const circleRef = useRef(null);
     const textRef = useRef(null);
+    const isActiveRef = useRef(false);
     const [text, setText] = useState('');
-    const [isActive, setIsActive] = useState(false);
     const location = useLocation();
+
+    // Hide cursor on mobile/touch devices
+    const isMobile = typeof window !== 'undefined' && (
+        window.matchMedia('(max-width: 768px)').matches ||
+        window.matchMedia('(pointer: coarse)').matches
+    );
+
+    if (isMobile) {
+        return null;
+    }
 
     // Reset state on route change
     useEffect(() => {
         setText('');
-        setIsActive(false);
+        isActiveRef.current = false;
+        if (circleRef.current && textRef.current) {
+            gsap.set(circleRef.current, { scale: 0, opacity: 0 });
+            gsap.set(textRef.current, { opacity: 0, scale: 0.5 });
+        }
     }, [location.pathname]);
 
     useEffect(() => {
@@ -29,55 +43,15 @@ export default function CustomCursor() {
         const xToText = gsap.quickTo(textEl, 'x', { duration: 0.25, ease: 'power3.out' });
         const yToText = gsap.quickTo(textEl, 'y', { duration: 0.25, ease: 'power3.out' });
 
-        const moveCursor = (e) => {
-            xToCircle(e.clientX);
-            yToCircle(e.clientY);
-            xToText(e.clientX);
-            yToText(e.clientY);
-        };
+        const showCursor = (followerText) => {
+            if (isActiveRef.current && text === followerText) return; // Already showing same text
+            isActiveRef.current = true;
+            setText(followerText);
 
-        window.addEventListener('mousemove', moveCursor);
+            // Kill only scale/opacity animations, not position (quickTo)
+            gsap.killTweensOf(circle, 'scale,opacity');
+            gsap.killTweensOf(textEl, 'scale,opacity');
 
-        const handleMouseOver = (e) => {
-            // Check if cursor is over header or any element with data-no-cursor
-            const isOverHeader = e.target.closest('header') || e.target.closest('[data-no-cursor]');
-            if (isOverHeader) {
-                setIsActive(false);
-                return;
-            }
-
-            const target = e.target.closest('[data-follower-text]');
-            if (target) {
-                const followerText = target.getAttribute('data-follower-text');
-                setText(followerText);
-                setIsActive(true);
-            } else {
-                setIsActive(false);
-            }
-        };
-
-        const handleMouseOut = (e) => {
-            // Optional: if we leave window
-            if (e.relatedTarget === null) {
-                setIsActive(false);
-            }
-        };
-
-        window.addEventListener('mouseover', handleMouseOver);
-        window.addEventListener('mouseout', handleMouseOut);
-
-        return () => {
-            window.removeEventListener('mousemove', moveCursor);
-            window.removeEventListener('mouseover', handleMouseOver);
-            window.removeEventListener('mouseout', handleMouseOut);
-        };
-    }, [location.pathname]);
-
-    useEffect(() => {
-        const circle = circleRef.current;
-        const textEl = textRef.current;
-
-        if (isActive) {
             gsap.to(circle, {
                 scale: 1,
                 opacity: 1,
@@ -88,10 +62,19 @@ export default function CustomCursor() {
                 opacity: 1,
                 scale: 1,
                 duration: 0.3,
-                delay: 0.1, // Slight delay for text appearance
+                delay: 0.1,
                 ease: 'power2.out'
             });
-        } else {
+        };
+
+        const hideCursor = () => {
+            if (!isActiveRef.current) return; // Already hidden
+            isActiveRef.current = false;
+
+            // Kill only scale/opacity animations, not position (quickTo)
+            gsap.killTweensOf(circle, 'scale,opacity');
+            gsap.killTweensOf(textEl, 'scale,opacity');
+
             gsap.to(circle, {
                 scale: 0,
                 opacity: 0,
@@ -104,8 +87,51 @@ export default function CustomCursor() {
                 duration: 0.2,
                 ease: 'power2.out'
             });
-        }
-    }, [isActive]);
+        };
+
+        const moveCursor = (e) => {
+            xToCircle(e.clientX);
+            yToCircle(e.clientY);
+            xToText(e.clientX);
+            yToText(e.clientY);
+
+            // Check element under cursor on every mouse move for reliable detection
+            const elementUnderCursor = document.elementFromPoint(e.clientX, e.clientY);
+            if (!elementUnderCursor) {
+                hideCursor();
+                return;
+            }
+
+            // Check if cursor is over header or any element with data-no-cursor
+            const isOverHeader = elementUnderCursor.closest('header') || elementUnderCursor.closest('[data-no-cursor]');
+            if (isOverHeader) {
+                hideCursor();
+                return;
+            }
+
+            const target = elementUnderCursor.closest('[data-follower-text]');
+            if (target) {
+                const followerText = target.getAttribute('data-follower-text');
+                showCursor(followerText);
+            } else {
+                hideCursor();
+            }
+        };
+
+        const handleMouseLeave = () => {
+            hideCursor();
+        };
+
+        window.addEventListener('mousemove', moveCursor);
+        document.addEventListener('mouseleave', handleMouseLeave);
+
+        return () => {
+            window.removeEventListener('mousemove', moveCursor);
+            document.removeEventListener('mouseleave', handleMouseLeave);
+            gsap.killTweensOf(circle, 'scale,opacity');
+            gsap.killTweensOf(textEl, 'scale,opacity');
+        };
+    }, [location.pathname]);
 
     return (
         <>

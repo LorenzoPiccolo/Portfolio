@@ -14,6 +14,12 @@ const rediWebsite = {
     year: '2025',
     heroImage: heroImage,
     description: 'A modern web platform built with performance and accessibility in mind. Clean code meets beautiful design to create a seamless user experience.',
+    keyInfo: {
+        client: 'Redi',
+        timeSpan: '2025',
+        typeOfWork: 'Web Development',
+        kpi: 'Performance',
+    },
     images: [
         { src: image1, alt: 'Development process' },
         { src: image2, alt: 'Final result' },

@@ -1,5 +1,6 @@
 // src/components/CaseHistoryCard.jsx
 import { Link } from 'react-router-dom';
+import TransitionLink from './TransitionLink.jsx';
 
 const SIZE_CLASS = {
   lg: 'lg:col-span-8',
@@ -31,11 +32,11 @@ export default function CaseHistoryCard({
 
   let Tag = 'a';
   if (!isExternal && !isAnchor) {
-    Tag = Link;
+    Tag = TransitionLink;
   }
 
   const tagProps = {
-    [Tag === Link ? 'to' : 'href']: computedHref,
+    [Tag === TransitionLink ? 'to' : 'href']: computedHref,
     ...(target ? { target } : {}),
     ...(computedRel ? { rel: computedRel } : {}),
     className: "group flex h-full flex-col gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-dark rounded-[16px]",
