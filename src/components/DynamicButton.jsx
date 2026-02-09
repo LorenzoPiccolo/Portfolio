@@ -1,7 +1,7 @@
 // src/components/DynamicButton.jsx
 import { forwardRef, isValidElement, cloneElement, useLayoutEffect, useRef, useEffect } from 'react';
 import { ArrowUpRight } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import TransitionLink from './TransitionLink.jsx';
 import { gsap, ScrollTrigger } from '../utils/gsapConfig.js';
 import useCursorGlow from '../hooks/useCursorGlow.js';
 
@@ -43,14 +43,14 @@ const DynamicButton = forwardRef(function DynamicButton(
     if (isExternal || isAnchor) {
       Tag = 'a';
     } else {
-      Tag = Link;
+      Tag = TransitionLink;
     }
   }
 
   const computedRel = rel ?? (href && target === '_blank' ? 'noopener noreferrer' : undefined);
   const tagProps = href
     ? {
-      [Tag === Link ? 'to' : 'href']: href,
+      [Tag === TransitionLink ? 'to' : 'href']: href,
       ...(target ? { target } : {}),
       ...(computedRel ? { rel: computedRel } : {}),
     }

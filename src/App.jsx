@@ -1,6 +1,6 @@
 // src/App.jsx
 import { Routes, Route, useLocation, useNavigationType } from 'react-router-dom';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 // Pages
 import Home from './pages/home/Home.jsx';
@@ -16,6 +16,7 @@ import Reborn from './pages/case-history/Reborn.jsx';
 import CustomCursor from './components/CustomCursor.jsx';
 import EdgeBlur from './components/EdgeBlur.jsx';
 import PageTransition from './components/PageTransition.jsx';
+import IntroLoader from './components/IntroLoader.jsx';
 import { TransitionProvider } from './context/TransitionContext.jsx';
 
 function ScrollToTop() {
@@ -72,8 +73,11 @@ function ScrollToTop() {
 }
 
 export default function App() {
+  const [showLoader, setShowLoader] = useState(true);
+
   return (
     <TransitionProvider>
+      {showLoader && <IntroLoader onComplete={() => setShowLoader(false)} />}
       <ScrollToTop />
       <CustomCursor />
       <EdgeBlur />

@@ -1,7 +1,8 @@
 // src/components/TransitionLink.jsx
+import { forwardRef } from 'react';
 import { useTransition } from '../context/TransitionContext.jsx';
 
-export default function TransitionLink({ to, children, ...props }) {
+const TransitionLink = forwardRef(function TransitionLink({ to, children, ...props }, ref) {
     const { navigateTo } = useTransition();
 
     const handleClick = (e) => {
@@ -10,8 +11,10 @@ export default function TransitionLink({ to, children, ...props }) {
     };
 
     return (
-        <a href={to} onClick={handleClick} {...props}>
+        <a ref={ref} href={to} onClick={handleClick} {...props}>
             {children}
         </a>
     );
-}
+});
+
+export default TransitionLink;
