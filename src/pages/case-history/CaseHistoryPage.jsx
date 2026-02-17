@@ -1,5 +1,5 @@
 // src/pages/case-history/CaseHistoryPage.jsx
-import { useLayoutEffect, useRef } from 'react';
+import { useLayoutEffect, useRef, useCallback, useState } from 'react';
 import { useTransition } from '../../context/TransitionContext.jsx';
 import Header from '../../components/Header.jsx';
 import Footer from '../../components/Footer.jsx';
@@ -197,6 +197,20 @@ export default function CaseHistoryPage({ project }) {
  * Layout pattern: split-tall-left → full-width → split-short-left → repeat
  */
 function DynamicGallery({ images, name }) {
+    const totalImages = images.length;
+    const loadedCountRef = useRef(0);
+
+    const handleImageLoad = useCallback(() => {
+        loadedCountRef.current += 1;
+        if (loadedCountRef.current >= totalImages) {
+            // All gallery images loaded — recalculate scroll bounds
+            requestAnimationFrame(() => {
+                ScrollTrigger.refresh();
+                if (window.lenis) window.lenis.resize();
+            });
+        }
+    }, [totalImages]);
+
     const renderElements = [];
     let imageIndex = 0;
 
@@ -216,6 +230,7 @@ function DynamicGallery({ images, name }) {
                     name={name}
                     leftTall={true}
                     startIndex={imageIndex}
+                    onImageLoad={handleImageLoad}
                 />
             );
             imageIndex += 2;
@@ -227,6 +242,7 @@ function DynamicGallery({ images, name }) {
                     image={images[imageIndex]}
                     name={name}
                     index={imageIndex}
+                    onImageLoad={handleImageLoad}
                 />
             );
             imageIndex += 1;
@@ -238,6 +254,7 @@ function DynamicGallery({ images, name }) {
                     image={images[imageIndex]}
                     name={name}
                     index={imageIndex}
+                    onImageLoad={handleImageLoad}
                 />
             );
             imageIndex += 1;
@@ -251,6 +268,7 @@ function DynamicGallery({ images, name }) {
                     name={name}
                     leftTall={false}
                     startIndex={imageIndex}
+                    onImageLoad={handleImageLoad}
                 />
             );
             imageIndex += 2;
@@ -262,6 +280,7 @@ function DynamicGallery({ images, name }) {
                     image={images[imageIndex]}
                     name={name}
                     index={imageIndex}
+                    onImageLoad={handleImageLoad}
                 />
             );
             imageIndex += 1;
@@ -274,7 +293,7 @@ function DynamicGallery({ images, name }) {
 /**
  * SplitSection - Two images side by side with sticky effect
  */
-function SplitSection({ leftImage, rightImage, name, leftTall, startIndex }) {
+function SplitSection({ leftImage, rightImage, name, leftTall, startIndex, onImageLoad }) {
     return (
         <section className="w-full bg-dark" style={{ padding: IMAGE_PADDING }}>
             <div className="flex flex-col md:flex-row md:justify-between gap-6">
@@ -285,6 +304,7 @@ function SplitSection({ leftImage, rightImage, name, leftTall, startIndex }) {
                             <img
                                 src={leftImage.src}
                                 alt={leftImage.alt || `${name} image ${startIndex + 1}`}
+                                onLoad={onImageLoad}
                                 className="w-full h-full object-cover"
                                 style={{ borderRadius: IMAGE_RADIUS }}
                             />
@@ -298,6 +318,7 @@ function SplitSection({ leftImage, rightImage, name, leftTall, startIndex }) {
                                 <img
                                     src={rightImage.src}
                                     alt={rightImage.alt || `${name} image ${startIndex + 2}`}
+                                    onLoad={onImageLoad}
                                     className="w-full h-full object-cover"
                                     style={{ borderRadius: IMAGE_RADIUS }}
                                 />
@@ -315,6 +336,7 @@ function SplitSection({ leftImage, rightImage, name, leftTall, startIndex }) {
                                 <img
                                     src={leftImage.src}
                                     alt={leftImage.alt || `${name} image ${startIndex + 1}`}
+                                    onLoad={onImageLoad}
                                     className="w-full h-full object-cover"
                                     style={{ borderRadius: IMAGE_RADIUS }}
                                 />
@@ -325,6 +347,7 @@ function SplitSection({ leftImage, rightImage, name, leftTall, startIndex }) {
                             <img
                                 src={rightImage.src}
                                 alt={rightImage.alt || `${name} image ${startIndex + 2}`}
+                                onLoad={onImageLoad}
                                 className="w-full h-full object-cover"
                                 style={{ borderRadius: IMAGE_RADIUS }}
                             />
@@ -339,13 +362,14 @@ function SplitSection({ leftImage, rightImage, name, leftTall, startIndex }) {
 /**
  * FullWidthImage - Single full-width image
  */
-function FullWidthImage({ image, name, index }) {
+function FullWidthImage({ image, name, index, onImageLoad }) {
     return (
         <section className="w-full bg-dark" style={{ padding: IMAGE_PADDING }}>
             <div className="w-full aspect-[9/16] md:aspect-auto md:h-[820px]">
                 <img
                     src={image.src}
                     alt={image.alt || `${name} image ${index + 1}`}
+                    onLoad={onImageLoad}
                     className="w-full h-full object-cover"
                     style={{ borderRadius: IMAGE_RADIUS }}
                 />

@@ -2,13 +2,9 @@
 import { useEffect, useRef } from 'react';
 import { gsap } from '../utils/gsapConfig.js';
 
-const MIN_DURATION = 1; // seconds
-
 export default function IntroLoader({ onComplete }) {
     const wrapperRef = useRef(null);
     const fillRef = useRef(null);
-    const readyRef = useRef(false);
-    const fillDoneRef = useRef(false);
 
     useEffect(() => {
         const wrapper = wrapperRef.current;
@@ -19,9 +15,43 @@ export default function IntroLoader({ onComplete }) {
         document.body.style.overflow = 'hidden';
         if (window.lenis) window.lenis.stop();
 
-        const startTime = Date.now();
+        // --- Phase 1: quickly fill to ~90% ---
+        const fillTween = gsap.fromTo(fill,
+            { clipPath: 'inset(100% 0 0 0)' },
+            {
+                clipPath: 'inset(10% 0 0 0)', // 90% filled (10% remaining from top)
+                duration: 0.8,
+                ease: 'power2.out',
+                onComplete: checkReady,
+            }
+        );
 
-        const exit = () => {
+        let pageReady = false;
+
+        // --- Detect when the page is truly ready ---
+        const markReady = () => { pageReady = true; checkReady(); };
+
+        if (document.readyState === 'complete') {
+            markReady();
+        } else {
+            window.addEventListener('load', markReady);
+        }
+
+        // --- Phase 2 + exit: finish fill → slide loader out ---
+        function checkReady() {
+            // Both conditions: fill reached 90% AND page is loaded
+            if (!pageReady || gsap.isTweening(fill)) return;
+
+            // Complete the last 10%
+            gsap.to(fill, {
+                clipPath: 'inset(0% 0 0 0)',
+                duration: 0.35,
+                ease: 'power2.inOut',
+                onComplete: exit,
+            });
+        }
+
+        function exit() {
             const tl = gsap.timeline({
                 onComplete: () => {
                     document.body.style.overflow = '';
@@ -37,45 +67,11 @@ export default function IntroLoader({ onComplete }) {
                     duration: 0.6,
                     ease: 'power3.inOut',
                 });
-        };
-
-        const tryExit = () => {
-            if (readyRef.current && fillDoneRef.current) {
-                // Ensure minimum duration has elapsed
-                const elapsed = (Date.now() - startTime) / 1000;
-                const remaining = Math.max(0, MIN_DURATION - elapsed);
-                gsap.delayedCall(remaining, exit);
-            }
-        };
-
-        // Single smooth fill animation (bottom to top)
-        gsap.fromTo(fill,
-            { clipPath: 'inset(100% 0 0 0)' },
-            {
-                clipPath: 'inset(0% 0 0 0)',
-                duration: 1,
-                ease: 'power2.inOut',
-                onComplete: () => {
-                    fillDoneRef.current = true;
-                    tryExit();
-                },
-            }
-        );
-
-        // Wait for page load
-        const onReady = () => {
-            readyRef.current = true;
-            tryExit();
-        };
-
-        if (document.readyState === 'complete') {
-            onReady();
-        } else {
-            window.addEventListener('load', onReady);
         }
 
         return () => {
-            window.removeEventListener('load', onReady);
+            window.removeEventListener('load', markReady);
+            fillTween.kill();
         };
     }, [onComplete]);
 

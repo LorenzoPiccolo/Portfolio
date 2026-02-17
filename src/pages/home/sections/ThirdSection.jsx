@@ -133,7 +133,7 @@ export default function ThirdSection({ resizeTick = 0 }) {
           <div className="hidden lg:block lg:w-[40%] shrink-0">
             <div className="sticky top-0 h-screen flex items-center">
               <h3 className="title-32 font-normal leading-tight">
-                Different skills for
+                Different tools for
                 <br /> the best result
               </h3>
             </div>
