@@ -15,21 +15,21 @@ export default function CustomCursor() {
         window.matchMedia('(pointer: coarse)').matches
     );
 
-    if (isMobile) {
-        return null;
-    }
-
     // Reset state on route change
+    // NOTE: hooks must be declared before any conditional return (Rules of Hooks)
     useEffect(() => {
+        if (isMobile) return;
         setText('');
         isActiveRef.current = false;
         if (circleRef.current && textRef.current) {
             gsap.set(circleRef.current, { scale: 0, opacity: 0 });
             gsap.set(textRef.current, { opacity: 0, scale: 0.5 });
         }
-    }, [location.pathname]);
+    }, [location.pathname, isMobile]);
 
     useEffect(() => {
+        if (isMobile) return;
+
         const circle = circleRef.current;
         const textEl = textRef.current;
 
@@ -131,7 +131,11 @@ export default function CustomCursor() {
             gsap.killTweensOf(circle, 'scale,opacity');
             gsap.killTweensOf(textEl, 'scale,opacity');
         };
-    }, [location.pathname]);
+    }, [location.pathname, isMobile]);
+
+    if (isMobile) {
+        return null;
+    }
 
     return (
         <>

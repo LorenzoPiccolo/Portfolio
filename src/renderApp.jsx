@@ -5,25 +5,22 @@ import Lenis from '@studio-freight/lenis';
 import { gsap, ScrollTrigger } from './utils/gsapConfig.js';
 
 export default function renderApp(RootComponent) {
-  // Robust touch device detection - disable Lenis on ANY touch device
+  // Touch device detection - disable Lenis on actual touch/mobile devices
   const isTouchDevice = () => {
     if (typeof window === 'undefined') return true; // SSR safety: assume touch
 
-    // Primary check: pointer capability (most reliable)
+    // Primary check: CSS pointer capability (most reliable cross-browser)
     const hasCoarsePointer = window.matchMedia('(pointer: coarse)').matches;
     const hasNoHover = window.matchMedia('(hover: none)').matches;
 
-    // Secondary check: touch points
-    const hasTouchPoints = navigator.maxTouchPoints > 0;
-
-    // Tertiary check: touch events support
-    const hasTouchEvents = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
-
-    // Fallback: user agent (last resort)
+    // Fallback: user agent (for older browsers without CSS pointer support)
     const isMobileUA = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
 
-    // Be aggressive: if ANY of these suggest touch, disable Lenis
-    return hasCoarsePointer || hasNoHover || hasTouchPoints || hasTouchEvents || isMobileUA;
+    // NOTE: navigator.maxTouchPoints is intentionally NOT used here.
+    // macOS Safari reports maxTouchPoints = 5 (trackpad), which would
+    // incorrectly disable Lenis on Safari desktop and cause scroll jank.
+    // CSS pointer/hover media queries correctly distinguish desktop from touch.
+    return hasCoarsePointer || hasNoHover || isMobileUA;
   };
 
   let lenis = null;

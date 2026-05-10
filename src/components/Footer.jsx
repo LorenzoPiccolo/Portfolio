@@ -4,7 +4,6 @@ import { Link } from 'react-router-dom';
 import { gsap, ScrollTrigger } from '../utils/gsapConfig.js';
 import footerBackground from '../../img/image-footer-05.jpg';
 import logo from '../../img/logo.svg';
-import gradientOverlay from '../../img/gradient-footer.png';
 import useCursorGlow from '../hooks/useCursorGlow.js';
 import DynamicMarquee from './DynamicMarquee.jsx';
 
@@ -138,7 +137,6 @@ function FooterMarqueeChunk() {
 
 export default function Footer({ resizeTick = 0 }) {
   const sectionRef = useRef(null);
-  const gradientRef = useRef(null);
   const marqueeRef = useRef(null);
   const { handlers: footerCardGlowHandlers, glowStyle: footerCardGlowStyle } = useCursorGlow({ glowSize: 600 });
 
@@ -161,40 +159,6 @@ export default function Footer({ resizeTick = 0 }) {
       clearTimeout(timeout);
     };
   }, []);
-
-  useLayoutEffect(() => {
-    const section = sectionRef.current;
-    const gradient = gradientRef.current;
-    if (!section || !gradient) return;
-
-    const isMobile = window.matchMedia('(max-width: 767px)').matches;
-
-    const ctx = gsap.context(() => {
-      gsap.set(gradient, { scaleY: 0, transformOrigin: 'top center' });
-
-      ScrollTrigger.getById('footer-gradient')?.kill();
-
-      gsap
-        .timeline({
-          defaults: { ease: 'none' },
-          scrollTrigger: {
-            id: 'footer-gradient',
-            trigger: section,
-            start: 'top top',
-            end: () => `+=${Math.max(window.innerHeight * 1, 1200)}`,
-            scrub: isMobile ? true : 0.5,
-            pin: !isMobile, // Disable pinning on mobile to prevent scroll issues
-            pinSpacing: !isMobile,
-            invalidateOnRefresh: true,
-            refreshPriority: -3,
-
-          },
-        })
-        .to(gradient, { scaleY: 1 }, 0);
-    }, section);
-
-    return () => ctx.revert();
-  }, [resizeTick]);
 
   useLayoutEffect(() => {
     const section = sectionRef.current;

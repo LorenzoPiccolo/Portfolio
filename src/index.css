@@ -42,8 +42,8 @@
 
   /* Mobile scroll performance optimizations */
   html {
-    -webkit-overflow-scrolling: touch;
-    /* Allow natural touch gestures for scrolling */
+    /* -webkit-overflow-scrolling: touch is deprecated since iOS 15 and can
+       cause rendering artifacts on modern Safari — removed intentionally */
     touch-action: pan-y pan-x;
     /* Prevent browser from hijacking scroll for pull-to-refresh etc */
     overscroll-behavior: none;
