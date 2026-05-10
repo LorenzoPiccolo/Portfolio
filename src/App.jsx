@@ -37,7 +37,7 @@ function ScrollToTop() {
     };
 
     // Debounce slightly if needed, but direct is usually fine for this
-    window.addEventListener('scroll', handleScroll);
+    window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, [key]);
 

@@ -10,8 +10,6 @@ import DynamicMarquee from './DynamicMarquee.jsx';
 const MENU_LINKS = [
   { label: 'Home', href: '/' },
   { label: 'Works', href: '/works' },
-  { label: 'About me', href: '/#about-me' },
-  { label: 'Process', href: '/#process' },
 ];
 
 const CONTACT_LINKS = [
@@ -174,21 +172,25 @@ export default function Footer({ resizeTick = 0 }) {
         // On mobile, show marquee immediately without animation
         gsap.set(marquee, { y: 0, autoAlpha: 1, x: 0 });
       } else {
-        // On desktop, animate in on scroll
-        gsap.set(marquee, { y: 100, autoAlpha: 0, x: 100 });
+        // Hidden starting state
+        gsap.set(marquee, { y: 80, autoAlpha: 0, x: 60 });
 
-        gsap.to(marquee, {
-          x: 0,
-          y: 0,
-          autoAlpha: 1,
-          duration: 1.2,
-          ease: 'power3.out',
-          scrollTrigger: {
-            id: 'footer-marquee',
-            trigger: section,
-            start: 'top center',
-            markers: false,
-            toggleActions: 'play none none none',
+        // Re-animate from bottom every time the section enters the viewport
+        ScrollTrigger.create({
+          id: 'footer-marquee',
+          trigger: section,
+          start: 'top 80%',
+          markers: false,
+          onEnter: () => {
+            gsap.fromTo(
+              marquee,
+              { y: 80, autoAlpha: 0, x: 60 },
+              { y: 0, autoAlpha: 1, x: 0, duration: 1.2, ease: 'power3.out', overwrite: true }
+            );
+          },
+          onLeaveBack: () => {
+            // Reset to hidden state so it can animate in again next time
+            gsap.set(marquee, { y: 80, autoAlpha: 0, x: 60 });
           },
         });
       }

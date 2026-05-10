@@ -40,18 +40,14 @@
     /* Chrome, Safari, Opera */
   }
 
-  /* Mobile scroll performance optimizations */
-  html {
-    /* -webkit-overflow-scrolling: touch is deprecated since iOS 15 and can
-       cause rendering artifacts on modern Safari — removed intentionally */
-    touch-action: pan-y pan-x;
-    /* Prevent browser from hijacking scroll for pull-to-refresh etc */
-    overscroll-behavior: none;
-  }
-
-  /* Prevent 300ms tap delay and double-tap-to-zoom on mobile */
+  /* Prevent 300ms tap delay and double-tap-to-zoom on mobile.
+     NOTE: Do NOT set touch-action on html — it would restrict native iOS
+     momentum scroll (inertia). Only set it on body for the tap delay fix. */
   body {
     touch-action: manipulation;
+    /* Prevent pull-to-refresh / overscroll bounce on body only.
+       Setting this on html can cancel mid-scroll momentum on iOS. */
+    overscroll-behavior: none;
   }
 
   body {

@@ -1,24 +1,20 @@
 // src/components/Header.jsx
 import { useEffect, useRef, useState } from 'react';
-import { Link } from 'react-router-dom';
 import TransitionLink from './TransitionLink.jsx';
 import logo from '../../img/logo.svg';
 import useCursorGlow from '../hooks/useCursorGlow.js';
 
-const NAV_LINKS = ['Home', 'Works', 'About me', 'Process',];
+const NAV_LINKS = [
+  { label: 'Home', path: '/' },
+  { label: 'Works', path: '/works' },
+  { label: 'Behance', path: 'https://www.behance.net/lorenzopiccolo9926', external: true },
+];
 
 export default function Header({ currentPage = 'Home' }) {
   const [menuOpen, setMenuOpen] = useState(false);
   const [hovered, setHovered] = useState(null);
   const hoverTimeoutRef = useRef(null);
   const { handlers: glowHandlers, glowStyle } = useCursorGlow({ glowSize: 400 });
-
-  const resolvePath = (label) => {
-    if (label === 'Home') return '/';
-    if (label === 'Works') return '/works';
-    const anchor = `#${label.toLowerCase().replace(/\s+/g, '-')}`;
-    return currentPage === 'Home' ? anchor : `/${anchor}`;
-  };
 
   const toggleMenu = () => setMenuOpen((prev) => !prev);
 
@@ -74,63 +70,33 @@ export default function Header({ currentPage = 'Home' }) {
         onMouseLeave={closeMenu}
       >
         <ul className="flex flex-col text-16">
-          {NAV_LINKS.map((label, index) => {
+          {NAV_LINKS.map(({ label, path, external }, index) => {
             const isHovered = hovered === label;
             const isDimmed = hovered && hovered !== label;
-
             const transitionDelay = isDimmed ? `${index * 60}ms` : '0ms';
-            const path = resolvePath(label);
-            const isAnchor = path.startsWith('#');
+
+            const linkClass = `relative flex items-center gap-2 py-[8px] transform transition-transform transition-colors duration-300 ease-out ${isDimmed ? 'text-gray400' : 'text-light'} ${isHovered ? 'translate-x-2' : 'translate-x-0'}`;
+            const hoverProps = {
+              onMouseEnter: () => { window.clearTimeout(hoverTimeoutRef.current); setHovered(label); },
+              onFocus: () => setHovered(label),
+              onMouseLeave: () => { hoverTimeoutRef.current = window.setTimeout(resetHover, 120); },
+              onBlur: resetHover,
+              className: linkClass,
+              style: { transitionDelay },
+            };
+            const dot = (
+              <span className={`w-2 text-[20px] leading-none text-light transition-opacity duration-300 ${isHovered ? 'opacity-100' : 'opacity-0'}`}>·</span>
+            );
 
             return (
               <li key={label}>
-                {isAnchor ? (
-                  <a
-                    href={path}
-                    onMouseEnter={() => {
-                      window.clearTimeout(hoverTimeoutRef.current);
-                      setHovered(label);
-                    }}
-                    onFocus={() => setHovered(label)}
-                    onMouseLeave={() => {
-                      hoverTimeoutRef.current = window.setTimeout(resetHover, 120);
-                    }}
-                    onBlur={resetHover}
-                    className={`relative flex items-center gap-2 py-[8px] transform transition-transform transition-colors duration-300 ease-out ${isDimmed ? 'text-gray400' : 'text-light'
-                      } ${isHovered ? 'translate-x-2' : 'translate-x-0'}`}
-                    style={{ transitionDelay }}
-                  >
-                    <span
-                      className={`w-2 text-[20px] leading-none text-light transition-opacity duration-300 ${isHovered ? 'opacity-100' : 'opacity-0'
-                        }`}
-                    >
-                      ·
-                    </span>
-                    <span className="leading-tight">{label}</span>
+                {external ? (
+                  <a href={path} target="_blank" rel="noopener noreferrer" {...hoverProps}>
+                    {dot}<span className="leading-tight">{label}</span>
                   </a>
                 ) : (
-                  <TransitionLink
-                    to={path}
-                    onMouseEnter={() => {
-                      window.clearTimeout(hoverTimeoutRef.current);
-                      setHovered(label);
-                    }}
-                    onFocus={() => setHovered(label)}
-                    onMouseLeave={() => {
-                      hoverTimeoutRef.current = window.setTimeout(resetHover, 120);
-                    }}
-                    onBlur={resetHover}
-                    className={`relative flex items-center gap-2 py-[8px] transform transition-transform transition-colors duration-300 ease-out ${isDimmed ? 'text-gray400' : 'text-light'
-                      } ${isHovered ? 'translate-x-2' : 'translate-x-0'}`}
-                    style={{ transitionDelay }}
-                  >
-                    <span
-                      className={`w-2 text-[20px] leading-none text-light transition-opacity duration-300 ${isHovered ? 'opacity-100' : 'opacity-0'
-                        }`}
-                    >
-                      ·
-                    </span>
-                    <span className="leading-tight">{label}</span>
+                  <TransitionLink to={path} {...hoverProps}>
+                    {dot}<span className="leading-tight">{label}</span>
                   </TransitionLink>
                 )}
               </li>
