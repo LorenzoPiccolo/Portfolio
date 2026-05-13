@@ -118,34 +118,19 @@
 
 @layer utilities {
 
-  /* Section that fills viewport height - extends under safe areas */
+  /* Section that fills viewport height.
+     Con viewport-fit=cover, 100vh = intero schermo fisico incluso sotto
+     la barra URL/tab bar di Safari. Il browser disegna la sua UI come
+     overlay, così il contenuto è visibile sotto le barre. */
   .section-full {
     box-sizing: border-box;
-    /* Extend min-height to fill under bottom safe area */
-    min-height: 100svh;
-    /* Remove padding so backgrounds extend fully under safe areas */
-    /* Content padding should be handled by child elements where needed */
-  }
-
-  /* Fallback for browsers without svh support */
-  @supports not (min-height: 100svh) {
-    .section-full {
-      min-height: 100vh;
-      min-height: -webkit-fill-available;
-    }
+    min-height: 100vh;
   }
 
   /* Element that fills viewport height */
   .vh-fill {
     box-sizing: border-box;
-    height: 100svh;
-  }
-
-  @supports not (height: 100svh) {
-    .vh-fill {
-      height: 100vh;
-      height: -webkit-fill-available;
-    }
+    height: 100vh;
   }
 
   .skill-active {

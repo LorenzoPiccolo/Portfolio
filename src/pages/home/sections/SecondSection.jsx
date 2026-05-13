@@ -1,10 +1,7 @@
 // src/pages/home/sections/SecondSection.jsx
-import { useEffect, useLayoutEffect, useRef, useState } from 'react';
+import { useLayoutEffect, useRef } from 'react';
 import { gsap, ScrollTrigger } from '../../../utils/gsapConfig.js';
 
-import { ChevronRight } from 'lucide-react';
-
-import DynamicButton from '../../../components/DynamicButton.jsx';
 import GlassCard from '../../../components/GlassCard.jsx';
 import { useFadeInUp } from '../../../hooks/useFadeInUp.js';
 import iconOne from '../../../../img/icona-01.svg';
@@ -18,28 +15,6 @@ export default function SecondSection({ resizeTick = 0 }) {
   const sectionRef = useRef(null);
   const blocksContainerRef = useRef(null); // Ref for the 3-block container
   useFadeInUp(sectionRef, { trigger: sectionRef });
-
-  const [buttonVisible, setButtonVisible] = useState(false);
-
-  // ScrollTrigger for button visibility
-  useLayoutEffect(() => {
-    if (!blocksContainerRef.current) return;
-
-    const ctx = gsap.context(() => {
-      ScrollTrigger.create({
-        trigger: blocksContainerRef.current,
-        start: 'top 80%',
-        end: 'bottom 80%',
-        onEnter: () => setButtonVisible(true),
-        onLeaveBack: () => setButtonVisible(false),
-        onLeave: () => setButtonVisible(false),
-        onEnterBack: () => setButtonVisible(true),
-        // markers: true, // Uncomment for debugging
-      });
-    }, sectionRef);
-
-    return () => ctx.revert();
-  }, [resizeTick]);
 
   useLayoutEffect(() => {
     const el = sectionRef.current;
@@ -98,20 +73,6 @@ export default function SecondSection({ resizeTick = 0 }) {
 
   return (
     <>
-      {/* Button - fixed, OUTSIDE section to escape isolate stacking context */}
-      <div
-        className={`pointer-events-none fixed bottom-6 left-1/2 z-[45] flex -translate-x-1/2 justify-center transition-all duration-500 ease-out origin-bottom ${buttonVisible ? 'scale-100 opacity-100' : 'scale-0 opacity-0'
-          }`}
-      >
-        <div className="pointer-events-auto transition-transform duration-300 hover:scale-[1.05]">
-          <DynamicButton
-            label="The process"
-            href="/#process"
-            icon={ChevronRight}
-          />
-        </div>
-      </div>
-
       <section
         id="about-me"
         ref={sectionRef}

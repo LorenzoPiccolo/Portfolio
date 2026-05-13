@@ -157,28 +157,44 @@ export default function FourthSection({ resizeTick = 0 }) {
     const triggerEl = sectionRef.current;
     if (!triggerEl) return;
 
-    // Calculate total scroll distance (same logic as the main animation)
+    // Calculate total scroll distance (desktop stacking animation)
     const getScrollDistance = () => {
       const cards = triggerEl.querySelectorAll('[data-work-card]');
       if (!cards.length) return window.innerHeight;
       const cardHeight = cards[0]?.offsetHeight || window.innerHeight;
       const stepDistance = Math.max(320, Math.round(cardHeight * 0.75));
       const steps = Math.max(1, cards.length - 1);
-      return stepDistance * steps + window.innerHeight; // Add viewport for exit parallax
+      return stepDistance * steps + window.innerHeight;
     };
 
     const ctx = gsap.context(() => {
-      ScrollTrigger.create({
-        trigger: triggerEl,
-        start: 'top 80%',
-        end: () => `+=${getScrollDistance()}`,
-        onEnter: () => setButtonVisible(true),
-        onLeaveBack: () => setButtonVisible(false),
-        onLeave: () => setButtonVisible(false),
-        onEnterBack: () => setButtonVisible(true),
-        invalidateOnRefresh: true,
-        markers: false,
-      });
+      if (isMobile) {
+        // Mobile: show button when section top hits 60%, hide when section scrolls out
+        ScrollTrigger.create({
+          trigger: triggerEl,
+          start: 'top 60%',
+          end: 'bottom top',
+          onEnter: () => setButtonVisible(true),
+          onLeaveBack: () => setButtonVisible(false),
+          onLeave: () => setButtonVisible(false),
+          onEnterBack: () => setButtonVisible(true),
+          invalidateOnRefresh: true,
+          markers: false,
+        });
+      } else {
+        // Desktop: match pinned scroll duration
+        ScrollTrigger.create({
+          trigger: triggerEl,
+          start: 'top 80%',
+          end: () => `+=${getScrollDistance()}`,
+          onEnter: () => setButtonVisible(true),
+          onLeaveBack: () => setButtonVisible(false),
+          onLeave: () => setButtonVisible(false),
+          onEnterBack: () => setButtonVisible(true),
+          invalidateOnRefresh: true,
+          markers: false,
+        });
+      }
     }, sectionRef);
 
     return () => ctx.revert();
@@ -187,7 +203,7 @@ export default function FourthSection({ resizeTick = 0 }) {
   return (
     <>
       {/* Button - fixed at bottom, centered - OUTSIDE section to avoid isolate stacking context */}
-      <div className="pointer-events-none fixed bottom-6 left-1/2 -translate-x-1/2 z-[45]">
+      <div className="pointer-events-none fixed left-1/2 -translate-x-1/2 z-[45]" style={{ bottom: 'max(1.5rem, calc(1.5rem + env(safe-area-inset-bottom, 0px)))' }}>
         <div
           className={`transition-transform duration-500 ease-out will-change-transform ${buttonVisible ? 'scale-100' : 'scale-0'}`}
           style={{ transformOrigin: 'center bottom' }}
