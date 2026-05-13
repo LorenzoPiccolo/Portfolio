@@ -1,6 +1,7 @@
 // src/App.jsx
 import { Routes, Route, useLocation, useNavigationType } from 'react-router-dom';
 import { useEffect, useState } from 'react';
+import { Analytics } from '@vercel/analytics/react';
 
 // Pages
 import Home from './pages/home/Home.jsx';
@@ -77,6 +78,7 @@ export default function App() {
 
   return (
     <TransitionProvider>
+      <Analytics />
       {showLoader && <IntroLoader onComplete={() => setShowLoader(false)} />}
       <ScrollToTop />
       <CustomCursor />
