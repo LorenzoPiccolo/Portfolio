@@ -63,41 +63,66 @@ export default function ThirdSection({ resizeTick = 0 }) {
     // Activate first skill initially
     gsap.set(rows[0], { opacity: ACTIVE_OPACITY });
 
-    const triggers = [];
     const triggerId = isMobile ? 'third-mobile' : 'third-desktop';
 
-    // Kill existing triggers
+    // Kill any leftover triggers from a previous mount/resize
+    ScrollTrigger.getById(triggerId)?.kill();
     rows.forEach((_, idx) => {
       ScrollTrigger.getById(`${triggerId}-skill-${idx}`)?.kill();
     });
 
-    const ctx = gsap.context(() => {
-      rows.forEach((row, idx) => {
-        // Create a ScrollTrigger for each skill item
-        // Each skill only handles its own activation/deactivation
-        const trigger = ScrollTrigger.create({
-          id: `${triggerId}-skill-${idx}`,
-          trigger: row,
-          start: 'top 50%', // Activate when top of skill reaches center
-          end: 'bottom 50%', // Deactivate when bottom passes center
-          markers: false,
-          onToggle: (self) => {
-            // Single callback for enter/leave in both directions
-            // Only animate opacity, color stays the same
-            gsap.to(row, {
-              opacity: self.isActive ? ACTIVE_OPACITY : INACTIVE_OPACITY,
-              duration: 0.3,
-              ease: 'power2.out',
-              overwrite: true,
-            });
-          },
+    let prevIdx = 0;
+
+    // Pick the row whose CENTER is closest to viewport center, instead of
+    // toggling each row "active" while the 50% line is anywhere between its
+    // top and bottom edges. With per-row top/bottom triggers, the active row
+    // could sit up to half a row-height off from viewport center — which is
+    // why "Gsap" looked below the heading at the start and "Vercel" looked
+    // above it at the end. Closest-to-center makes the handoff happen at the
+    // midpoint between adjacent rows.
+    const updateActive = () => {
+      const viewportCenter = window.innerHeight / 2;
+      let activeIdx = 0;
+      let minDist = Infinity;
+      for (let i = 0; i < rows.length; i++) {
+        const rect = rows[i].getBoundingClientRect();
+        const center = rect.top + rect.height / 2;
+        const dist = Math.abs(center - viewportCenter);
+        if (dist < minDist) {
+          minDist = dist;
+          activeIdx = i;
+        }
+      }
+      if (activeIdx !== prevIdx) {
+        gsap.to(rows[prevIdx], {
+          opacity: INACTIVE_OPACITY,
+          duration: 0.3,
+          ease: 'power2.out',
+          overwrite: true,
         });
-        triggers.push(trigger);
+        gsap.to(rows[activeIdx], {
+          opacity: ACTIVE_OPACITY,
+          duration: 0.3,
+          ease: 'power2.out',
+          overwrite: true,
+        });
+        prevIdx = activeIdx;
+      }
+    };
+
+    const ctx = gsap.context(() => {
+      ScrollTrigger.create({
+        id: triggerId,
+        trigger: list,
+        start: 'top bottom',
+        end: 'bottom top',
+        onUpdate: updateActive,
+        onRefresh: updateActive,
       });
     }, sectionRef.current);
 
     return () => {
-      triggers.forEach(t => t.kill());
+      ScrollTrigger.getById(triggerId)?.kill();
       ctx.revert();
     };
   }, [resizeTick, isMobile]);
@@ -139,8 +164,12 @@ export default function ThirdSection({ resizeTick = 0 }) {
             </div>
           </div>
 
-          {/* Right column - Scrolling skill list */}
-          <div className="flex-1 py-[50vh]">
+          {/* Right column - Scrolling skill list.
+              Padding is `50vh - half-row-height` so the FIRST/LAST skill's
+              center (not its top) lands at viewport center — i.e. aligned
+              with the heading on the left, which is centered via items-center
+              in an h-screen sticky container. */}
+          <div className="flex-1 pt-[calc(50vh-2.5rem)] pb-[calc(50vh-2.5rem)]">
             <ul
               ref={listRef}
               className="m-0 flex w-full flex-col"

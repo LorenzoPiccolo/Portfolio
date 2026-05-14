@@ -49,7 +49,10 @@ export default function SecondSection({ resizeTick = 0 }) {
             return window.scrollY + rect.top - window.innerHeight;
           },
           end: () => `+=${isMobileDevice ? Math.max(600, window.innerHeight * 0.8) : Math.max(800, window.innerHeight * 1)}`,
-          scrub: isMobileDevice ? true : 0.5, // Immediate on mobile
+          // Smoothed scrub on both — `scrub: true` ran sync per scroll event
+          // and was killing iOS Safari momentum scroll. 0.5s lerp moves the
+          // work into the GSAP RAF ticker.
+          scrub: 0.5,
           invalidateOnRefresh: true,
           refreshPriority: 0,
           markers: false,

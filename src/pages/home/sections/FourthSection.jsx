@@ -173,7 +173,7 @@ export default function FourthSection({ resizeTick = 0 }) {
         ScrollTrigger.create({
           trigger: triggerEl,
           start: 'top 60%',
-          end: 'bottom top',
+          end: 'bottom 70%',
           onEnter: () => setButtonVisible(true),
           onLeaveBack: () => setButtonVisible(false),
           onLeave: () => setButtonVisible(false),

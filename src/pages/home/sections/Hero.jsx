@@ -123,34 +123,19 @@ export default function Hero({ resizeTick = 0 }) {
 
     const isMobileDevice = window.matchMedia('(max-width: 767px)').matches;
 
-    // On mobile: simple gradient animation only, no pinning, no frame sequence
+    // On mobile: NO ScrollTrigger at all here.
+    // Pin/canvas frame sequence are disabled on mobile to preserve native iOS
+    // momentum scrolling. The gradient overlay is shown statically (CSS-only
+    // reveal applied directly to the element), so no scroll handler runs.
     if (isMobileDevice) {
-      if (!gradientRef.current) return;
-
-      const ctx = gsap.context(() => {
-        ScrollTrigger.getById('hero-scroll')?.kill();
-
-        // Simple gradient reveal on scroll (no pinning)
-        gsap.fromTo(
-          gradientRef.current,
-          { scaleY: 0, transformOrigin: 'bottom center' },
-          {
-            scaleY: 1,
-            ease: 'none',
-            scrollTrigger: {
-              id: 'hero-scroll',
-              trigger: sectionRef.current,
-              start: 'top top',
-              end: 'bottom top',
-              scrub: true,
-              invalidateOnRefresh: true,
-              refreshPriority: 1,
-            },
-          }
-        );
-      }, sectionRef);
-
-      return () => ctx.revert();
+      ScrollTrigger.getById('hero-scroll')?.kill();
+      if (gradientRef.current) {
+        gsap.set(gradientRef.current, {
+          scaleY: 1,
+          transformOrigin: 'bottom center',
+        });
+      }
+      return undefined;
     }
 
     // Desktop: full canvas animation with pinning

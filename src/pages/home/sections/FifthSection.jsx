@@ -149,10 +149,20 @@ export default function FifthSection({ resizeTick = 0 }) {
       const boxes = gsap.utils.toArray(section.querySelectorAll('[data-fifth-box]'));
       if (!boxes.length) return;
 
-      gsap.set(boxes, { willChange: 'transform' });
-
       ScrollTrigger.getById('fifth-section-gallery')?.kill();
       ScrollTrigger.getById('fifth-section-heading')?.kill();
+
+      // On mobile: skip the scrub-driven sticker parallax + heading scale
+      // entirely. Both ran sync per scroll event and were blocking iOS
+      // momentum scroll. Stickers stay in their absolute positions and the
+      // heading sits at its target scale.
+      if (isMobileDevice) {
+        gsap.set(boxes, { yPercent: 0, clearProps: 'willChange' });
+        gsap.set(heading, { scale: 1 });
+        return;
+      }
+
+      gsap.set(boxes, { willChange: 'transform' });
 
       // Heading is CSS fixed - no ScrollTrigger needed, it stays in center naturally
 
@@ -163,7 +173,7 @@ export default function FifthSection({ resizeTick = 0 }) {
           trigger: section,
           start: 'top center',
           end: 'bottom top', // Continue parallax until section is completely off screen
-          scrub: isMobileDevice ? true : 0.5, // Immediate on mobile
+          scrub: 0.5,
           invalidateOnRefresh: true,
           refreshPriority: -2,
           markers: false,
@@ -177,7 +187,7 @@ export default function FifthSection({ resizeTick = 0 }) {
           trigger: section,
           start: 'top 80%',
           end: 'bottom 20%',
-          scrub: isMobileDevice ? true : 1,
+          scrub: 1,
           invalidateOnRefresh: true,
           refreshPriority: -2,
           markers: false,

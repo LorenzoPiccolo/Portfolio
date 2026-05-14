@@ -20,7 +20,7 @@ export default function SelectedWorkCard({ videoSrc, poster = undefined, title, 
     <Wrapper {...wrapperProps}>
       {videoSrc ? (
         <video
-          className="absolute inset-0 h-full w-full object-cover transition-all duration-500 group-hover:scale-105 group-hover:blur-sm"
+          className="absolute inset-0 h-full w-full object-cover transition-all duration-500 group-hover:scale-105 group-hover:blur-lg"
           src={videoSrc}
           poster={poster}
           autoPlay
@@ -31,7 +31,7 @@ export default function SelectedWorkCard({ videoSrc, poster = undefined, title, 
         />
       ) : (
         <img
-          className="absolute inset-0 h-full w-full object-cover transition-all duration-500 group-hover:scale-105 group-hover:blur-sm"
+          className="absolute inset-0 h-full w-full object-cover transition-all duration-500 group-hover:scale-105 group-hover:blur-lg"
           src={poster}
           alt={`Preview for ${title}`}
           draggable={false}
