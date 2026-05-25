@@ -226,10 +226,16 @@ export default function FourthSection({ resizeTick = 0 }) {
       >
         {isMobile ? (
           /* Mobile: Simple column layout, no overlapping */
-          <div ref={cardsContainerRef} className="flex flex-col gap-6 w-full">
+          <div ref={cardsContainerRef} className="flex flex-col gap-8 w-full">
             {WORKS.map((work) => (
-              <div key={work.id} className="w-full aspect-[4/5]">
-                <SelectedWorkCard {...work} />
+              <div key={work.id} className="w-full">
+                <div className="w-full aspect-[4/5]">
+                  <SelectedWorkCard {...work} />
+                </div>
+                <div className="mt-3 flex items-baseline justify-between">
+                  <span className="title-24 font-normal text-dark">{work.title}</span>
+                  <span className="text-14 text-dark/50">{work.subtitle}</span>
+                </div>
               </div>
             ))}
           </div>

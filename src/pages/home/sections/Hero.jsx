@@ -311,7 +311,7 @@ function MarqueeChunk() {
       "
       style={{ WebkitTextStroke: '0 transparent' }}
     >
-      design anything&nbsp;&nbsp;design anything&nbsp;&nbsp;design anything&nbsp;&nbsp;design anything&nbsp;&nbsp;
+      Web · UI/UX · AI visual&nbsp;&nbsp;&nbsp;&nbsp;Web · UI/UX · AI visual&nbsp;&nbsp;&nbsp;&nbsp;Web · UI/UX · AI visual&nbsp;&nbsp;&nbsp;&nbsp;Web · UI/UX · AI visual&nbsp;&nbsp;&nbsp;&nbsp;
     </span>
   );
 }

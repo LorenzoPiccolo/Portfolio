@@ -46,7 +46,7 @@ export default function Header({ currentPage = 'Home' }) {
 
         <div className="relative inline-flex items-start z-10">
           <button
-            aria-label="Apri menu"
+            aria-label="Open menu"
             className="group inline-flex items-center transition-all"
             type="button"
             onClick={toggleMenu}

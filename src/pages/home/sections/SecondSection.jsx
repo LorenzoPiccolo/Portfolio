@@ -100,17 +100,17 @@ export default function SecondSection({ resizeTick = 0 }) {
           <div ref={blocksContainerRef} className="flex md:flex-row flex-col items-start gap-6">
             {/* Blocco 1 - 50% width, 550px height */}
             <div className="md:basis-1/2 w-full">
-              <a href="#" className="block transition-transform duration-300 hover:scale-[1.02] ease-out">
+              <div className="block transition-transform duration-300 hover:scale-[1.02] ease-out">
                 <GlassCard className="w-full h-[50vh] md:h-[550px] rounded-[14px] bg-gray850/70 flex items-center justify-center">
                   <img src={iconOne} alt="icona 01" className="md:w-[400px] w-[250px]" />
                 </GlassCard>
                 <div className="title-24 font-normal mt-2">Web design</div>
-              </a>
+              </div>
             </div>
 
             {/* Blocco 2 - 25% width, 300px height */}
             <div className="md:basis-1/4 w-full">
-              <a href="#" className="block transition-transform duration-300 hover:scale-[1.02] ease-out">
+              <div className="block transition-transform duration-300 hover:scale-[1.02] ease-out">
                 <GlassCard className="w-full h-[50vh] md:h-[300px] rounded-[14px] bg-gray850/70">
                   <div className="flex gap-[32px] hover:gap-[56px] transition-all duration-300 ease-out items-center justify-center">
                     <img src={iconTwoOne} alt="icona 02" className="h-[60px]" />
@@ -119,12 +119,12 @@ export default function SecondSection({ resizeTick = 0 }) {
                   </div>
                 </GlassCard>
                 <div className="title-24 font-normal mt-2">UX/UI Design</div>
-              </a>
+              </div>
             </div>
 
             {/* Blocco 3 - 25% width, 300px height */}
             <div className="md:basis-1/4 w-full">
-              <a href="#" className="group block transition-transform duration-300 hover:scale-[1.03] ease-out">
+              <div className="group block transition-transform duration-300 hover:scale-[1.03] ease-out">
                 <GlassCard className="w-full h-[50vh] md:h-[300px] rounded-[14px] bg-gray850/70 flex items-center justify-center">
                   <img
                     src={iconThree}
@@ -133,7 +133,7 @@ export default function SecondSection({ resizeTick = 0 }) {
                   />
                 </GlassCard>
                 <div className="title-24 font-normal mt-2">AI visual</div>
-              </a>
+              </div>
             </div>
           </div>
         </div>
