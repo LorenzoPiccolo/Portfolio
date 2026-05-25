@@ -7,7 +7,6 @@ import SecondSection from './sections/SecondSection.jsx';
 import ThirdSection from './sections/ThirdSection.jsx';
 import FourthSection from './sections/FourthSection.jsx';
 import FifthSection from './sections/FifthSection.jsx';
-import ContactCTA from './sections/ContactCTA.jsx';
 import Footer from '../../components/Footer.jsx';
 import useResizeTick from '../../hooks/useResizeTick.js';
 import useAttentionTitle from '../../hooks/useAttentionTitle.js';
@@ -36,8 +35,6 @@ export default function Home() {
             <FourthSection resizeTick={resizeTick} />
 
             <FifthSection resizeTick={resizeTick} />
-
-            <ContactCTA />
 
             <Footer resizeTick={resizeTick} />
 
