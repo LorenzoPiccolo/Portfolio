@@ -1,5 +1,5 @@
-// src/pages/case-history/Alidays.jsx
-import CaseHistoryPage from './CaseHistoryPage.jsx';
+// src/pages/projects/Alidays.jsx
+import ProjectPage from './ProjectPage.jsx';
 
 import heroImage from '../../../img/footer-image.jpg';
 import image1 from '../../../img/image-footer-03.jpg';
@@ -37,5 +37,5 @@ const alidays = {
 };
 
 export default function Alidays() {
-    return <CaseHistoryPage project={alidays} />;
+    return <ProjectPage project={alidays} />;
 }

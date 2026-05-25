@@ -1,5 +1,5 @@
-// src/pages/case-history/Romaji.jsx
-import CaseHistoryPage from './CaseHistoryPage.jsx';
+// src/pages/projects/Romaji.jsx
+import ProjectPage from './ProjectPage.jsx';
 
 import heroImage from '../../../img/romaji/romaji-01.jpg';
 import image2 from '../../../img/romaji/romaji-02.jpg';
@@ -38,5 +38,5 @@ const romaji = {
 };
 
 export default function Romaji() {
-    return <CaseHistoryPage project={romaji} />;
+    return <ProjectPage project={romaji} />;
 }

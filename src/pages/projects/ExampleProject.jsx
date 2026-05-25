@@ -1,5 +1,5 @@
-// src/pages/case-history/ExampleProject.jsx
-import CaseHistoryPage from './CaseHistoryPage.jsx';
+// src/pages/projects/ExampleProject.jsx
+import ProjectPage from './ProjectPage.jsx';
 
 // Using existing images as placeholders
 import heroImage from '../../../img/image-footer-05.jpg';
@@ -45,5 +45,5 @@ const exampleProject = {
 };
 
 export default function ExampleProject() {
-    return <CaseHistoryPage project={exampleProject} />;
+    return <ProjectPage project={exampleProject} />;
 }

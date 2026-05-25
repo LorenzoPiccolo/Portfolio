@@ -1,4 +1,4 @@
-// src/pages/case-history/CaseHistoryPage.jsx
+// src/pages/projects/ProjectPage.jsx
 import { useLayoutEffect, useRef, useCallback, useState } from 'react';
 import { useTransition } from '../../context/TransitionContext.jsx';
 import Header from '../../components/Header.jsx';
@@ -15,9 +15,9 @@ const IMAGE_RADIUS = '16px';
 const IMAGE_PADDING = '24px';
 
 /**
- * CaseHistoryPage - Reusable case history/project page template
+ * ProjectPage - Reusable project page template
  */
-export default function CaseHistoryPage({ project }) {
+export default function ProjectPage({ project }) {
     const { navigateTo } = useTransition();
     const resizeTick = useResizeTick();
     const heroRef = useRef(null);
@@ -47,11 +47,11 @@ export default function CaseHistoryPage({ project }) {
             // Initial state: light color with 20% opacity
             gsap.set(words, { opacity: 0.2, color: COLOR_LIGHT });
 
-            ScrollTrigger.getById('case-history-text')?.kill();
+            ScrollTrigger.getById('project-text')?.kill();
 
             gsap.timeline({
                 scrollTrigger: {
-                    id: 'case-history-text',
+                    id: 'project-text',
                     trigger: el,
                     start: 'top 70%',
                     end: () => `+=${Math.max(600, window.innerHeight * 0.8)}`,

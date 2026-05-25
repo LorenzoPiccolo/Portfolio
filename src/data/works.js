@@ -16,7 +16,7 @@ export const WORKS = [
     subtitle: 'UX/UI Design',
     poster: buildZeroHero,
     year: '2024',
-    href: '/case-history/build-zero',
+    href: '/works/build-zero',
   },
   {
     id: 'portfolio-website',
@@ -24,7 +24,7 @@ export const WORKS = [
     subtitle: 'Web Design',
     poster: portfolioHero,
     year: '2025',
-    href: '/case-history/portfolio-website',
+    href: '/works/portfolio-website',
   },
   {
     id: 'alidays',
@@ -32,7 +32,7 @@ export const WORKS = [
     subtitle: 'Brand Identity',
     poster: footerImage,
     year: '2024',
-    href: '/case-history/alidays',
+    href: '/works/alidays',
   },
   {
     id: 'atalus',
@@ -40,6 +40,6 @@ export const WORKS = [
     subtitle: 'Digital Identity',
     poster: atalusHero,
     year: '2024',
-    href: '/case-history/atalus',
+    href: '/works/atalus',
   },
 ];

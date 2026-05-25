@@ -1,5 +1,5 @@
-// src/pages/case-history/Reborn.jsx
-import CaseHistoryPage from './CaseHistoryPage.jsx';
+// src/pages/projects/Reborn.jsx
+import ProjectPage from './ProjectPage.jsx';
 
 import heroImage from '../../../img/reborn/reborn-01.jpg';
 import image2 from '../../../img/reborn/reborn-02.jpg';
@@ -37,5 +37,5 @@ const reborn = {
 };
 
 export default function Reborn() {
-    return <CaseHistoryPage project={reborn} />;
+    return <ProjectPage project={reborn} />;
 }

@@ -1,5 +1,5 @@
-// src/pages/case-history/RediWebsite.jsx
-import CaseHistoryPage from './CaseHistoryPage.jsx';
+// src/pages/projects/RediWebsite.jsx
+import ProjectPage from './ProjectPage.jsx';
 
 import heroImage from '../../../img/image-footer-05.jpg';
 import image1 from '../../../img/project-03.jpg';
@@ -37,5 +37,5 @@ const rediWebsite = {
 };
 
 export default function RediWebsite() {
-    return <CaseHistoryPage project={rediWebsite} />;
+    return <ProjectPage project={rediWebsite} />;
 }

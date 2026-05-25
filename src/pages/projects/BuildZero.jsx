@@ -1,5 +1,5 @@
-// src/pages/case-history/BuildZero.jsx
-import CaseHistoryPage from './CaseHistoryPage.jsx';
+// src/pages/projects/BuildZero.jsx
+import ProjectPage from './ProjectPage.jsx';
 
 import heroImage from '../../../img/build-zero/build-zero-01.jpg';
 import image2 from '../../../img/build-zero/build-zero-02.jpg';
@@ -38,5 +38,5 @@ const buildZero = {
 };
 
 export default function BuildZero() {
-    return <CaseHistoryPage project={buildZero} />;
+    return <ProjectPage project={buildZero} />;
 }

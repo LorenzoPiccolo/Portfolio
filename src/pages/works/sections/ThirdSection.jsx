@@ -22,7 +22,7 @@ const CASE_HISTORY_CARDS = [
     size: 'md',
     className: 'lg:row-start-1 lg:col-start-1',
     year: '2024',
-    href: '/case-history/build-zero',
+    href: '/works/build-zero',
   },
   {
     id: 'portfolio-website',
@@ -32,7 +32,7 @@ const CASE_HISTORY_CARDS = [
     size: 'sm',
     className: 'lg:row-start-1 lg:col-start-7',
     year: '2025',
-    href: '/case-history/portfolio-website',
+    href: '/works/portfolio-website',
   },
   {
     id: 'alidays',
@@ -42,7 +42,7 @@ const CASE_HISTORY_CARDS = [
     size: 'sm',
     className: 'lg:row-start-1 lg:col-start-10',
     year: '2024',
-    href: '/case-history/alidays',
+    href: '/works/alidays',
   },
   {
     id: 'redi-website',
@@ -52,7 +52,7 @@ const CASE_HISTORY_CARDS = [
     size: 'lg',
     className: 'lg:row-start-2 lg:col-start-3 lg:self-center',
     year: '2025',
-    href: '/case-history/redi',
+    href: '/works/redi',
   },
   {
     id: 'romaji',
@@ -62,7 +62,7 @@ const CASE_HISTORY_CARDS = [
     size: 'sm',
     className: 'lg:row-start-3 lg:col-start-1',
     year: '2024',
-    href: '/case-history/romaji',
+    href: '/works/romaji',
   },
   {
     id: 'atalus',
@@ -72,7 +72,7 @@ const CASE_HISTORY_CARDS = [
     size: 'sm',
     className: 'lg:row-start-3 lg:col-start-4',
     year: '2025',
-    href: '/case-history/atalus',
+    href: '/works/atalus',
   },
   {
     id: 'reborn',
@@ -82,7 +82,7 @@ const CASE_HISTORY_CARDS = [
     size: 'md',
     className: 'lg:row-start-3 lg:col-start-7',
     year: '2023',
-    href: '/case-history/reborn',
+    href: '/works/reborn',
   },
 ];
 

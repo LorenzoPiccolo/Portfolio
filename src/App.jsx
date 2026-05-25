@@ -6,14 +6,14 @@ import { Analytics } from '@vercel/analytics/react';
 // Pages
 import Home from './pages/home/Home.jsx';
 import WorksApp from './pages/works/WorksApp.jsx';
-import ExampleProject from './pages/case-history/ExampleProject.jsx';
-import Alidays from './pages/case-history/Alidays.jsx';
-import Atalus from './pages/case-history/Atalus.jsx';
-import BuildZero from './pages/case-history/BuildZero.jsx';
-import PortfolioWebsite from './pages/case-history/PortfolioWebsite.jsx';
-import RediWebsite from './pages/case-history/RediWebsite.jsx';
-import Romaji from './pages/case-history/Romaji.jsx';
-import Reborn from './pages/case-history/Reborn.jsx';
+import ExampleProject from './pages/projects/ExampleProject.jsx';
+import Alidays from './pages/projects/Alidays.jsx';
+import Atalus from './pages/projects/Atalus.jsx';
+import BuildZero from './pages/projects/BuildZero.jsx';
+import PortfolioWebsite from './pages/projects/PortfolioWebsite.jsx';
+import RediWebsite from './pages/projects/RediWebsite.jsx';
+import Romaji from './pages/projects/Romaji.jsx';
+import Reborn from './pages/projects/Reborn.jsx';
 import CustomCursor from './components/CustomCursor.jsx';
 import EdgeBlur from './components/EdgeBlur.jsx';
 import PageTransition from './components/PageTransition.jsx';
@@ -87,16 +87,14 @@ export default function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/works" element={<WorksApp />} />
-
-        {/* Case History Routes */}
-        <Route path="/case-history" element={<ExampleProject />} />
-        <Route path="/case-history/alidays" element={<Alidays />} />
-        <Route path="/case-history/atalus" element={<Atalus />} />
-        <Route path="/case-history/build-zero" element={<BuildZero />} />
-        <Route path="/case-history/portfolio-website" element={<PortfolioWebsite />} />
-        <Route path="/case-history/redi" element={<RediWebsite />} />
-        <Route path="/case-history/romaji" element={<Romaji />} />
-        <Route path="/case-history/reborn" element={<Reborn />} />
+        {/* Works Routes */}
+        <Route path="/works/alidays" element={<Alidays />} />
+        <Route path="/works/atalus" element={<Atalus />} />
+        <Route path="/works/build-zero" element={<BuildZero />} />
+        <Route path="/works/portfolio-website" element={<PortfolioWebsite />} />
+        <Route path="/works/redi" element={<RediWebsite />} />
+        <Route path="/works/romaji" element={<Romaji />} />
+        <Route path="/works/reborn" element={<Reborn />} />
       </Routes>
     </TransitionProvider>
   );

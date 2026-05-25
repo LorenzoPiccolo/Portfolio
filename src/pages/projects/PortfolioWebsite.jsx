@@ -1,5 +1,5 @@
-// src/pages/case-history/PortfolioWebsite.jsx
-import CaseHistoryPage from './CaseHistoryPage.jsx';
+// src/pages/projects/PortfolioWebsite.jsx
+import ProjectPage from './ProjectPage.jsx';
 
 import heroImage from '../../../img/portfolio/portfolio-01.jpg';
 import image2 from '../../../img/portfolio/portfolio-02.jpg';
@@ -39,5 +39,5 @@ const portfolioWebsite = {
 };
 
 export default function PortfolioWebsite() {
-    return <CaseHistoryPage project={portfolioWebsite} />;
+    return <ProjectPage project={portfolioWebsite} />;
 }

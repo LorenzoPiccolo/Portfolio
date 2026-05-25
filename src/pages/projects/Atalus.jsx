@@ -1,5 +1,5 @@
-// src/pages/case-history/Atalus.jsx
-import CaseHistoryPage from './CaseHistoryPage.jsx';
+// src/pages/projects/Atalus.jsx
+import ProjectPage from './ProjectPage.jsx';
 
 import heroImage from '../../../img/atalus/atalus-01.jpg';
 import image2 from '../../../img/atalus/atalus-02.jpg';
@@ -37,5 +37,5 @@ const atalus = {
 };
 
 export default function Atalus() {
-    return <CaseHistoryPage project={atalus} />;
+    return <ProjectPage project={atalus} />;
 }
