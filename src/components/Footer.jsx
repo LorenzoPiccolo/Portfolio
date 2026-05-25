@@ -138,25 +138,12 @@ export default function Footer({ resizeTick = 0 }) {
   const marqueeRef = useRef(null);
   const { handlers: footerCardGlowHandlers, glowStyle: footerCardGlowStyle } = useCursorGlow({ glowSize: 600 });
 
-  // Force ScrollTrigger refresh when page height changes (e.g. images loading above)
-  useEffect(() => {
-    if (!document.body) return;
-
-    let timeout;
-    const observer = new ResizeObserver(() => {
-      clearTimeout(timeout);
-      timeout = setTimeout(() => {
-        ScrollTrigger.refresh();
-      }, 200); // Debounce to avoid thrashing
-    });
-
-    observer.observe(document.body);
-
-    return () => {
-      observer.disconnect();
-      clearTimeout(timeout);
-    };
-  }, []);
+  // NOTE: The ResizeObserver on document.body was removed.
+  // It was calling ScrollTrigger.refresh() during scroll on iOS Safari because
+  // the browser toolbar show/hide changes document.body dimensions.
+  // This was causing pin spacers to recalculate mid-scroll → visible scroll jumps.
+  // ScrollTrigger.config({ ignoreMobileResize: true }) in gsapConfig.js already
+  // handles mobile resize. Per-trigger invalidateOnRefresh:true handles the rest.
 
   useLayoutEffect(() => {
     const section = sectionRef.current;

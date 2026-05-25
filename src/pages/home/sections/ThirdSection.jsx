@@ -73,6 +73,25 @@ export default function ThirdSection({ resizeTick = 0 }) {
 
     let prevIdx = 0;
 
+    // Cache page-absolute positions (offsetTop from viewport + scrollY) once,
+    // and recompute only on layout changes (onRefresh).
+    // This avoids calling getBoundingClientRect() on every scroll frame, which
+    // forces a layout read per row and causes jank on mobile.
+    let cachedRowPositions = [];
+
+    const cacheRowPositions = () => {
+      // getBoundingClientRect is viewport-relative; add scrollY for page-absolute
+      cachedRowPositions = rows.map((r) => {
+        const rect = r.getBoundingClientRect();
+        return {
+          top: rect.top + window.scrollY,
+          height: rect.height,
+        };
+      });
+    };
+
+    cacheRowPositions();
+
     // Pick the row whose CENTER is closest to viewport center, instead of
     // toggling each row "active" while the 50% line is anywhere between its
     // top and bottom edges. With per-row top/bottom triggers, the active row
@@ -80,14 +99,15 @@ export default function ThirdSection({ resizeTick = 0 }) {
     // why "Gsap" looked below the heading at the start and "Vercel" looked
     // above it at the end. Closest-to-center makes the handoff happen at the
     // midpoint between adjacent rows.
+    // Uses cached positions: only window.scrollY is read per frame (no layout).
     const updateActive = () => {
-      const viewportCenter = window.innerHeight / 2;
+      if (!cachedRowPositions.length) return;
+      const pageCenter = window.scrollY + window.innerHeight / 2;
       let activeIdx = 0;
       let minDist = Infinity;
-      for (let i = 0; i < rows.length; i++) {
-        const rect = rows[i].getBoundingClientRect();
-        const center = rect.top + rect.height / 2;
-        const dist = Math.abs(center - viewportCenter);
+      for (let i = 0; i < cachedRowPositions.length; i++) {
+        const center = cachedRowPositions[i].top + cachedRowPositions[i].height / 2;
+        const dist = Math.abs(center - pageCenter);
         if (dist < minDist) {
           minDist = dist;
           activeIdx = i;
@@ -117,7 +137,11 @@ export default function ThirdSection({ resizeTick = 0 }) {
         start: 'top bottom',
         end: 'bottom top',
         onUpdate: updateActive,
-        onRefresh: updateActive,
+        onRefresh: () => {
+          // Recompute cached positions on layout changes (resize, font load, etc.)
+          cacheRowPositions();
+          updateActive();
+        },
       });
     }, sectionRef.current);
 
