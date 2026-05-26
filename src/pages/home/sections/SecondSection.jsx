@@ -29,39 +29,53 @@ export default function SecondSection({ resizeTick = 0 }) {
       // colore iniziale: light con opacità 20%
       gsap.set(words, { color: COLOR_LIGHT, opacity: 0.2 });
 
-      // timeline unica: il progress dello scroll colora parola-per-parola
       ScrollTrigger.getById('second-section-text')?.kill();
-      gsap.timeline({
-        scrollTrigger: {
-          id: 'second-section-text',
-          trigger: el,
-          start: () => {
-            // On mobile, start when section top reaches center of viewport
-            if (isMobileDevice) {
-              return 'top 30%';
-            }
-            // On desktop, start after hero animation ends
-            const heroTrigger = ScrollTrigger.getById('hero-scroll');
-            if (heroTrigger) {
-              return heroTrigger.end;
-            }
-            const rect = el.getBoundingClientRect();
-            return window.scrollY + rect.top - window.innerHeight;
+
+      if (isMobileDevice) {
+        // Mobile: no scrub — iOS Safari doesn't emit scroll events during
+        // momentum scroll so scrub-based animations freeze mid-way.
+        // Instead, fire once when the section enters the viewport.
+        gsap.timeline({
+          scrollTrigger: {
+            id: 'second-section-text',
+            trigger: el,
+            start: 'top 70%',
+            toggleActions: 'play none none none',
+            invalidateOnRefresh: true,
+            refreshPriority: 0,
           },
-          end: () => `+=${isMobileDevice ? Math.max(600, window.innerHeight * 0.8) : Math.max(800, window.innerHeight * 1)}`,
-          // Smoothed scrub on both — `scrub: true` ran sync per scroll event
-          // and was killing iOS Safari momentum scroll. 0.5s lerp moves the
-          // work into the GSAP RAF ticker.
-          scrub: 0.5,
-          invalidateOnRefresh: true,
-          refreshPriority: 0,
-          markers: false,
-        },
-      }).to(words, {
-        opacity: 1,
-        ease: 'none',
-        stagger: { each: 0.12, from: 'start' },
-      });
+        }).to(words, {
+          opacity: 1,
+          duration: 0.4,
+          ease: 'power1.out',
+          stagger: { each: 0.06, from: 'start' },
+        });
+      } else {
+        // Desktop: scrub-driven word-by-word reveal
+        gsap.timeline({
+          scrollTrigger: {
+            id: 'second-section-text',
+            trigger: el,
+            start: () => {
+              const heroTrigger = ScrollTrigger.getById('hero-scroll');
+              if (heroTrigger) {
+                return heroTrigger.end;
+              }
+              const rect = el.getBoundingClientRect();
+              return window.scrollY + rect.top - window.innerHeight;
+            },
+            end: () => `+=${Math.max(800, window.innerHeight * 1)}`,
+            scrub: 0.5,
+            invalidateOnRefresh: true,
+            refreshPriority: 0,
+            markers: false,
+          },
+        }).to(words, {
+          opacity: 1,
+          ease: 'none',
+          stagger: { each: 0.12, from: 'start' },
+        });
+      }
 
     }, sectionRef);
 

@@ -136,6 +136,9 @@ export default function ThirdSection({ resizeTick = 0 }) {
         trigger: list,
         start: 'top bottom',
         end: 'bottom top',
+        // Desktop: onUpdate fires via GSAP's RAF ticker.
+        // Mobile: native scroll listener below handles iOS momentum scroll —
+        // onUpdate is kept as a fallback but native listener is more reliable.
         onUpdate: updateActive,
         onRefresh: () => {
           // Recompute cached positions on layout changes (resize, font load, etc.)
@@ -145,7 +148,18 @@ export default function ThirdSection({ resizeTick = 0 }) {
       });
     }, sectionRef.current);
 
+    // Mobile: add a native passive scroll listener so the highlight updates
+    // during iOS momentum scroll (GSAP's onUpdate can lag behind on fast flings).
+    // updateActive only reads window.scrollY (no layout reads) so it's safe.
+    const mobileScrollHandler = isMobile ? updateActive : null;
+    if (mobileScrollHandler) {
+      window.addEventListener('scroll', mobileScrollHandler, { passive: true });
+    }
+
     return () => {
+      if (mobileScrollHandler) {
+        window.removeEventListener('scroll', mobileScrollHandler);
+      }
       ScrollTrigger.getById(triggerId)?.kill();
       ctx.revert();
     };
