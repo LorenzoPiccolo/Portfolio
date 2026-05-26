@@ -570,7 +570,7 @@ export default function Work3App() {
                       to={project.href}
                       data-follower-text="View"
                       className={`
-                        relative flex items-center py-5 md:py-6
+                        relative flex items-center py-10
                         transition-opacity duration-300
                         ${isDimmed ? 'opacity-20' : 'opacity-100'}
                       `}
