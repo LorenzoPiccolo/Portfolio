@@ -549,7 +549,7 @@ export default function Work3App() {
                       {/* Meta */}
                       <div className="flex items-baseline justify-between gap-3">
                         <span
-                          className="font-urbanist font-semibold text-light leading-tight"
+                          className="font-urbanist font-normal text-light leading-tight"
                           style={{ fontSize: 'clamp(1rem, 1.8vw, 1.3rem)' }}
                         >
                           {project.title}
@@ -597,7 +597,7 @@ export default function Work3App() {
                             {num}
                           </span>
                           <span
-                            className="font-urbanist font-semibold leading-none tracking-tight text-light"
+                            className="font-urbanist font-normal leading-none tracking-tight text-light"
                             style={{ fontSize: 'clamp(1.15rem, 2.2vw, 1.9rem)' }}
                           >
                             {project.title}
@@ -642,7 +642,7 @@ export default function Work3App() {
                         </span>
                         <span className="flex items-baseline justify-between gap-2">
                           <span
-                            className="font-urbanist font-semibold text-light leading-tight"
+                            className="font-urbanist font-normal text-light leading-tight"
                             style={{ fontSize: 'clamp(1rem, 5vw, 1.2rem)' }}
                           >
                             {project.title}

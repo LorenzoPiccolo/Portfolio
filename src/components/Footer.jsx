@@ -1,6 +1,6 @@
 // src/components/Footer.jsx
 import { useEffect, useLayoutEffect, useRef, useState } from 'react';
-import { Link } from 'react-router-dom';
+import TransitionLink from './TransitionLink.jsx';
 import { gsap, ScrollTrigger } from '../utils/gsapConfig.js';
 import footerBackground from '../../img/image-footer-05.jpg';
 import logo from '../../img/logo.svg';
@@ -47,7 +47,7 @@ function FooterNavList({ title, links }) {
           if (isInternal) {
             return (
               <li key={label}>
-                <Link
+                <TransitionLink
                   to={href}
                   onMouseEnter={() => {
                     window.clearTimeout(hoverTimeoutRef.current);
@@ -68,7 +68,7 @@ function FooterNavList({ title, links }) {
                     ·
                   </span>
                   <span className="leading-tight">{label}</span>
-                </Link>
+                </TransitionLink>
               </li>
             );
           }
