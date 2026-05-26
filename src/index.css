@@ -79,6 +79,10 @@
 }
 
 @layer components {
+  .title-104 {
+    @apply font-urbanist text-[80px] md:text-[104px];
+  }
+  
   .title-64 {
     @apply font-urbanist text-[64px];
   }

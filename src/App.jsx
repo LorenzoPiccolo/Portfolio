@@ -5,7 +5,8 @@ import { Analytics } from '@vercel/analytics/react';
 
 // Pages
 import Home from './pages/home/Home.jsx';
-import WorksApp from './pages/works/WorksApp.jsx';
+import WorksApp from './pages/works/WorksApp.jsx';   // backup — not linked in nav
+import Work3App from './pages/works/Work3App.jsx';    // current /works page
 import ExampleProject from './pages/projects/ExampleProject.jsx';
 import Alidays from './pages/projects/Alidays.jsx';
 import Atalus from './pages/projects/Atalus.jsx';
@@ -86,7 +87,8 @@ export default function App() {
       <PageTransition />
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/works" element={<WorksApp />} />
+        <Route path="/works" element={<Work3App />} />
+        <Route path="/works-backup" element={<WorksApp />} />
         {/* Works Routes */}
         <Route path="/works/alidays" element={<Alidays />} />
         <Route path="/works/atalus" element={<Atalus />} />

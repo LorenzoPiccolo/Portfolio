@@ -1,172 +1,119 @@
-import { useEffect, useRef, useState } from 'react';
+// src/components/CustomCursor.jsx
+// ─────────────────────────────────────────────────────────────────────────────
+// Root-cause fix: document.elementFromPoint() returns the cursor circle itself
+// when it is rendered on top of the hovered element (pointer-events:none does
+// NOT exclude elements from elementFromPoint — MDN confirmed).
+//
+// Fix: use document.elementsFromPoint() (plural) which returns ALL elements
+// at the point, then skip our own cursor element via [data-cursor-el], and
+// find the first real element underneath.
+// ─────────────────────────────────────────────────────────────────────────────
+import { useEffect, useRef } from 'react';
 import { gsap } from '../utils/gsapConfig.js';
 import { useLocation } from 'react-router-dom';
 
 export default function CustomCursor() {
-    const circleRef = useRef(null);
-    const textRef = useRef(null);
-    const isActiveRef = useRef(false);
-    const [text, setText] = useState('');
-    const location = useLocation();
+  const cursorRef = useRef(null);
+  const textRef   = useRef(null);
+  const state     = useRef({ visible: false });
+  const location  = useLocation();
 
-    // Hide cursor on mobile/touch devices
-    const isMobile = typeof window !== 'undefined' && (
-        window.matchMedia('(max-width: 768px)').matches ||
-        window.matchMedia('(pointer: coarse)').matches
-    );
+  const isMobile = typeof window !== 'undefined' && (
+    window.matchMedia('(pointer: coarse)').matches ||
+    window.matchMedia('(max-width: 768px)').matches
+  );
 
-    // Reset state on route change
-    // NOTE: hooks must be declared before any conditional return (Rules of Hooks)
-    useEffect(() => {
-        if (isMobile) return;
-        setText('');
-        isActiveRef.current = false;
-        if (circleRef.current && textRef.current) {
-            gsap.set(circleRef.current, { scale: 0, opacity: 0 });
-            gsap.set(textRef.current, { opacity: 0, scale: 0.5 });
-        }
-    }, [location.pathname, isMobile]);
+  // ── Reset on route change ─────────────────────────────────────────────────
+  useEffect(() => {
+    if (isMobile) return;
+    const el = cursorRef.current;
+    if (!el) return;
+    state.current.visible = false;
+    gsap.killTweensOf(el, 'scale,opacity');
+    gsap.set(el, { scale: 0, opacity: 0 });
+  }, [location.pathname, isMobile]);
 
-    useEffect(() => {
-        if (isMobile) return;
+  // ── Main effect ───────────────────────────────────────────────────────────
+  useEffect(() => {
+    if (isMobile) return;
+    const el     = cursorRef.current;
+    const textEl = textRef.current;
+    if (!el || !textEl) return;
 
-        const circle = circleRef.current;
-        const textEl = textRef.current;
+    // Start off-screen, hidden
+    gsap.set(el, { xPercent: -50, yPercent: -50, x: -200, y: -200, scale: 0, opacity: 0 });
 
-        // Center origins
-        gsap.set([circle, textEl], { xPercent: -50, yPercent: -50, x: window.innerWidth / 2, y: window.innerHeight / 2 });
+    // Single quickTo drives both position — text lives inside the circle so it
+    // comes along for free, no second tracking needed.
+    const xTo = gsap.quickTo(el, 'x', { duration: 0.5, ease: 'power3.out' });
+    const yTo = gsap.quickTo(el, 'y', { duration: 0.5, ease: 'power3.out' });
 
-        // Parallax durations: Text trails mouse slightly, Circle trails text (slower)
-        const xToCircle = gsap.quickTo(circle, 'x', { duration: 0.3, ease: 'power3.out' });
-        const yToCircle = gsap.quickTo(circle, 'y', { duration: 0.3, ease: 'power3.out' });
+    const show = (text) => {
+      // Update label via DOM so we never trigger a React re-render
+      if (textEl.textContent !== text) textEl.textContent = text;
+      if (state.current.visible) return;
+      state.current.visible = true;
+      gsap.killTweensOf(el, 'scale,opacity');
+      gsap.to(el, { scale: 1, opacity: 1, duration: 0.35, ease: 'back.out(1.5)' });
+    };
 
-        const xToText = gsap.quickTo(textEl, 'x', { duration: 0.25, ease: 'power3.out' });
-        const yToText = gsap.quickTo(textEl, 'y', { duration: 0.25, ease: 'power3.out' });
+    const hide = () => {
+      if (!state.current.visible) return;
+      state.current.visible = false;
+      gsap.killTweensOf(el, 'scale,opacity');
+      gsap.to(el, { scale: 0, opacity: 0, duration: 0.25, ease: 'power2.in' });
+    };
 
-        const showCursor = (followerText) => {
-            if (isActiveRef.current && text === followerText) return; // Already showing same text
-            isActiveRef.current = true;
-            setText(followerText);
+    const onMove = (e) => {
+      xTo(e.clientX);
+      yTo(e.clientY);
 
-            // Kill only scale/opacity animations, not position (quickTo)
-            gsap.killTweensOf(circle, 'scale,opacity');
-            gsap.killTweensOf(textEl, 'scale,opacity');
+      // elementsFromPoint returns elements from topmost to bottommost.
+      // We skip our own cursor ([data-cursor-el]) to find the real top element.
+      const allEls = document.elementsFromPoint(e.clientX, e.clientY);
+      const topEl  = allEls.find(node => !node.closest('[data-cursor-el]'));
 
-            gsap.to(circle, {
-                scale: 1,
-                opacity: 1,
-                duration: 0.4,
-                ease: 'power2.out'
-            });
-            gsap.to(textEl, {
-                opacity: 1,
-                scale: 1,
-                duration: 0.3,
-                delay: 0.1,
-                ease: 'power2.out'
-            });
-        };
+      if (!topEl)                                          { hide(); return; }
+      if (topEl.closest('header'))                         { hide(); return; }
+      if (topEl.closest('[data-no-cursor]'))               { hide(); return; }
 
-        const hideCursor = () => {
-            if (!isActiveRef.current) return; // Already hidden
-            isActiveRef.current = false;
+      const target = topEl.closest('[data-follower-text]');
+      if (target) show(target.getAttribute('data-follower-text'));
+      else        hide();
+    };
 
-            // Kill only scale/opacity animations, not position (quickTo)
-            gsap.killTweensOf(circle, 'scale,opacity');
-            gsap.killTweensOf(textEl, 'scale,opacity');
+    const onLeave = () => hide();
 
-            gsap.to(circle, {
-                scale: 0,
-                opacity: 0,
-                duration: 0.3,
-                ease: 'power2.out'
-            });
-            gsap.to(textEl, {
-                opacity: 0,
-                scale: 0.5,
-                duration: 0.2,
-                ease: 'power2.out'
-            });
-        };
+    window.addEventListener('mousemove', onMove, { passive: true });
+    document.addEventListener('mouseleave', onLeave);
 
-        const moveCursor = (e) => {
-            xToCircle(e.clientX);
-            yToCircle(e.clientY);
-            xToText(e.clientX);
-            yToText(e.clientY);
+    return () => {
+      window.removeEventListener('mousemove', onMove);
+      document.removeEventListener('mouseleave', onLeave);
+      gsap.killTweensOf(el);
+    };
+  }, [location.pathname, isMobile]);
 
-            // Check element under cursor on every mouse move for reliable detection
-            const elementUnderCursor = document.elementFromPoint(e.clientX, e.clientY);
-            if (!elementUnderCursor) {
-                hideCursor();
-                return;
-            }
+  if (isMobile) return null;
 
-            // Check if cursor is over header or any element with data-no-cursor
-            const isOverHeader = elementUnderCursor.closest('header') || elementUnderCursor.closest('[data-no-cursor]');
-            if (isOverHeader) {
-                hideCursor();
-                return;
-            }
-
-            const target = elementUnderCursor.closest('[data-follower-text]');
-            if (target) {
-                const followerText = target.getAttribute('data-follower-text');
-                showCursor(followerText);
-            } else {
-                hideCursor();
-            }
-        };
-
-        const handleMouseLeave = () => {
-            hideCursor();
-        };
-
-        window.addEventListener('mousemove', moveCursor);
-        document.addEventListener('mouseleave', handleMouseLeave);
-
-        return () => {
-            window.removeEventListener('mousemove', moveCursor);
-            document.removeEventListener('mouseleave', handleMouseLeave);
-            gsap.killTweensOf(circle, 'scale,opacity');
-            gsap.killTweensOf(textEl, 'scale,opacity');
-        };
-    }, [location.pathname, isMobile]);
-
-    if (isMobile) {
-        return null;
-    }
-
-    return (
-        <>
-            {/* Background Circle */}
-            <div
-                ref={circleRef}
-                className="fixed top-0 left-0 z-[9990] pointer-events-none backdrop-blur-[12px] rounded-full overflow-hidden"
-                style={{
-                    width: '128px',
-                    height: '128px',
-                    backgroundColor: 'rgba(24, 24, 24, 0.6)',
-                    scale: 0,
-                    opacity: 0,
-                }}
-            />
-
-            {/* Text Container */}
-            <div
-                ref={textRef}
-                className="fixed top-0 left-0 z-[9999] pointer-events-none flex items-center justify-center p-4 text-center"
-                style={{
-                    width: 'auto',
-                    minWidth: '128px', // Match circle width ideally, or just be centered
-                    opacity: 0,
-                    // scale: 0, // Controlled by GSAP
-                }}
-            >
-                <span className="font-urbanist text-[16px] text-light whitespace-normal leading-tight">
-                    {text}
-                </span>
-            </div>
-        </>
-    );
+  return (
+    <div
+      ref={cursorRef}
+      data-cursor-el
+      className="fixed top-0 left-0 z-[9990] pointer-events-none rounded-full flex items-center justify-center select-none"
+      style={{
+        width: '110px',
+        height: '110px',
+        backgroundColor: 'rgba(18, 18, 18, 0.78)',
+        backdropFilter: 'blur(10px)',
+        WebkitBackdropFilter: 'blur(10px)',
+      }}
+    >
+      <span
+        ref={textRef}
+        data-cursor-el
+        className="font-urbanist text-[14px] font-medium text-light leading-none pointer-events-none"
+      />
+    </div>
+  );
 }
