@@ -208,7 +208,7 @@ export default function FourthSection({ resizeTick = 0 }) {
           className={`transition-transform duration-500 ease-out will-change-transform ${buttonVisible ? 'scale-100' : 'scale-0'}`}
           style={{ transformOrigin: 'center bottom' }}
         >
-          <div className="pointer-events-auto transition-transform duration-300 hover:scale-[1.05]">
+          <div className="pointer-events-auto">
             <DynamicButton
               label="More projects"
               href="/works"

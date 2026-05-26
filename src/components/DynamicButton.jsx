@@ -14,9 +14,9 @@ import useCursorGlow from '../hooks/useCursorGlow.js';
 
 // No transform / transition-transform / hover:scale on this string ↓
 // transition-colors is safe here: it only animates color/bg/border — NOT transform.
-// hover:border-transparent removes the border on hover so the fill effect is clean.
+// hover:border-primary matches the fill color on hover — visually no border on any background.
 const baseBtnClasses =
-  'relative overflow-hidden flex items-center gap-4 rounded-full border border-gray600 bg-dark/70 backdrop-blur-lg pl-4 pr-2 py-2 text-light group whitespace-nowrap w-fit cursor-pointer transition-colors duration-300 hover:border-transparent';
+  'relative overflow-hidden flex items-center gap-4 rounded-full border border-gray600 bg-dark/70 backdrop-blur-lg pl-4 pr-2 py-2 text-light group whitespace-nowrap w-fit cursor-pointer transition-colors duration-300 hover:border-primary';
 
 const DynamicButton = forwardRef(function DynamicButton(
   {
