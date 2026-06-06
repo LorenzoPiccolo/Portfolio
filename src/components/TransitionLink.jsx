@@ -2,11 +2,12 @@
 import { forwardRef } from 'react';
 import { useTransition } from '../context/TransitionContext.jsx';
 
-const TransitionLink = forwardRef(function TransitionLink({ to, children, ...props }, ref) {
+const TransitionLink = forwardRef(function TransitionLink({ to, children, onClick, ...props }, ref) {
     const { navigateTo } = useTransition();
 
     const handleClick = (e) => {
         e.preventDefault();
+        onClick?.(e);
         navigateTo(to);
     };
 
