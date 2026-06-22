@@ -13,6 +13,7 @@ import Atalus from './pages/projects/Atalus.jsx';
 import BuildZero from './pages/projects/BuildZero.jsx';
 import PortfolioWebsite from './pages/projects/PortfolioWebsite.jsx';
 import RediWebsite from './pages/projects/RediWebsite.jsx';
+import Eurica from './pages/projects/Eurica.jsx';
 import Romaji from './pages/projects/Romaji.jsx';
 import Reborn from './pages/projects/Reborn.jsx';
 import CustomCursor from './components/CustomCursor.jsx';
@@ -95,6 +96,7 @@ export default function App() {
         <Route path="/works/build-zero" element={<BuildZero />} />
         <Route path="/works/portfolio-website" element={<PortfolioWebsite />} />
         <Route path="/works/redi" element={<RediWebsite />} />
+        <Route path="/works/eurica" element={<Eurica />} />
         <Route path="/works/romaji" element={<Romaji />} />
         <Route path="/works/reborn" element={<Reborn />} />
       </Routes>

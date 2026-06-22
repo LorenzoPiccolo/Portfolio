@@ -15,7 +15,9 @@ import useAttentionTitle        from '../../hooks/useAttentionTitle.js';
 import buildZeroImg  from '../../../img/build-zero/build-zero-01.jpg';
 import portfolioImg  from '../../../img/portfolio/portfolio-01.jpg';
 import alidaysImg    from '../../../img/footer-image.jpg';
-import rediImg       from '../../../img/image-footer-05.jpg';
+// NOTE: replace with a real imported image once Eurica screenshots are ready
+// e.g.: import euricaImg from '../../../img/eurica/eurica-01.jpg';
+const euricaImg = 'https://placehold.co/800x600/0A1628/4FACDE?text=Eurica';
 import romajiImg     from '../../../img/romaji/romaji-01.jpg';
 import atalusImg     from '../../../img/atalus/atalus-01.jpg';
 import rebornImg     from '../../../img/reborn/reborn-01.jpg';
@@ -50,13 +52,13 @@ export const ALL_PROJECTS = [
     image: alidaysImg,
   },
   {
-    id: 'redi-website',
-    title: 'Redi Website',
-    discipline: 'Web',
-    services: ['Web Development', 'React'],
+    id: 'eurica',
+    title: 'Eurica',
+    discipline: 'UX/UI',
+    services: ['App Design', 'Design System'],
     year: '2025',
-    href: '/works/redi',
-    image: rediImg,
+    href: '/works/eurica',
+    image: euricaImg,
   },
   {
     id: 'romaji',

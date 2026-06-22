@@ -247,6 +247,11 @@ function SectionRenderer({ section, index, name, resizeTick }) {
         case 'gallery':     return <GallerySection    section={section} name={name} />;
         case 'wireframe':   return <WireframeSection  section={section} name={name} index={index} />;
         case 'masonry':     return <MasonrySection    section={section} name={name} />;
+        case 'live-ui':     return (
+            <section className="w-full" style={{ paddingLeft: IMAGE_PADDING, paddingRight: IMAGE_PADDING, paddingBottom: IMAGE_PADDING }}>
+                {section.content}
+            </section>
+        );
         default:            return null;
     }
 }
