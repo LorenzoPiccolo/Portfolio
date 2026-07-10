@@ -3,7 +3,7 @@ import { useEffect, useRef, useState } from 'react';
 import { gsap } from 'gsap';
 import TransitionLink from './TransitionLink.jsx';
 import logo from '../../img/logo.svg';
-import cardImage from '../../img/build-zero/build-zero-01.jpg';
+import cardImage from '../../img/eurica/eurica-cover.png';
 import useCursorGlow from '../hooks/useCursorGlow.js';
 
 const NAV_LINKS = [
@@ -187,18 +187,18 @@ export default function Header({ currentPage = 'Home' }) {
 
                 {/* Card in evidenza */}
                 <TransitionLink
-                  to="/works"
+                  to="/works/eurica"
                   onClick={closeMenu}
                   data-reveal
                   className="group/card relative block aspect-[4/3] w-full overflow-hidden rounded-[10px] md:w-[320px]"
                 >
                   <img
                     src={cardImage}
-                    alt="Lavoro in evidenza"
+                    alt="Eurica — lavoro in evidenza"
                     className="h-full w-full object-cover transition-transform duration-500 ease-out group-hover/card:scale-105"
                   />
                   <span className="absolute bottom-3 left-3 inline-flex items-center gap-1 rounded-full bg-dark/80 px-3 py-1.5 text-12 text-light backdrop-blur-[6px]">
-                    Esplora i lavori →
+                    New
                   </span>
                 </TransitionLink>
               </div>
