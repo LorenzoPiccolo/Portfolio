@@ -11,6 +11,9 @@ import imgLogo     from '../../../img/eurica/eurica-logo.png';
 import imgBerlinCard  from '../../../img/eurica/eurica-a-berlin-card.png';
 import imgAddActivity from '../../../img/eurica/eurica-b-add-activity.png';
 
+// [B-2] — 1645×980 landscape desktop
+import imgTripMapDetail from '../../../img/eurica/eurica-b2-trip-map-detail.png';
+
 // [C] [D] — 800×1000 portrait split
 import imgIcons   from '../../../img/eurica/eurica-c-icons.png';
 import imgDayTabs from '../../../img/eurica/eurica-d-sidebar.png';
@@ -95,7 +98,14 @@ const eurica = {
             ],
         },
 
-        // ── 6. [C]+[D] — Icons + Day Tabs (full width, no parallax) ──────────
+        // ── 6. [B-2] — Berlin trip detail, mappa 3D + pannello location ───────
+        {
+            type: 'desktop',
+            src:  imgTripMapDetail,
+            alt:  'Eurica — dettaglio viaggio Berlin con mappa 3D e pannello location',
+        },
+
+        // ── 7. [C]+[D] — Icons + Day Tabs (full width, no parallax) ──────────
         {
             type: 'row',
             images: [
@@ -104,14 +114,14 @@ const eurica = {
             ],
         },
 
-        // ── 7. [E] — Overview Eurica color theme (1600×900) ───────────────────
+        // ── 8. [E] — Overview Eurica color theme (1600×900) ───────────────────
         {
             type: 'desktop',
             src:  imgEOverview,
             alt:  'Eurica — overview del color theme con palette e componenti UI',
         },
 
-        // ── 8. [F]+[G] — Boxes + Trip Header (full width, no parallax) ───────
+        // ── 9. [F]+[G] — Boxes + Trip Header (full width, no parallax) ───────
         {
             type: 'row',
             images: [
@@ -120,7 +130,7 @@ const eurica = {
             ],
         },
 
-        // ── 9. [H]+[I]+[L] — iPhone row ────────────────────────────────────────
+        // ── 10. [H]+[I]+[L] — iPhone row ───────────────────────────────────────
         {
             type: 'iphone-row',
             images: [
