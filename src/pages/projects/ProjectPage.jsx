@@ -245,6 +245,7 @@ function SectionRenderer({ section, index, name, resizeTick }) {
         case 'text':        return <TextSection       section={section} index={index} resizeTick={resizeTick} />;
         case 'palette':     return <PaletteSection    section={section} />;
         case 'gallery':     return <GallerySection    section={section} name={name} />;
+        case 'split':       return <SplitSection      section={section} name={name} />;
         case 'wireframe':   return <WireframeSection  section={section} name={name} index={index} />;
         case 'masonry':     return <MasonrySection    section={section} name={name} />;
         case 'live-ui':     return (
@@ -310,20 +311,59 @@ const IPHONE_ASPECT = 'aspect-[390/844]';
  * Desktop: centered group at ~72vw, 3 equal flex columns.
  * Mobile:  3 images in a row (all visible at once), small gap.
  */
+/**
+ * Single iPhone image with parallax — no overflow clip, image shown at natural ratio.
+ */
+function IPhoneItem({ src, alt, strength, radius }) {
+    const wrapRef = useRef(null);
+    useLayoutEffect(() => {
+        const el = wrapRef.current;
+        if (!el) return;
+        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+        const ctx = gsap.context(() => {
+            gsap.fromTo(el,
+                { yPercent: strength },
+                {
+                    yPercent: -strength,
+                    ease: 'none',
+                    scrollTrigger: {
+                        trigger: el,
+                        start: 'top bottom',
+                        end: 'bottom top',
+                        scrub: true,
+                        invalidateOnRefresh: true,
+                    },
+                }
+            );
+        });
+        return () => ctx.revert();
+    }, [strength]);
+
+    return (
+        <div ref={wrapRef}>
+            <img src={src} alt={alt} className="w-full block" style={{ borderRadius: radius }} />
+        </div>
+    );
+}
+
 function IPhoneRowSection({ section, name }) {
     const images = section.images || [];
 
-    // Descending strengths: forte → medio → debole
-    // Creates a clear staircase depth effect (Dennis Snellenberg style)
+    // Descending strengths: forte → medio → debole (Dennis Snellenberg style)
     const strengths = [16, 9, 3];
 
-    // Static Y offset (px): stagger iniziale che amplifica la scala visiva
+    // Static Y offset (px): stagger iniziale che amplifica la scala visiva.
+    // Padding-bottom compensates so nothing gets clipped.
     const yOffsets = [80, 40, 0];
 
     return (
         <section
-            className="w-full bg-dark py-24 md:py-40"
-            style={{ paddingLeft: IMAGE_PADDING, paddingRight: IMAGE_PADDING }}
+            className="w-full bg-dark pt-24 md:pt-40"
+            style={{
+                paddingLeft: IMAGE_PADDING,
+                paddingRight: IMAGE_PADDING,
+                paddingBottom: `calc(${IMAGE_PADDING} + 80px)`,   /* extra for largest offset */
+            }}
         >
             {/* Mobile: all 3 in a row */}
             <div className="flex gap-2 md:hidden">
@@ -333,12 +373,11 @@ function IPhoneRowSection({ section, name }) {
                         className="flex-1"
                         style={{ transform: `translateY(${yOffsets[i] ?? 0}px)` }}
                     >
-                        <ParallaxImage
+                        <IPhoneItem
                             src={img.src}
                             alt={img.alt || `${name} mockup ${i + 1}`}
                             strength={strengths[i] ?? 4}
                             radius="20px"
-                            className={`w-full ${IPHONE_ASPECT}`}
                         />
                     </div>
                 ))}
@@ -353,12 +392,11 @@ function IPhoneRowSection({ section, name }) {
                             className="flex-1"
                             style={{ transform: `translateY(${yOffsets[i] ?? 0}px)` }}
                         >
-                            <ParallaxImage
+                            <IPhoneItem
                                 src={img.src}
                                 alt={img.alt || `${name} mockup ${i + 1}`}
                                 strength={strengths[i] ?? 4}
                                 radius="28px"
-                                className={`w-full ${IPHONE_ASPECT}`}
                             />
                         </div>
                     ))}
@@ -548,6 +586,25 @@ function PaletteSection({ section }) {
 /** Wraps DynamicGallery as a section type */
 function GallerySection({ section, name }) {
     return <DynamicGallery images={section.images || []} name={name} />;
+}
+
+/**
+ * Two images side by side with different parallax speeds — no preceding full image.
+ * Left moves faster (strength 14), right moves slower (strength 5).
+ * section.images = [leftImg, rightImg]  each { src, alt, aspect }
+ */
+function SplitSection({ section, name }) {
+    const [left, right] = section.images || [];
+    if (!left || !right) return null;
+    return (
+        <GallerySplit
+            left={left}
+            right={right}
+            name={name}
+            startIdx={0}
+            onLoad={() => {}}
+        />
+    );
 }
 
 /** Wireframe / user flow — object-contain so diagrams aren't cropped */
