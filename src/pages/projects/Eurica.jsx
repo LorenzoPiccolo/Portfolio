@@ -1,22 +1,31 @@
 // src/pages/projects/Eurica.jsx
-// Case history — Eurica, travel planning web app
 import ProjectPage from './ProjectPage.jsx';
-import EuricaTripsGrid    from './eurica/EuricaTripsGrid.jsx';
-import EuricaSchedulePanel from './eurica/EuricaSchedulePanel.jsx';
 
 import nextHeroImage from '../../../img/romaji/romaji-01.jpg';
 
-// ── Hero: stylised gradient image (will be swapped for real screenshot) ──────
-const heroImage = 'https://placehold.co/1440x810/211F20/C6BDFB?text=Eurica';
+// Hero + brand
+import imgCover    from '../../../img/eurica/eurica-cover.png';
+import imgLogo     from '../../../img/eurica/eurica-logo.png';
+import imgOverview from '../../../img/eurica/eurica-overview.png';
 
-// ── Design System preview image ───────────────────────────────────────────────
-const screenDS = 'https://placehold.co/1440x810/0A0A0A/5B8BFF?text=Design+System';
+// Components / UI details (portrait)
+import imgMap        from '../../../img/eurica/eurica-g-map.png';
+import imgBerlinCard from '../../../img/eurica/eurica-a-berlin-card.png';
+import imgAddActivity from '../../../img/eurica/eurica-b-add-activity.png';
+import imgIcons      from '../../../img/eurica/eurica-c-icons.png';
+import imgSidebar    from '../../../img/eurica/eurica-d-sidebar.png';
+import imgBoxes      from '../../../img/eurica/eurica-f-boxes.png';
+
+// Mobile screens (iphone-row)
+import imgMobile01 from '../../../img/eurica/eurica-h-mobile-01.png';
+import imgMobile02 from '../../../img/eurica/eurica-i-mobile-02.png';
+import imgMobile03 from '../../../img/eurica/eurica-l-mobile-03.png';
 
 const eurica = {
     name: 'Eurica',
     category: 'UX/UI DESIGN',
     year: '2025',
-    heroImage,
+    heroImage: imgCover,
     description: 'A travel planning web app that transforms itinerary building into a ritual — designed for travelers who find pleasure in the planning itself, not just the destination.',
     keyInfo: {
         client:     'Personal Project',
@@ -26,21 +35,36 @@ const eurica = {
     },
     sections: [
 
-        // ── 1. All Trips — interactive grid ──────────────────────────────────
+        // ── 1. Logo / brand mark ──────────────────────────────────────────────
         {
-            type: 'live-ui',
-            content: <EuricaTripsGrid />,
+            type: 'desktop',
+            src:  imgLogo,
+            alt:  'Eurica — wordmark su sfondo lavanda',
         },
 
-        // ── 2. Brand identity — palette + typography ──────────────────────────
+        // ── 2. Testo — visione progettuale ────────────────────────────────────
+        {
+            type: 'text',
+            layout: 'left',
+            content: 'Eurica è progettata attorno a una tensione deliberata: l\'efficienza dell\'interfaccia digitale che incontra il piacere dell\'organizzazione analogica. Ogni schermata è pensata per chi trova soddisfazione nel costruire un piano perfetto, non solo nel viverlo.',
+        },
+
+        // ── 3. Dashboard overview ─────────────────────────────────────────────
+        {
+            type: 'desktop',
+            src:  imgOverview,
+            alt:  'Eurica — dashboard con globo interattivo, sidebar e statistiche viaggio',
+        },
+
+        // ── 4. Palette + tipografia ───────────────────────────────────────────
         {
             type: 'palette',
             colors: [
-                { hex: '#6A5AC7', name: 'Blue Violet'    },
-                { hex: '#C6BDFB', name: 'Light Violet'   },
-                { hex: '#DAFF04', name: 'Sun Glare'      },
-                { hex: '#211F20', name: 'Darkest Hour'   },
-                { hex: '#F3EFEC', name: 'Cloud Dancer'   },
+                { hex: '#6A5AC7', name: 'Blue Violet'  },
+                { hex: '#C6BDFB', name: 'Light Violet' },
+                { hex: '#DAFF04', name: 'Sun Glare'    },
+                { hex: '#211F20', name: 'Darkest Hour'  },
+                { hex: '#F3EFEC', name: 'Cloud Dancer'  },
             ],
             fonts: [
                 {
@@ -56,31 +80,41 @@ const eurica = {
             ],
         },
 
-        // ── 3. Narrative — design approach ───────────────────────────────────
+        // ── 5. Testo — modello di interazione ─────────────────────────────────
         {
             type: 'text',
             layout: 'right',
-            content: 'Eurica è progettata attorno a una tensione deliberata: l\'efficienza digitale dell\'interfaccia che incontra il piacere fisico dell\'organizzazione analogica. Ogni schermata è pensata per chi trova soddisfazione nel costruire un piano perfetto, non solo nel viverlo.',
+            content: 'Il sistema di interazione si basa sulla divulgazione progressiva: i dettagli emergono solo quando sono rilevanti. Drag & drop per riordinare le attività, pill dei giorni per navigare, hover sulle card per accedere alle azioni — senza toolbar permanenti che occupano spazio.',
         },
 
-        // ── 4. Trip detail — interactive schedule panel ───────────────────────
+        // ── 6. Gallery — mappa 3D + dettaglio viaggio + modale ───────────────
         {
-            type: 'live-ui',
-            content: <EuricaSchedulePanel />,
+            type: 'gallery',
+            images: [
+                { src: imgMap,        alt: 'Eurica — mappa Mapbox 3D Berlin con pin attività',    aspect: 'portrait' },
+                { src: imgBerlinCard, alt: 'Eurica — card viaggio Berlin con lista attività Day 1', aspect: 'portrait' },
+                { src: imgAddActivity, alt: 'Eurica — modale "Add activity" con time picker e categorie', aspect: 'portrait' },
+            ],
         },
 
-        // ── 5. Narrative — interaction model ─────────────────────────────────
+        // ── 7. Gallery — icone 3D + sidebar + componenti ─────────────────────
         {
-            type: 'text',
-            layout: 'left',
-            content: 'Il sistema di interazione si basa sulla divulgazione progressiva: i dettagli emergono solo quando sono rilevanti. Drag & drop per riordinare le attività, click sulle pill dei giorni per navigare, hover sulle card per accedere alle azioni — senza toolbar permanenti che occupano spazio.',
+            type: 'gallery',
+            images: [
+                { src: imgIcons,   alt: 'Eurica — libreria icone 3D per le categorie di viaggio', aspect: 'portrait'  },
+                { src: imgSidebar, alt: 'Eurica — sidebar con navigazione e lista trip',           aspect: 'portrait'  },
+                { src: imgBoxes,   alt: 'Eurica — componenti UI: note editor, reminders, next trip widget', aspect: 'portrait' },
+            ],
         },
 
-        // ── 6. Design System preview ──────────────────────────────────────────
+        // ── 8. iPhone row — app mobile ────────────────────────────────────────
         {
-            type: 'desktop',
-            src: screenDS,
-            alt: 'Eurica — Design system overview: tokens, componenti, icone',
+            type: 'iphone-row',
+            images: [
+                { src: imgMobile03, alt: 'Eurica mobile — Home con globo e next trip' },
+                { src: imgMobile01, alt: 'Eurica mobile — All Trips con filtri e trip card' },
+                { src: imgMobile02, alt: 'Eurica mobile — dettaglio Berlin con mappa 3D' },
+            ],
         },
 
     ],
