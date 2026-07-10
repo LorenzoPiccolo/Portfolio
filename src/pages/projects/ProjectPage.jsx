@@ -246,6 +246,7 @@ function SectionRenderer({ section, index, name, resizeTick }) {
         case 'palette':     return <PaletteSection    section={section} />;
         case 'gallery':     return <GallerySection    section={section} name={name} />;
         case 'split':       return <SplitSection      section={section} name={name} />;
+        case 'row':         return <RowSection        section={section} name={name} />;
         case 'wireframe':   return <WireframeSection  section={section} name={name} index={index} />;
         case 'masonry':     return <MasonrySection    section={section} name={name} />;
         case 'live-ui':     return (
@@ -604,6 +605,43 @@ function SplitSection({ section, name }) {
             startIdx={0}
             onLoad={() => {}}
         />
+    );
+}
+
+/**
+ * Two images side by side, full width, static (no parallax).
+ * Desktop: each image takes 50% of the available width, edge to edge
+ *          (only the standard section padding), no dark gutters between.
+ * Mobile:  stacked full-width, each image uses its own aspect ratio.
+ * section.images = [leftImg, rightImg]  each { src, alt, aspect }
+ */
+function RowSection({ section, name }) {
+    const images = section.images || [];
+    if (images.length !== 2) return null;
+    const [left, right] = images;
+    const lMobile = getMobileAspect(left.aspect || 'portrait');
+    const rMobile = getMobileAspect(right.aspect || 'portrait');
+    return (
+        <section className="w-full bg-dark py-10 md:py-16" style={{ paddingLeft: IMAGE_PADDING, paddingRight: IMAGE_PADDING }}>
+            <div className="flex flex-col md:flex-row gap-4 md:gap-6">
+                <div className={`w-full md:w-1/2 ${lMobile} md:aspect-[4/5]`}>
+                    <img
+                        src={left.src}
+                        alt={left.alt || `${name} image`}
+                        className="w-full h-full object-cover"
+                        style={{ borderRadius: IMAGE_RADIUS }}
+                    />
+                </div>
+                <div className={`w-full md:w-1/2 ${rMobile} md:aspect-[4/5]`}>
+                    <img
+                        src={right.src}
+                        alt={right.alt || `${name} image`}
+                        className="w-full h-full object-cover"
+                        style={{ borderRadius: IMAGE_RADIUS }}
+                    />
+                </div>
+            </div>
+        </section>
     );
 }
 

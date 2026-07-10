@@ -6,7 +6,6 @@ import nextHeroImage from '../../../img/romaji/romaji-01.jpg';
 // Hero + landscape desktop sections
 import imgCover    from '../../../img/eurica/eurica-cover.png';
 import imgLogo     from '../../../img/eurica/eurica-logo.png';
-import imgOverview from '../../../img/eurica/eurica-overview.png';
 
 // [A] [B] — 800×1000 portrait split
 import imgBerlinCard  from '../../../img/eurica/eurica-a-berlin-card.png';
@@ -56,14 +55,7 @@ const eurica = {
             content: 'Eurica è progettata attorno a una tensione deliberata: l\'efficienza dell\'interfaccia digitale che incontra il piacere dell\'organizzazione analogica. Ogni schermata è pensata per chi trova soddisfazione nel costruire un piano perfetto, non solo nel viverlo.',
         },
 
-        // ── 3. Dashboard overview ─────────────────────────────────────────────
-        {
-            type: 'desktop',
-            src:  imgOverview,
-            alt:  'Eurica — dashboard con globo interattivo, sidebar e statistiche viaggio',
-        },
-
-        // ── 4. Palette + tipografia ───────────────────────────────────────────
+        // ── 3. Palette + tipografia ────────────────────────────────────────────
         {
             type: 'palette',
             colors: [
@@ -87,48 +79,48 @@ const eurica = {
             ],
         },
 
-        // ── 5. Testo destra ───────────────────────────────────────────────────
+        // ── 4. Testo destra ───────────────────────────────────────────────────
         {
             type: 'text',
             layout: 'right',
             content: 'Il sistema di interazione si basa sulla divulgazione progressiva: i dettagli emergono solo quando sono rilevanti. Drag & drop per riordinare le attività, pill dei giorni per navigare, hover sulle card per accedere alle azioni — senza toolbar permanenti che occupano spazio.',
         },
 
-        // ── 6. [A]+[B] — Berlin card + Add activity ───────────────────────────
+        // ── 5. [A]+[B] — Berlin card + Add activity (full width, no parallax) ─
         {
-            type: 'split',
+            type: 'row',
             images: [
                 { src: imgBerlinCard,  alt: 'Eurica — dettaglio viaggio Berlin con lista attività Day 1', aspect: 'portrait' },
                 { src: imgAddActivity, alt: 'Eurica — modale "Add activity" con time picker e categorie',  aspect: 'portrait' },
             ],
         },
 
-        // ── 7. [C]+[D] — Icons + Day Tabs ────────────────────────────────────
+        // ── 6. [C]+[D] — Icons + Day Tabs (full width, no parallax) ──────────
         {
-            type: 'split',
+            type: 'row',
             images: [
                 { src: imgIcons,   alt: 'Eurica — libreria icone 3D per le categorie di viaggio', aspect: 'portrait' },
                 { src: imgDayTabs, alt: 'Eurica — day tabs e filter chips nella vista itinerario', aspect: 'portrait' },
             ],
         },
 
-        // ── 8. [E] — Overview Eurica color theme (1600×900) ──────────────────
+        // ── 7. [E] — Overview Eurica color theme (1600×900) ───────────────────
         {
             type: 'desktop',
             src:  imgEOverview,
             alt:  'Eurica — overview del color theme con palette e componenti UI',
         },
 
-        // ── 9. [F]+[G] — Boxes + Trip Header ─────────────────────────────────
+        // ── 8. [F]+[G] — Boxes + Trip Header (full width, no parallax) ───────
         {
-            type: 'split',
+            type: 'row',
             images: [
                 { src: imgBoxes,      alt: 'Eurica — componenti UI: note editor, reminders, next trip widget', aspect: 'portrait' },
                 { src: imgTripHeader, alt: 'Eurica — trip header con breadcrumb e navigazione contestuale',     aspect: 'portrait' },
             ],
         },
 
-        // ── 10. [H]+[I]+[L] — iPhone row ──────────────────────────────────────
+        // ── 9. [H]+[I]+[L] — iPhone row ────────────────────────────────────────
         {
             type: 'iphone-row',
             images: [
