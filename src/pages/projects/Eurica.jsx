@@ -3,32 +3,37 @@ import ProjectPage from './ProjectPage.jsx';
 
 import nextHeroImage from '../../../img/romaji/romaji-01.jpg';
 
-// Hero + landscape desktop sections
-import imgCover    from '../../../img/eurica/eurica-cover.png';
-import imgLogo     from '../../../img/eurica/eurica-logo.png';
+// [00] Hero — campagna "Create. Explore. Travel." con wordmark
+import imgCover from '../../../img/eurica/eurica-cover.png';
 
-// [A] [B] — 800×1000 portrait split
+// [01] Logo — wordmark su sfondo lavanda
+import imgLogo from '../../../img/eurica/eurica-logo.png';
+
+// [A] [B] — 800×1000 portrait row
 import imgBerlinCard  from '../../../img/eurica/eurica-a-berlin-card.png';
 import imgAddActivity from '../../../img/eurica/eurica-b-add-activity.png';
 
-// [B-2] — 1645×980 landscape desktop
-import imgTripMapDetail from '../../../img/eurica/eurica-b2-trip-map-detail.png';
+// [C] — 1600×900 landscape, immagine brand/campagna
+import imgBrand from '../../../img/eurica/eurica-c-brand.png';
 
-// [C] [D] — 800×1000 portrait split
-import imgIcons   from '../../../img/eurica/eurica-c-icons.png';
-import imgDayTabs from '../../../img/eurica/eurica-d-sidebar.png';
+// [D] [E] — 800×1000 portrait row
+import imgIcons   from '../../../img/eurica/eurica-d-icons.png';
+import imgDayTabs from '../../../img/eurica/eurica-e-daytabs.png';
 
-// [E] — 1600×900 landscape desktop
-import imgEOverview from '../../../img/eurica/eurica-e-overview.png';
+// [F] — 1645×980 landscape, dettaglio viaggio Berlin con mappa 3D
+import imgTripMapDetail from '../../../img/eurica/eurica-f-tripmap.png';
 
-// [F] [G] — 800×1000 portrait split
-import imgBoxes      from '../../../img/eurica/eurica-f-boxes.png';
-import imgTripHeader from '../../../img/eurica/eurica-g-map.png';
+// [G] — 1600×900 landscape, dashboard overview con globo interattivo
+import imgDashboard from '../../../img/eurica/eurica-g-dashboard.png';
 
-// [H] [I] [L] — iPhone row
-import imgMobileTrips  from '../../../img/eurica/eurica-h-mobile-01.png';
-import imgMobileDetail from '../../../img/eurica/eurica-i-mobile-02.png';
-import imgMobileHome   from '../../../img/eurica/eurica-l-mobile-03.png';
+// [H] [I] — 800×1000 portrait row
+import imgBoxes      from '../../../img/eurica/eurica-h-boxes.png';
+import imgTripHeader from '../../../img/eurica/eurica-i-tripheader.png';
+
+// [L] [M] [N] — iPhone row
+import imgMobileTrips  from '../../../img/eurica/eurica-l-mobile-01.png';
+import imgMobileDetail from '../../../img/eurica/eurica-m-mobile-02.png';
+import imgMobileHome   from '../../../img/eurica/eurica-n-mobile-03.png';
 
 const eurica = {
     name: 'Eurica',
@@ -44,7 +49,7 @@ const eurica = {
     },
     sections: [
 
-        // ── 1. Logo (nessun crop, ratio originale 1600×900) ─────────────────────
+        // ── 1. [01] Logo (nessun crop, ratio originale 1600×900) ────────────────
         {
             type: 'natural',
             src:  imgLogo,
@@ -98,15 +103,14 @@ const eurica = {
             ],
         },
 
-        // ── 6. [B-2] — Berlin trip detail, mappa 3D + pannello location ───────
-        //     Nessun crop: ratio originale 1645×980 (non è un 16:9 esatto)
+        // ── 6. [C] — Immagine brand "Create. Explore. Travel." (nessun crop) ──
         {
             type: 'natural',
-            src:  imgTripMapDetail,
-            alt:  'Eurica — dettaglio viaggio Berlin con mappa 3D e pannello location',
+            src:  imgBrand,
+            alt:  'Eurica — visual di campagna "Create. Explore. Travel."',
         },
 
-        // ── 7. [C]+[D] — Icons + Day Tabs (full width, no parallax) ──────────
+        // ── 7. [D]+[E] — Icons + Day Tabs (full width, no parallax) ──────────
         {
             type: 'row',
             images: [
@@ -115,14 +119,22 @@ const eurica = {
             ],
         },
 
-        // ── 8. [E] — Overview Eurica color theme (nessun crop, 1600×900) ──────
+        // ── 8. [F] — Berlin trip detail, mappa 3D + pannello location ─────────
+        //     Nessun crop: ratio originale 1645×980 (non è un 16:9 esatto)
         {
             type: 'natural',
-            src:  imgEOverview,
-            alt:  'Eurica — overview del color theme con palette e componenti UI',
+            src:  imgTripMapDetail,
+            alt:  'Eurica — dettaglio viaggio Berlin con mappa 3D e pannello location',
         },
 
-        // ── 9. [F]+[G] — Boxes + Trip Header (full width, no parallax) ───────
+        // ── 9. [G] — Dashboard overview con globo interattivo (nessun crop) ───
+        {
+            type: 'natural',
+            src:  imgDashboard,
+            alt:  'Eurica — dashboard con globo interattivo, sidebar e statistiche viaggio',
+        },
+
+        // ── 10. [H]+[I] — Boxes + Trip Header (full width, no parallax) ──────
         {
             type: 'row',
             images: [
@@ -131,7 +143,7 @@ const eurica = {
             ],
         },
 
-        // ── 10. [H]+[I]+[L] — iPhone row ───────────────────────────────────────
+        // ── 11. [L]+[M]+[N] — iPhone row ────────────────────────────────────────
         {
             type: 'iphone-row',
             images: [

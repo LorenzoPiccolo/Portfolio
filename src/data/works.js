@@ -8,7 +8,7 @@ import buildZeroHero from '../../img/build-zero/build-zero-01.jpg';
 import imageFooter05 from '../../img/image-footer-05.jpg';
 import portfolioHero from '../../img/portfolio/portfolio-01.jpg';
 import atalusHero from '../../img/atalus/atalus-01.jpg';
-import euricaCover from '../../img/eurica/eurica-cover.png';
+import euricaPreview from '../../img/eurica/eurica-preview.png';
 
 export const WORKS = [
   {
@@ -31,7 +31,7 @@ export const WORKS = [
     id: 'eurica',
     title: 'Eurica',
     subtitle: 'UX/UI Design',
-    poster: euricaCover,
+    poster: euricaPreview,
     year: '2025',
     href: '/works/eurica',
   },
