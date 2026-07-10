@@ -1,5 +1,5 @@
 // src/pages/projects/ProjectPage.jsx
-import { useLayoutEffect, useEffect, useRef, useCallback } from 'react';
+import { useLayoutEffect, useEffect, useRef, useCallback, useState } from 'react';
 import { useTransition } from '../../context/TransitionContext.jsx';
 import Header from '../../components/Header.jsx';
 import Footer from '../../components/Footer.jsx';
@@ -78,6 +78,8 @@ export default function ProjectPage({ project }) {
     const { navigateTo } = useTransition();
     const resizeTick = useResizeTick();
     const descriptionRef = useRef(null);
+    const heroSectionRef = useRef(null);
+    const footerRef = useRef(null);
     const { handlers: backBtnHandlers, glowStyle: backBtnGlow } = useCursorGlow({ glowSize: 200 });
 
     const {
@@ -91,6 +93,47 @@ export default function ProjectPage({ project }) {
         sections    = [],
         nextProject,
     } = project || {};
+
+    // CTA button visibility — like FourthSection's "More projects":
+    // appears once the hero has been scrolled past, stays fixed while
+    // scrolling through the case history, and hides again once the
+    // footer arrives.
+    const [ctaPastHero, setCtaPastHero]   = useState(false);
+    const [ctaNearFooter, setCtaNearFooter] = useState(false);
+    const ctaVisible = Boolean(ctaButton) && ctaPastHero && !ctaNearFooter;
+
+    useLayoutEffect(() => {
+        if (!ctaButton) return undefined;
+        const heroEl   = heroSectionRef.current;
+        const footerEl = footerRef.current;
+        if (!heroEl || !footerEl) return undefined;
+
+        const ctx = gsap.context(() => {
+            ScrollTrigger.getById('project-cta-show')?.kill();
+            ScrollTrigger.create({
+                id: 'project-cta-show',
+                trigger: heroEl,
+                start: 'bottom top',
+                onEnter:     () => setCtaPastHero(true),
+                onLeaveBack: () => setCtaPastHero(false),
+                invalidateOnRefresh: true,
+                markers: false,
+            });
+
+            ScrollTrigger.getById('project-cta-footer')?.kill();
+            ScrollTrigger.create({
+                id: 'project-cta-footer',
+                trigger: footerEl,
+                start: 'top 90%',
+                onEnter:     () => setCtaNearFooter(true),
+                onLeaveBack: () => setCtaNearFooter(false),
+                invalidateOnRefresh: true,
+                markers: false,
+            });
+        });
+
+        return () => ctx.revert();
+    }, [resizeTick, ctaButton]);
 
     // Description word-by-word reveal
     useLayoutEffect(() => {
@@ -118,6 +161,28 @@ export default function ProjectPage({ project }) {
     return (
         <div className="min-h-screen bg-dark text-light">
 
+            {/* ── Floating CTA button — appears after the hero, hides near the footer ── */}
+            {ctaButton && (
+                <div
+                    className="pointer-events-none fixed left-1/2 -translate-x-1/2 z-[45]"
+                    style={{ bottom: 'max(1.5rem, calc(1.5rem + env(safe-area-inset-bottom, 0px)))' }}
+                >
+                    <div
+                        className={`transition-transform duration-500 ease-out will-change-transform ${ctaVisible ? 'scale-100' : 'scale-0'}`}
+                        style={{ transformOrigin: 'center bottom' }}
+                    >
+                        <div className="pointer-events-auto">
+                            <DynamicButton
+                                label={ctaButton.label}
+                                href={ctaButton.href}
+                                target={ctaButton.target}
+                                rel={ctaButton.rel}
+                            />
+                        </div>
+                    </div>
+                </div>
+            )}
+
             {/* ── Back button ── */}
             <button
                 onClick={() => navigateTo('/works')}
@@ -132,7 +197,7 @@ export default function ProjectPage({ project }) {
             <Header currentPage="Works" />
 
             {/* ── Hero ── */}
-            <section className="relative bg-dark pt-[300px]">
+            <section ref={heroSectionRef} className="relative bg-dark pt-[300px]">
                 <div className="w-full overflow-x-hidden">
                     <DynamicMarquee duration="70s">
                         <span className="font-urbanist font-normal text-[120px] md:text-[200px] leading-none text-light pr-16">
@@ -184,17 +249,7 @@ export default function ProjectPage({ project }) {
             {Object.keys(keyInfo).length > 0 && (
                 <section className="w-full bg-dark px-4 md:px-12 pb-10 md:pb-16">
                     <div className="flex flex-col gap-8 md:gap-10">
-                        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
-                            <h2 className="font-urbanist text-[26px] md:text-[32px] font-normal text-light">Key information</h2>
-                            {ctaButton && (
-                                <DynamicButton
-                                    label={ctaButton.label}
-                                    href={ctaButton.href}
-                                    target={ctaButton.target}
-                                    rel={ctaButton.rel}
-                                />
-                            )}
-                        </div>
+                        <h2 className="font-urbanist text-[26px] md:text-[32px] font-normal text-light">Key information</h2>
                         <div className="grid grid-cols-2 md:flex md:flex-wrap md:justify-between gap-6 md:gap-8">
                             {keyInfo.client && (
                                 <div className="flex flex-col gap-3">
@@ -241,7 +296,9 @@ export default function ProjectPage({ project }) {
                 <NextProjectSection nextProject={nextProject} navigateTo={navigateTo} />
             )}
 
-            <Footer resizeTick={resizeTick} />
+            <div ref={footerRef}>
+                <Footer resizeTick={resizeTick} />
+            </div>
         </div>
     );
 }
