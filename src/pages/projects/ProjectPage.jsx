@@ -247,6 +247,7 @@ function SectionRenderer({ section, index, name, resizeTick }) {
         case 'gallery':     return <GallerySection    section={section} name={name} />;
         case 'split':       return <SplitSection      section={section} name={name} />;
         case 'row':         return <RowSection        section={section} name={name} />;
+        case 'natural':     return <NaturalImageSection section={section} name={name} index={index} />;
         case 'wireframe':   return <WireframeSection  section={section} name={name} index={index} />;
         case 'masonry':     return <MasonrySection    section={section} name={name} />;
         case 'live-ui':     return (
@@ -297,6 +298,25 @@ function DesktopSection({ section, name, index }) {
                     style={{ borderRadius: IMAGE_RADIUS }}
                 />
             </div>
+        </section>
+    );
+}
+
+/**
+ * Single full-width image at its NATIVE aspect ratio — no forced box, no crop.
+ * Renders exactly as exported: width fills the section, height follows
+ * automatically from the image's own dimensions (no object-cover, no
+ * aspect-[...] container that could clip top/bottom or sides).
+ */
+function NaturalImageSection({ section, name, index }) {
+    return (
+        <section className="w-full bg-dark py-2 md:py-3" style={{ paddingLeft: IMAGE_PADDING, paddingRight: IMAGE_PADDING }}>
+            <img
+                src={section.src}
+                alt={section.alt || `${name} image ${index + 1}`}
+                className="w-full h-auto block"
+                style={{ borderRadius: IMAGE_RADIUS }}
+            />
         </section>
     );
 }

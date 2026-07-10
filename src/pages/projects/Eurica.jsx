@@ -44,9 +44,9 @@ const eurica = {
     },
     sections: [
 
-        // ── 1. Logo ───────────────────────────────────────────────────────────
+        // ── 1. Logo (nessun crop, ratio originale 1600×900) ─────────────────────
         {
-            type: 'desktop',
+            type: 'natural',
             src:  imgLogo,
             alt:  'Eurica — wordmark su sfondo lavanda',
         },
@@ -99,8 +99,9 @@ const eurica = {
         },
 
         // ── 6. [B-2] — Berlin trip detail, mappa 3D + pannello location ───────
+        //     Nessun crop: ratio originale 1645×980 (non è un 16:9 esatto)
         {
-            type: 'desktop',
+            type: 'natural',
             src:  imgTripMapDetail,
             alt:  'Eurica — dettaglio viaggio Berlin con mappa 3D e pannello location',
         },
@@ -114,9 +115,9 @@ const eurica = {
             ],
         },
 
-        // ── 8. [E] — Overview Eurica color theme (1600×900) ───────────────────
+        // ── 8. [E] — Overview Eurica color theme (nessun crop, 1600×900) ──────
         {
-            type: 'desktop',
+            type: 'natural',
             src:  imgEOverview,
             alt:  'Eurica — overview del color theme con palette e componenti UI',
         },
