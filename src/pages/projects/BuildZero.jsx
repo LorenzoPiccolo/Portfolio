@@ -82,11 +82,11 @@ const buildZero = {
             ],
         },
 
-        // ── 6. [C] — Panoramica schermate app (nessun crop) ────────────────────
+        // ── 6. [H] — Wireframes (nessun crop) ────────────────────────────────
         {
             type: 'natural',
-            src:  imgScreensOverview,
-            alt:  'Build Zero — panoramica delle schermate dell\'app',
+            src:  imgWireframes,
+            alt:  'Build Zero — wireframes dello scanner e della lista biglietti',
         },
 
         // ── 7. [D]+[E]+[F] — iPhone row ──────────────────────────────────────
@@ -106,11 +106,11 @@ const buildZero = {
             alt:  'Build Zero — user flow completo e architettura schermate',
         },
 
-        // ── 9. [H] — Wireframes (nessun crop) ────────────────────────────────
+        // ── 9. [C] — Panoramica schermate app (nessun crop) ────────────────────
         {
             type: 'natural',
-            src:  imgWireframes,
-            alt:  'Build Zero — wireframes dello scanner e della lista biglietti',
+            src:  imgScreensOverview,
+            alt:  'Build Zero — panoramica delle schermate dell\'app',
         },
 
     ],
