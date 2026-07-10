@@ -10,6 +10,7 @@ import useCursorGlow from '../../hooks/useCursorGlow.js';
 import arrow02Left  from '../../../img/icons/arrow-02-left.svg';
 import arrow02Right from '../../../img/icons/arrow-02-right.svg';
 import DynamicMarquee from '../../components/DynamicMarquee.jsx';
+import DynamicButton from '../../components/DynamicButton.jsx';
 
 const IMAGE_RADIUS  = '16px';
 const IMAGE_PADDING = '24px';
@@ -58,6 +59,7 @@ function renderRevealText(text) {
  *   heroImage,
  *   description,
  *   keyInfo: { client, timeSpan, typeOfWork, kpi },
+ *   ctaButton: { label, href, target, rel } (optional — e.g. "Prova l'app"),
  *   sections: [ ...section objects ],
  *   nextProject: { name, path, heroImage }
  * }
@@ -85,6 +87,7 @@ export default function ProjectPage({ project }) {
         heroImage,
         description,
         keyInfo     = {},
+        ctaButton   = null,
         sections    = [],
         nextProject,
     } = project || {};
@@ -181,7 +184,17 @@ export default function ProjectPage({ project }) {
             {Object.keys(keyInfo).length > 0 && (
                 <section className="w-full bg-dark px-4 md:px-12 pb-10 md:pb-16">
                     <div className="flex flex-col gap-8 md:gap-10">
-                        <h2 className="font-urbanist text-[26px] md:text-[32px] font-normal text-light">Key information</h2>
+                        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+                            <h2 className="font-urbanist text-[26px] md:text-[32px] font-normal text-light">Key information</h2>
+                            {ctaButton && (
+                                <DynamicButton
+                                    label={ctaButton.label}
+                                    href={ctaButton.href}
+                                    target={ctaButton.target}
+                                    rel={ctaButton.rel}
+                                />
+                            )}
+                        </div>
                         <div className="grid grid-cols-2 md:flex md:flex-wrap md:justify-between gap-6 md:gap-8">
                             {keyInfo.client && (
                                 <div className="flex flex-col gap-3">

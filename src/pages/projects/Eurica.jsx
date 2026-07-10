@@ -47,6 +47,11 @@ const eurica = {
         typeOfWork: 'App Design · Dev',
         kpi:        'User Experience',
     },
+    ctaButton: {
+        label:  "Prova l'app",
+        href:   'https://eurica.it',
+        target: '_blank',
+    },
     sections: [
 
         // ── 1. [01] Logo (nessun crop, ratio originale 1600×900) ────────────────
