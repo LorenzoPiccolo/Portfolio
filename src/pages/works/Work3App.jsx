@@ -15,9 +15,7 @@ import useAttentionTitle        from '../../hooks/useAttentionTitle.js';
 import buildZeroImg  from '../../../img/build-zero/build-zero-01.jpg';
 import portfolioImg  from '../../../img/portfolio/portfolio-01.jpg';
 import alidaysImg    from '../../../img/footer-image.jpg';
-// NOTE: replace with a real imported image once Eurica screenshots are ready
-// e.g.: import euricaImg from '../../../img/eurica/eurica-01.jpg';
-const euricaImg = 'https://placehold.co/800x600/0A1628/4FACDE?text=Eurica';
+import euricaImg     from '../../../img/eurica/eurica-cover.png';
 import romajiImg     from '../../../img/romaji/romaji-01.jpg';
 import atalusImg     from '../../../img/atalus/atalus-01.jpg';
 import rebornImg     from '../../../img/reborn/reborn-01.jpg';

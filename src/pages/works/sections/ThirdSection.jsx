@@ -7,6 +7,7 @@ import imageFooter04 from '../../../../img/image-footer-04.jpg';
 import imageFooter05 from '../../../../img/image-footer-05.jpg';
 import footerImage from '../../../../img/footer-image.jpg';
 import gradientImage from '../../../../img/gradient.png';
+import euricaCover from '../../../../img/eurica/eurica-cover.png';
 import portfolioHero from '../../../../img/portfolio/portfolio-01.jpg';
 import romajiHero from '../../../../img/romaji/romaji-01.jpg';
 import rebornHero from '../../../../img/reborn/reborn-01.jpg';
@@ -35,14 +36,14 @@ const CASE_HISTORY_CARDS = [
     href: '/works/portfolio-website',
   },
   {
-    id: 'alidays',
-    title: 'Alidays',
-    type: 'Brand Identity',
-    image: footerImage,
+    id: 'eurica',
+    title: 'Eurica',
+    type: 'UX/UI',
+    image: euricaCover,
     size: 'sm',
     className: 'lg:row-start-1 lg:col-start-10',
-    year: '2024',
-    href: '/works/alidays',
+    year: '2025',
+    href: '/works/eurica',
   },
   {
     id: 'redi-website',

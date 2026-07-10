@@ -8,6 +8,7 @@ import buildZeroHero from '../../img/build-zero/build-zero-01.jpg';
 import imageFooter05 from '../../img/image-footer-05.jpg';
 import portfolioHero from '../../img/portfolio/portfolio-01.jpg';
 import atalusHero from '../../img/atalus/atalus-01.jpg';
+import euricaCover from '../../img/eurica/eurica-cover.png';
 
 export const WORKS = [
   {
@@ -27,12 +28,12 @@ export const WORKS = [
     href: '/works/portfolio-website',
   },
   {
-    id: 'alidays',
-    title: 'Alidays',
-    subtitle: 'Brand Identity',
-    poster: footerImage,
-    year: '2024',
-    href: '/works/alidays',
+    id: 'eurica',
+    title: 'Eurica',
+    subtitle: 'UX/UI Design',
+    poster: euricaCover,
+    year: '2025',
+    href: '/works/eurica',
   },
   {
     id: 'atalus',

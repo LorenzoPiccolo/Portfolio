@@ -3,23 +3,30 @@ import ProjectPage from './ProjectPage.jsx';
 
 import nextHeroImage from '../../../img/romaji/romaji-01.jpg';
 
-// Hero + brand
+// Hero + landscape desktop sections
 import imgCover    from '../../../img/eurica/eurica-cover.png';
 import imgLogo     from '../../../img/eurica/eurica-logo.png';
 import imgOverview from '../../../img/eurica/eurica-overview.png';
 
-// Components / UI details (portrait)
-import imgMap        from '../../../img/eurica/eurica-g-map.png';
-import imgBerlinCard from '../../../img/eurica/eurica-a-berlin-card.png';
+// [A] [B] — 800×1000 portrait split
+import imgBerlinCard  from '../../../img/eurica/eurica-a-berlin-card.png';
 import imgAddActivity from '../../../img/eurica/eurica-b-add-activity.png';
-import imgIcons      from '../../../img/eurica/eurica-c-icons.png';
-import imgSidebar    from '../../../img/eurica/eurica-d-sidebar.png';
-import imgBoxes      from '../../../img/eurica/eurica-f-boxes.png';
 
-// Mobile screens (iphone-row)
-import imgMobile01 from '../../../img/eurica/eurica-h-mobile-01.png';
-import imgMobile02 from '../../../img/eurica/eurica-i-mobile-02.png';
-import imgMobile03 from '../../../img/eurica/eurica-l-mobile-03.png';
+// [C] [D] — 800×1000 portrait split
+import imgIcons   from '../../../img/eurica/eurica-c-icons.png';
+import imgDayTabs from '../../../img/eurica/eurica-d-sidebar.png';
+
+// [E] — 1600×900 landscape desktop
+import imgEOverview from '../../../img/eurica/eurica-e-overview.png';
+
+// [F] [G] — 800×1000 portrait split
+import imgBoxes      from '../../../img/eurica/eurica-f-boxes.png';
+import imgTripHeader from '../../../img/eurica/eurica-g-map.png';
+
+// [H] [I] [L] — iPhone row
+import imgMobileTrips  from '../../../img/eurica/eurica-h-mobile-01.png';
+import imgMobileDetail from '../../../img/eurica/eurica-i-mobile-02.png';
+import imgMobileHome   from '../../../img/eurica/eurica-l-mobile-03.png';
 
 const eurica = {
     name: 'Eurica',
@@ -35,14 +42,14 @@ const eurica = {
     },
     sections: [
 
-        // ── 1. Logo / brand mark ──────────────────────────────────────────────
+        // ── 1. Logo ───────────────────────────────────────────────────────────
         {
             type: 'desktop',
             src:  imgLogo,
             alt:  'Eurica — wordmark su sfondo lavanda',
         },
 
-        // ── 2. Testo — visione progettuale ────────────────────────────────────
+        // ── 2. Testo sinistra ─────────────────────────────────────────────────
         {
             type: 'text',
             layout: 'left',
@@ -80,40 +87,54 @@ const eurica = {
             ],
         },
 
-        // ── 5. Testo — modello di interazione ─────────────────────────────────
+        // ── 5. Testo destra ───────────────────────────────────────────────────
         {
             type: 'text',
             layout: 'right',
             content: 'Il sistema di interazione si basa sulla divulgazione progressiva: i dettagli emergono solo quando sono rilevanti. Drag & drop per riordinare le attività, pill dei giorni per navigare, hover sulle card per accedere alle azioni — senza toolbar permanenti che occupano spazio.',
         },
 
-        // ── 6. Gallery — mappa 3D + dettaglio viaggio + modale ───────────────
+        // ── 6. [A]+[B] — Berlin card + Add activity ───────────────────────────
         {
-            type: 'gallery',
+            type: 'split',
             images: [
-                { src: imgMap,        alt: 'Eurica — mappa Mapbox 3D Berlin con pin attività',    aspect: 'portrait' },
-                { src: imgBerlinCard, alt: 'Eurica — card viaggio Berlin con lista attività Day 1', aspect: 'portrait' },
-                { src: imgAddActivity, alt: 'Eurica — modale "Add activity" con time picker e categorie', aspect: 'portrait' },
+                { src: imgBerlinCard,  alt: 'Eurica — dettaglio viaggio Berlin con lista attività Day 1', aspect: 'portrait' },
+                { src: imgAddActivity, alt: 'Eurica — modale "Add activity" con time picker e categorie',  aspect: 'portrait' },
             ],
         },
 
-        // ── 7. Gallery — icone 3D + sidebar + componenti ─────────────────────
+        // ── 7. [C]+[D] — Icons + Day Tabs ────────────────────────────────────
         {
-            type: 'gallery',
+            type: 'split',
             images: [
-                { src: imgIcons,   alt: 'Eurica — libreria icone 3D per le categorie di viaggio', aspect: 'portrait'  },
-                { src: imgSidebar, alt: 'Eurica — sidebar con navigazione e lista trip',           aspect: 'portrait'  },
-                { src: imgBoxes,   alt: 'Eurica — componenti UI: note editor, reminders, next trip widget', aspect: 'portrait' },
+                { src: imgIcons,   alt: 'Eurica — libreria icone 3D per le categorie di viaggio', aspect: 'portrait' },
+                { src: imgDayTabs, alt: 'Eurica — day tabs e filter chips nella vista itinerario', aspect: 'portrait' },
             ],
         },
 
-        // ── 8. iPhone row — app mobile ────────────────────────────────────────
+        // ── 8. [E] — Overview Eurica color theme (1600×900) ──────────────────
+        {
+            type: 'desktop',
+            src:  imgEOverview,
+            alt:  'Eurica — overview del color theme con palette e componenti UI',
+        },
+
+        // ── 9. [F]+[G] — Boxes + Trip Header ─────────────────────────────────
+        {
+            type: 'split',
+            images: [
+                { src: imgBoxes,      alt: 'Eurica — componenti UI: note editor, reminders, next trip widget', aspect: 'portrait' },
+                { src: imgTripHeader, alt: 'Eurica — trip header con breadcrumb e navigazione contestuale',     aspect: 'portrait' },
+            ],
+        },
+
+        // ── 10. [H]+[I]+[L] — iPhone row ──────────────────────────────────────
         {
             type: 'iphone-row',
             images: [
-                { src: imgMobile03, alt: 'Eurica mobile — Home con globo e next trip' },
-                { src: imgMobile01, alt: 'Eurica mobile — All Trips con filtri e trip card' },
-                { src: imgMobile02, alt: 'Eurica mobile — dettaglio Berlin con mappa 3D' },
+                { src: imgMobileTrips,  alt: 'Eurica mobile — All Trips con filtri e trip card' },
+                { src: imgMobileDetail, alt: 'Eurica mobile — dettaglio Berlin con mappa 3D' },
+                { src: imgMobileHome,   alt: 'Eurica mobile — Home con globo e next trip' },
             ],
         },
 
