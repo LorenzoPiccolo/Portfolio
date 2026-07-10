@@ -609,9 +609,9 @@ function SplitSection({ section, name }) {
 }
 
 /**
- * Two images side by side, full width, static (no parallax).
- * Desktop: each image takes 50% of the available width, edge to edge
- *          (only the standard section padding), no dark gutters between.
+ * Two images side by side, static (no parallax).
+ * Desktop: the pair sits in a 70vw column centered in the section, each
+ *          image taking 50% of that column.
  * Mobile:  stacked full-width, each image uses its own aspect ratio.
  * section.images = [leftImg, rightImg]  each { src, alt, aspect }
  */
@@ -623,7 +623,7 @@ function RowSection({ section, name }) {
     const rMobile = getMobileAspect(right.aspect || 'portrait');
     return (
         <section className="w-full bg-dark py-10 md:py-16" style={{ paddingLeft: IMAGE_PADDING, paddingRight: IMAGE_PADDING }}>
-            <div className="flex flex-col md:flex-row gap-4 md:gap-6">
+            <div className="flex flex-col md:flex-row gap-4 md:gap-6 md:w-[70vw] md:mx-auto">
                 <div className={`w-full md:w-1/2 ${lMobile} md:aspect-[4/5]`}>
                     <img
                         src={left.src}
