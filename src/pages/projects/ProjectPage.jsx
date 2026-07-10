@@ -270,7 +270,7 @@ function SectionRenderer({ section, index, name, resizeTick }) {
 function FullImageSection({ section, name, index }) {
     const mobileAspect = getMobileAspect(section.aspect);
     return (
-        <section className="w-full bg-dark py-10 md:py-16" style={{ paddingLeft: IMAGE_PADDING, paddingRight: IMAGE_PADDING }}>
+        <section className="w-full bg-dark py-2 md:py-3" style={{ paddingLeft: IMAGE_PADDING, paddingRight: IMAGE_PADDING }}>
             <div className={`w-full ${mobileAspect} md:aspect-[16/9]`}>
                 <img
                     src={section.src}
@@ -288,7 +288,7 @@ function FullImageSection({ section, name, index }) {
  */
 function DesktopSection({ section, name, index }) {
     return (
-        <section className="w-full bg-dark py-10 md:py-16" style={{ paddingLeft: IMAGE_PADDING, paddingRight: IMAGE_PADDING }}>
+        <section className="w-full bg-dark py-2 md:py-3" style={{ paddingLeft: IMAGE_PADDING, paddingRight: IMAGE_PADDING }}>
             <div className="w-full aspect-[16/9]">
                 <img
                     src={section.src}
@@ -622,7 +622,7 @@ function RowSection({ section, name }) {
     const lMobile = getMobileAspect(left.aspect || 'portrait');
     const rMobile = getMobileAspect(right.aspect || 'portrait');
     return (
-        <section className="w-full bg-dark py-10 md:py-16" style={{ paddingLeft: IMAGE_PADDING, paddingRight: IMAGE_PADDING }}>
+        <section className="w-full bg-dark py-2 md:py-3" style={{ paddingLeft: IMAGE_PADDING, paddingRight: IMAGE_PADDING }}>
             <div className="flex flex-col md:flex-row gap-4 md:gap-6 md:w-[70vw] md:mx-auto">
                 <div className={`w-full md:w-1/2 ${lMobile} md:aspect-[4/5]`}>
                     <img
@@ -922,7 +922,7 @@ function GallerySplit({ left, right, name, startIdx, onLoad }) {
     const rMobile = getMobileAspect(right.aspect);
 
     return (
-        <section className="w-full bg-dark py-16 md:py-24" style={{ paddingLeft: IMAGE_PADDING, paddingRight: IMAGE_PADDING }}>
+        <section className="w-full bg-dark py-2 md:py-3" style={{ paddingLeft: IMAGE_PADDING, paddingRight: IMAGE_PADDING }}>
             {/* Mobile: stacked */}
             <div className="flex flex-col gap-4 md:hidden">
                 <ParallaxImage
@@ -960,7 +960,7 @@ function GallerySplit({ left, right, name, startIdx, onLoad }) {
 function GalleryFull({ image, name, idx, onLoad }) {
     const mA = getMobileAspect(image.aspect);
     return (
-        <section className="w-full bg-dark py-10 md:py-16" style={{ paddingLeft: IMAGE_PADDING, paddingRight: IMAGE_PADDING }}>
+        <section className="w-full bg-dark py-2 md:py-3" style={{ paddingLeft: IMAGE_PADDING, paddingRight: IMAGE_PADDING }}>
             <div className={`w-full ${mA} md:aspect-[16/9]`}>
                 <img
                     src={image.src}
