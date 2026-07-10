@@ -46,6 +46,23 @@ function renderRevealText(text) {
     ));
 }
 
+/**
+ * Lenis caches its own virtual scroll limit and only recalculates it when
+ * ScrollTrigger fires a global 'refresh' (see renderApp.jsx). Large
+ * case-history images that finish decoding after that point — or a
+ * client-side route change that never re-measures the new page — leave
+ * Lenis stuck at a shorter height than the real document, which feels like
+ * the scroll "stopping" partway down. Every <img> in this file calls this
+ * (debounced) on load so the real height is always picked back up.
+ */
+let scrollRefreshTimer = null;
+function scheduleScrollRefresh() {
+    if (scrollRefreshTimer) clearTimeout(scrollRefreshTimer);
+    scrollRefreshTimer = setTimeout(() => {
+        ScrollTrigger.refresh();
+    }, 120);
+}
+
 // ─────────────────────────────────────────────
 // Main page component
 // ─────────────────────────────────────────────
@@ -93,6 +110,13 @@ export default function ProjectPage({ project }) {
         sections    = [],
         nextProject,
     } = project || {};
+
+    // Re-measure once mounted — fixes Lenis staying stuck at the previous
+    // page's scroll limit after a client-side (SPA) navigation.
+    useEffect(() => {
+        const raf = requestAnimationFrame(() => ScrollTrigger.refresh());
+        return () => cancelAnimationFrame(raf);
+    }, []);
 
     // CTA button visibility — like FourthSection's "More projects":
     // appears once the hero has been scrolled past, stays fixed while
@@ -226,6 +250,7 @@ export default function ProjectPage({ project }) {
                             alt={`${name} hero`}
                             className="w-full h-full object-cover"
                             style={{ borderRadius: IMAGE_RADIUS }}
+                            onLoad={scheduleScrollRefresh}
                         />
                     </div>
                 )}
@@ -348,6 +373,7 @@ function FullImageSection({ section, name, index }) {
                     alt={section.alt || `${name} image ${index + 1}`}
                     className="w-full h-full object-cover"
                     style={{ borderRadius: IMAGE_RADIUS }}
+                    onLoad={scheduleScrollRefresh}
                 />
             </div>
         </section>
@@ -366,6 +392,7 @@ function DesktopSection({ section, name, index }) {
                     alt={section.alt || `${name} desktop ${index + 1}`}
                     className="w-full h-full object-cover"
                     style={{ borderRadius: IMAGE_RADIUS }}
+                    onLoad={scheduleScrollRefresh}
                 />
             </div>
         </section>
@@ -386,6 +413,7 @@ function NaturalImageSection({ section, name, index }) {
                 alt={section.alt || `${name} image ${index + 1}`}
                 className="w-full h-auto block"
                 style={{ borderRadius: IMAGE_RADIUS }}
+                onLoad={scheduleScrollRefresh}
             />
         </section>
     );
@@ -432,7 +460,7 @@ function IPhoneItem({ src, alt, strength, radius }) {
 
     return (
         <div ref={wrapRef}>
-            <img src={src} alt={alt} className="w-full block" style={{ borderRadius: radius }} />
+            <img src={src} alt={alt} className="w-full block" style={{ borderRadius: radius }} onLoad={scheduleScrollRefresh} />
         </div>
     );
 }
@@ -574,6 +602,7 @@ function PaletteSection({ section }) {
                                 strength={3 + i * 2}
                                 radius={IMAGE_RADIUS}
                                 className="w-full aspect-[4/3]"
+                                onLoad={scheduleScrollRefresh}
                             />
                         </div>
                     ))}
@@ -593,6 +622,7 @@ function PaletteSection({ section }) {
                                     strength={3 + i * 3}
                                     radius={IMAGE_RADIUS}
                                     className="w-full aspect-[4/3]"
+                                    onLoad={scheduleScrollRefresh}
                                 />
                             </div>
                         ))}
@@ -693,7 +723,7 @@ function SplitSection({ section, name }) {
             right={right}
             name={name}
             startIdx={0}
-            onLoad={() => {}}
+            onLoad={scheduleScrollRefresh}
         />
     );
 }
@@ -720,6 +750,7 @@ function RowSection({ section, name }) {
                         alt={left.alt || `${name} image`}
                         className="w-full h-full object-cover"
                         style={{ borderRadius: IMAGE_RADIUS }}
+                        onLoad={scheduleScrollRefresh}
                     />
                 </div>
                 <div className={`w-full md:w-1/2 ${rMobile} md:aspect-[4/5]`}>
@@ -728,6 +759,7 @@ function RowSection({ section, name }) {
                         alt={right.alt || `${name} image`}
                         className="w-full h-full object-cover"
                         style={{ borderRadius: IMAGE_RADIUS }}
+                        onLoad={scheduleScrollRefresh}
                     />
                 </div>
             </div>
@@ -749,6 +781,7 @@ function WireframeSection({ section, name, index }) {
                     alt={section.alt || `${name} wireframe ${index + 1}`}
                     className="w-full h-full object-contain"
                     style={{ borderRadius: IMAGE_RADIUS }}
+                    onLoad={scheduleScrollRefresh}
                 />
             </div>
         </section>
@@ -768,6 +801,7 @@ function MasonrySection({ section, name }) {
                             alt={img.alt || `${name} ${i + 1}`}
                             className="w-full h-auto"
                             style={{ borderRadius: IMAGE_RADIUS }}
+                            onLoad={scheduleScrollRefresh}
                         />
                     </div>
                 ))}

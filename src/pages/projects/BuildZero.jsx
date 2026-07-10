@@ -14,7 +14,7 @@ import imgTicketsCloseup from '../../../img/build-zero/build-zero-a-tickets-clos
 import imgArResult       from '../../../img/build-zero/build-zero-b-ar-result.png';
 
 // [C] — 1600×900 landscape, panoramica schermate app
-import imgScreensOverview from '../../../img/build-zero/build-zero-c-screens-overview.png';
+import imgScreensOverview from '../../../img/build-zero/build-zero-c-screens-overview.webp';
 
 // [D] [E] [F] — iPhone row (430×984)
 import imgTicketsList from '../../../img/build-zero/build-zero-d-tickets-list.png';

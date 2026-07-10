@@ -7,7 +7,7 @@ import imageFooter04 from '../../../../img/image-footer-04.jpg';
 import imageFooter05 from '../../../../img/image-footer-05.jpg';
 import footerImage from '../../../../img/footer-image.jpg';
 import gradientImage from '../../../../img/gradient.png';
-import euricaPreview from '../../../../img/eurica/eurica-preview.png';
+import euricaPreview from '../../../../img/eurica/eurica-preview.webp';
 import portfolioHero from '../../../../img/portfolio/portfolio-01.jpg';
 import romajiHero from '../../../../img/romaji/romaji-01.jpg';
 import rebornHero from '../../../../img/reborn/reborn-01.jpg';

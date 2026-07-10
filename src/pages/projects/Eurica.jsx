@@ -4,7 +4,7 @@ import ProjectPage from './ProjectPage.jsx';
 import nextHeroImage from '../../../img/romaji/romaji-01.jpg';
 
 // [00] Hero — campagna "Create. Explore. Travel." con wordmark
-import imgCover from '../../../img/eurica/eurica-cover.png';
+import imgCover from '../../../img/eurica/eurica-cover.webp';
 
 // [01] Logo — wordmark su sfondo lavanda
 import imgLogo from '../../../img/eurica/eurica-logo.png';
@@ -14,14 +14,14 @@ import imgBerlinCard  from '../../../img/eurica/eurica-a-berlin-card.png';
 import imgAddActivity from '../../../img/eurica/eurica-b-add-activity.png';
 
 // [C] — 1600×900 landscape, immagine brand/campagna
-import imgBrand from '../../../img/eurica/eurica-c-brand.png';
+import imgBrand from '../../../img/eurica/eurica-c-brand.webp';
 
 // [D] [E] — 800×1000 portrait row
 import imgIcons   from '../../../img/eurica/eurica-d-icons.png';
 import imgDayTabs from '../../../img/eurica/eurica-e-daytabs.png';
 
 // [F] — 1645×980 landscape, dettaglio viaggio Berlin con mappa 3D
-import imgTripMapDetail from '../../../img/eurica/eurica-f-tripmap.png';
+import imgTripMapDetail from '../../../img/eurica/eurica-f-tripmap.webp';
 
 // [G] — 1600×900 landscape, dashboard overview con globo interattivo
 import imgDashboard from '../../../img/eurica/eurica-g-dashboard.png';

@@ -3,7 +3,7 @@ import { useEffect, useRef, useState } from 'react';
 import { gsap } from 'gsap';
 import TransitionLink from './TransitionLink.jsx';
 import logo from '../../img/logo.svg';
-import cardImage from '../../img/eurica/eurica-cover.png';
+import cardImage from '../../img/eurica/eurica-cover.webp';
 import useCursorGlow from '../hooks/useCursorGlow.js';
 
 const NAV_LINKS = [

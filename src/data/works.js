@@ -8,7 +8,7 @@ import buildZeroCover from '../../img/build-zero/build-zero-cover.png';
 import imageFooter05 from '../../img/image-footer-05.jpg';
 import portfolioHero from '../../img/portfolio/portfolio-01.jpg';
 import atalusHero from '../../img/atalus/atalus-01.jpg';
-import euricaCover from '../../img/eurica/eurica-cover.png';
+import euricaCover from '../../img/eurica/eurica-cover.webp';
 
 export const WORKS = [
   {
