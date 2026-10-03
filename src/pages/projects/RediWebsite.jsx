@@ -21,6 +21,12 @@ const rediWebsite = {
         typeOfWork: 'Web Design',
         kpi: 'Performance',
     },
+    overview: {
+        title: 'A fast, accessible web platform.',
+        lede: 'A modern web platform built with performance and accessibility in mind.',
+        specs: [['Client', 'Redi'], ['Year', '2025'], ['Role', 'Web design'], ['Focus', 'Performance']],
+    },
+
     sections: [
         // 1. Immagine subito dopo le key information
         { type: 'desktop', src: image1, alt: 'Homepage design' },

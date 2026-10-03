@@ -16,6 +16,7 @@ import buildZeroImg  from '../../../img/build-zero/build-zero-preview.png';
 import portfolioImg  from '../../../img/portfolio/portfolio-01.jpg';
 import alidaysImg    from '../../../img/footer-image.jpg';
 import euricaImg     from '../../../img/eurica/eurica-preview.webp';
+import euricaHomeImg from '../../../img/eurica-home/kamakura-preview.webp';
 import romajiImg     from '../../../img/romaji/romaji-01.jpg';
 import atalusImg     from '../../../img/atalus/atalus-01.jpg';
 import rebornImg     from '../../../img/reborn/reborn-01.jpg';
@@ -57,6 +58,15 @@ export const ALL_PROJECTS = [
     year: '2025',
     href: '/works/eurica',
     image: euricaImg,
+  },
+  {
+    id: 'eurica-home',
+    title: 'Eurica Home',
+    discipline: 'Web',
+    services: ['Web Design', 'Development'],
+    year: '2026',
+    href: '/works/eurica-home',
+    image: euricaHomeImg,
   },
   {
     id: 'romaji',

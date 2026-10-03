@@ -1,51 +1,53 @@
 // src/pages/projects/Atalus.jsx
 import ProjectPage from './ProjectPage.jsx';
-
 import heroImage     from '../../../img/atalus/atalus-01.jpg';
 import nextHeroImage from '../../../img/build-zero/build-zero-01.jpg';
-import image2 from '../../../img/atalus/atalus-02.jpg';
-import image3 from '../../../img/atalus/atalus-03.jpg';
-import image4 from '../../../img/atalus/atalus-04.jpg';
-import image5 from '../../../img/atalus/atalus-05.jpg';
-import image6 from '../../../img/atalus/atalus-06.jpg';
+import imgShelter  from '../../../img/atalus/atalus-02.jpg';
+import imgCards    from '../../../img/atalus/atalus-03.jpg';
+import imgTotem    from '../../../img/atalus/atalus-04.jpg';
+import imgManual   from '../../../img/atalus/atalus-05.jpg';
+import imgSocial   from '../../../img/atalus/atalus-06.jpg';
 
 const atalus = {
     name: 'Atalus',
     category: 'BRAND IDENTITY',
     year: '2025',
+    theme: 'atalus',
+    hue: '#B48CFF',
     heroImage,
-    description: 'A sophisticated brand identity for a luxury service. Every element was designed to convey elegance, trust, and attention to detail.',
-    keyInfo: {
-        client: 'Atalus',
-        timeSpan: '2025',
-        typeOfWork: 'Brand Identity',
-        kpi: 'Visual Restyling',
+    heroAlt: 'The Atalus mark on violet ribbons',
+
+    overview: {
+        title: 'One A that carries everything.',
+        lede: 'Atalus is business software by Portico Digitale. The mark had to work at every size, from the app icon to the totem.',
+        specs: [['Client', 'Atalus, Portico Digitale'], ['Year', '2025'], ['Role', 'Brand identity'], ['Deliverables', 'Mark, colours, applications']],
     },
+
+    highlights: [
+        { src: imgManual,  alt: 'A page of the brand guidelines', strong: 'The guidelines.', text: 'Icon, variants and palette on one board, including the sister brand Laworo.' },
+        { src: imgCards,   alt: 'Atalus business cards', strong: 'On paper.', text: 'Violet business cards with the mark in white.' },
+        { src: imgShelter, alt: 'Atalus poster in a bus shelter at night', position: '50% 60%', strong: 'On the street.', text: 'A bus-shelter poster, at night.' },
+        { src: imgSocial,  alt: 'The Atalus Instagram profile', position: '50% 30%', strong: 'On social.', text: 'The Instagram profile, all in violet.' },
+    ],
+
     sections: [
-        // 1. Immagine subito dopo le key information
-        { type: 'full-image', src: image2, alt: 'Brand applications', aspect: 'landscape' },
-
-        // 2. Colour palette + typography — aggiungi le immagini quando pronte
-        // { type: 'palette', paletteImage: { src: paletteImg, alt: 'Color palette' }, typographyImage: { src: typographyImg, alt: 'Typography' } },
-
-        // 3. Testo narrativo
+        { type: 'chapter', id: 'colour', nav: 'Colour', eyebrow: 'Colour', title: 'One violet, five shades.', lede: <>From almost black to lilac. The middle shade is called <strong>Forgotten Purple</strong>.</> },
+        // Valori campionati dalle immagini del progetto: da sostituire con quelli del manuale.
         {
-            type: 'text',
-            layout: 'right',
-            content: 'The identity system includes a refined color palette, custom typography selections, and a comprehensive set of brand guidelines for consistent application.',
-        },
-
-        // 4. Gallery
-        {
-            type: 'gallery',
-            images: [
-                { src: image3, alt: 'Visual identity',    aspect: 'landscape' },
-                { src: image4, alt: 'Stationery design',  aspect: 'landscape' },
-                { src: image5, alt: 'Final presentation', aspect: 'landscape' },
-                { src: image6, alt: 'Detail view',        aspect: 'landscape' },
+            type: 'bands',
+            colors: [
+                { name: 'Lilac',            hex: '#E8E4ED', ink: '#110B29' },
+                { name: 'Forgotten Purple', hex: '#A970FF', ink: '#110B29' },
+                { name: 'Mid violet',       hex: '#67549E', ink: '#fff' },
+                { name: 'Night violet',     hex: '#2A1B57', ink: '#fff' },
+                { name: 'Almost black',     hex: '#110B29', ink: '#fff', border: true },
             ],
         },
+
+        { type: 'chapter', id: 'world', nav: 'In the world', eyebrow: 'In the world', title: 'Three words, everywhere.', lede: 'The payoff, in the client’s own words: organise, simplify, accelerate.' },
+        { type: 'shrink', src: imgTotem, alt: 'Atalus totem with the payoff', words: ['Organizza.', 'Semplifica.', 'Accelera.'], deep: '#0F0824', accent: '#A970FF' },
     ],
+
     nextProject: {
         name: 'Build Zero',
         path: '/works/build-zero',

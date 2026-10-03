@@ -11,9 +11,16 @@ import arrow02Left  from '../../../img/icons/arrow-02-left.svg';
 import arrow02Right from '../../../img/icons/arrow-02-right.svg';
 import DynamicMarquee from '../../components/DynamicMarquee.jsx';
 import DynamicButton from '../../components/DynamicButton.jsx';
-
-const IMAGE_RADIUS  = '16px';
-const IMAGE_PADDING = '24px';
+import './caseHistory.css';
+import { LegacySection, scheduleScrollRefresh } from './sections/LegacySections.jsx';
+import { LocalNav, Overview, Chapter, CopyTwo, Outro, Highlights } from './sections/common.jsx';
+import {
+    ScreenTour, PhoneRow, BrandGrid, AppSystem, ColorBands, ShrinkPayoff, PaperCover,
+    Bleed, Quote, VinylSleeve, BackCover, PageScroll, DeviceSwitch, SiteSystem,
+} from './sections/custom.jsx';
+import EuricaLive from './eurica/EuricaLive.jsx';
+import LandingFeatures from './eurica/LandingFeatures.jsx';
+import LandingHero from './eurica/LandingHero.jsx';
 
 // Cursor-follow constants (match Work3App)
 const LERP_DUR       = 0.35;
@@ -25,76 +32,64 @@ const IMAGE_H        = 420;
 const IMAGE_OFFSET_X = 28;
 const IMAGE_OFFSET_Y = -IMAGE_H * 0.45;
 
-// ─────────────────────────────────────────────
-// Helpers
-// ─────────────────────────────────────────────
+// I tipi di sezione nuovi. Tutto il resto passa a LegacySection (le sezioni della prima versione).
+const SECTIONS = {
+    chapter: Chapter,
+    copy: CopyTwo,
+    outro: Outro,
+    highlights: ({ section }) => <Highlights items={section.items} title={section.title} />,
+    tour: ScreenTour,
+    phones: PhoneRow,
+    brandgrid: BrandGrid,
+    appsystem: AppSystem,
+    bands: ColorBands,
+    shrink: ShrinkPayoff,
+    papercover: PaperCover,
+    bleed: Bleed,
+    quote: Quote,
+    sleeve: VinylSleeve,
+    backcover: BackCover,
+    pagescroll: PageScroll,
+    devices: DeviceSwitch,
+    sitesystem: SiteSystem,
+    'eurica-live': EuricaLive,
+    'landing-features': LandingFeatures,
+    'landing-hero': LandingHero,
+};
 
-/** Maps image.aspect → Tailwind class for mobile */
-function getMobileAspect(aspect) {
-    switch (aspect) {
-        case 'portrait':  return 'aspect-[4/5]';
-        case 'square':    return 'aspect-square';
-        case 'landscape':
-        default:          return 'aspect-[16/9]';
-    }
-}
-
-/** Splits a string into animated word spans */
-function renderRevealText(text) {
-    return text.split(' ').map((w, i) => (
-        <span key={i} className="reveal-word text-light/20 inline-block mr-3">{w}</span>
-    ));
+/** Senza `overview` (progetti non ancora migrati) la panoramica si ricava da description e keyInfo. */
+function deriveOverview(project) {
+    if (project.overview) return project.overview;
+    const k = project.keyInfo || {};
+    const specs = [['Client', k.client], ['Time Span', k.timeSpan], ['Type of Work', k.typeOfWork], ['Focus', k.kpi]].filter(([, v]) => v);
+    if (!project.description && !specs.length) return null;
+    return { title: project.name, lede: project.description, specs };
 }
 
 /**
- * Lenis caches its own virtual scroll limit and only recalculates it when
- * ScrollTrigger fires a global 'refresh' (see renderApp.jsx). Large
- * case-history images that finish decoding after that point — or a
- * client-side route change that never re-measures the new page — leave
- * Lenis stuck at a shorter height than the real document, which feels like
- * the scroll "stopping" partway down. Every <img> in this file calls this
- * (debounced) on load so the real height is always picked back up.
- */
-let scrollRefreshTimer = null;
-function scheduleScrollRefresh() {
-    if (scrollRefreshTimer) clearTimeout(scrollRefreshTimer);
-    scrollRefreshTimer = setTimeout(() => {
-        ScrollTrigger.refresh();
-    }, 120);
-}
-
-// ─────────────────────────────────────────────
-// Main page component
-// ─────────────────────────────────────────────
-
-/**
- * ProjectPage — universal project page template.
+ * ProjectPage — lo scheletro di tutte le case history (stile pagina prodotto, pulito e minimale).
+ *
+ *   Intestazione (marquee del nome, barra categoria · scroll · anno, prima immagine che si allarga)
+ *   → barra di sezione (si ferma sotto l'header) → panoramica (titolo, due righe, dati in riga)
+ *   → «In short» (carosello) → sezioni del progetto → Next Project → Footer.
  *
  * Project data shape:
  * {
- *   name, category, year,
- *   heroImage,
- *   description,
- *   keyInfo: { client, timeSpan, typeOfWork, kpi },
- *   ctaButton: { label, href, target, rel } (optional — e.g. "Prova l'app"),
- *   sections: [ ...section objects ],
+ *   name, category, year, heroImage, heroAlt,
+ *   theme: 'eurica' | 'home' | 'atalus' | 'romaji' | 'reborn'   (variabili colore di caseHistory.css)
+ *   hue:   colore delle parole sopra i titoli (default: primary del sito)
+ *   overview:   { eyebrow, title, lede, specs: [[label, value], ...] }
+ *   highlights: [{ src, alt, strong, text, fit, bg, position }]
+ *   ctaButton:  { label, href, target, rel }   (bottone fluttuante, opzionale)
+ *   sections:   [{ type, ... }]   tipi in SECTIONS qui sopra, oppure quelli di LegacySections
+ *               un `chapter` con `nav` finisce anche nella barra di sezione
  *   nextProject: { name, path, heroImage }
  * }
- *
- * Section types:
- *   { type: 'full-image',  src, alt, aspect }
- *   { type: 'desktop',     src, alt }
- *   { type: 'iphone-row',  images: [{src,alt},...] }
- *   { type: 'text',        content, layout: 'left'|'right'|'center'|'full' }
- *   { type: 'palette',     colors: [{hex,name},...], fonts: [{name,weights,specimen},...] }
- *   { type: 'gallery',     images: [{src,alt,aspect},...] }
- *   { type: 'wireframe',   src, alt, aspect }
- *   { type: 'masonry',     images: [{src,alt},...] }
  */
 export default function ProjectPage({ project }) {
     const { navigateTo } = useTransition();
     const resizeTick = useResizeTick();
-    const descriptionRef = useRef(null);
+    const rootRef = useRef(null);
     const heroSectionRef = useRef(null);
     const footerRef = useRef(null);
     const { handlers: backBtnHandlers, glowStyle: backBtnGlow } = useCursorGlow({ glowSize: 200 });
@@ -104,12 +99,16 @@ export default function ProjectPage({ project }) {
         category    = 'WEBSITE',
         year        = '2025',
         heroImage,
-        description,
-        keyInfo     = {},
+        heroAlt,
+        theme,
+        hue,
+        highlights,
         ctaButton   = null,
         sections    = [],
         nextProject,
     } = project || {};
+    const overview = deriveOverview(project || {});
+    const navLinks = sections.filter((s) => s.type === 'chapter' && s.nav).map((s) => ({ id: s.id, label: s.nav }));
 
     // Re-measure once mounted — fixes Lenis staying stuck at the previous
     // page's scroll limit after a client-side (SPA) navigation.
@@ -141,9 +140,7 @@ export default function ProjectPage({ project }) {
                 onEnter:     () => setCtaPastHero(true),
                 onLeaveBack: () => setCtaPastHero(false),
                 invalidateOnRefresh: true,
-                markers: false,
             });
-
             ScrollTrigger.getById('project-cta-footer')?.kill();
             ScrollTrigger.create({
                 id: 'project-cta-footer',
@@ -152,663 +149,128 @@ export default function ProjectPage({ project }) {
                 onEnter:     () => setCtaNearFooter(true),
                 onLeaveBack: () => setCtaNearFooter(false),
                 invalidateOnRefresh: true,
-                markers: false,
             });
         });
-
         return () => ctx.revert();
     }, [resizeTick, ctaButton]);
 
-    // Description word-by-word reveal
+    // Effetti comuni: la prima immagine si allarga, i titoli salgono, i dati entrano a scalare
     useLayoutEffect(() => {
-        const el = descriptionRef.current;
-        if (!el) return;
+        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return undefined;
+        const root = rootRef.current;
         const ctx = gsap.context(() => {
-            const words = el.querySelectorAll('.reveal-word');
-            if (!words.length) return;
-            gsap.set(words, { opacity: 0.2, color: 'var(--color-light)' });
-            ScrollTrigger.getById('project-desc')?.kill();
-            gsap.timeline({
-                scrollTrigger: {
-                    id: 'project-desc',
-                    trigger: el,
-                    start: 'top 70%',
-                    end: () => `+=${Math.max(600, window.innerHeight * 0.8)}`,
-                    scrub: true,
-                    invalidateOnRefresh: true,
-                },
-            }).to(words, { opacity: 1, ease: 'none', stagger: { each: 0.12, from: 'start' } });
-        }, el);
+            const hero = root.querySelector('.heroimg .frame');
+            if (hero) {
+                gsap.fromTo(hero, { clipPath: 'inset(0% 12% 0% 12% round 16px)' }, {
+                    clipPath: 'inset(0% 0% 0% 0% round 16px)', ease: 'none',
+                    scrollTrigger: { trigger: hero, start: 'top 90%', end: 'top 12%', scrub: true },
+                });
+            }
+            root.querySelectorAll('.ov > .eb, .ov > .display, .ov > .lede, .ch > *').forEach((el) => {
+                gsap.from(el, { y: 36, opacity: 0, duration: 1, ease: 'power3.out', scrollTrigger: { trigger: el, start: 'top 90%', once: true } });
+            });
+            root.querySelectorAll('.specs > div').forEach((el, i) => {
+                gsap.from(el, { y: 24, opacity: 0, duration: 0.8, ease: 'power3.out', delay: i * 0.07, scrollTrigger: { trigger: el, start: 'top 95%', once: true } });
+            });
+        }, root);
         return () => ctx.revert();
-    }, [resizeTick, description]);
+    }, [resizeTick]);
 
     return (
-        <div className="min-h-screen bg-dark text-light">
+        <div ref={rootRef} className="chp min-h-screen bg-dark text-light" style={hue ? { '--hue': hue } : undefined}>
+            <div className={`cs${theme ? ` cs--${theme}` : ''}`}>
 
-            {/* ── Floating CTA button — appears after the hero, hides near the footer ── */}
-            {ctaButton && (
-                <div
-                    className="pointer-events-none fixed left-1/2 -translate-x-1/2 z-[45]"
-                    style={{ bottom: 'max(1.5rem, calc(1.5rem + env(safe-area-inset-bottom, 0px)))' }}
-                >
+                {/* ── Floating CTA button — appears after the hero, hides near the footer ── */}
+                {ctaButton && (
                     <div
-                        className={`transition-transform duration-500 ease-out will-change-transform ${ctaVisible ? 'scale-100' : 'scale-0'}`}
-                        style={{ transformOrigin: 'center bottom' }}
+                        className="pointer-events-none fixed left-1/2 -translate-x-1/2 z-[45]"
+                        style={{ bottom: 'max(1.5rem, calc(1.5rem + env(safe-area-inset-bottom, 0px)))' }}
                     >
-                        <div className="pointer-events-auto">
-                            <DynamicButton
-                                label={ctaButton.label}
-                                href={ctaButton.href}
-                                target={ctaButton.target}
-                                rel={ctaButton.rel}
-                            />
+                        <div
+                            className={`transition-transform duration-500 ease-out will-change-transform ${ctaVisible ? 'scale-100' : 'scale-0'}`}
+                            style={{ transformOrigin: 'center bottom' }}
+                        >
+                            <div className="pointer-events-auto">
+                                <DynamicButton label={ctaButton.label} href={ctaButton.href} target={ctaButton.target} rel={ctaButton.rel} />
+                            </div>
                         </div>
-                    </div>
-                </div>
-            )}
-
-            {/* ── Back button ── */}
-            <button
-                onClick={() => navigateTo('/works')}
-                className="fixed top-[84px] left-4 z-50 w-[60px] h-[60px] md:top-6 md:left-6 md:w-12 md:h-12 aspect-square rounded-[14px] border border-gray600 backdrop-blur-[12px] flex items-center justify-center overflow-hidden transition-transform duration-300 hover:scale-105 cursor-pointer"
-                style={{ backgroundColor: 'var(--blurBg)' }}
-                {...backBtnHandlers}
-            >
-                <div style={backBtnGlow} aria-hidden="true" />
-                <img src={arrow02Left} alt="Back" className="w-5 h-5 relative z-10" />
-            </button>
-
-            <Header currentPage="Works" />
-
-            {/* ── Hero ── */}
-            <section ref={heroSectionRef} className="relative bg-dark pt-[300px]">
-                <div className="w-full overflow-x-hidden">
-                    <DynamicMarquee duration="70s">
-                        <span className="font-urbanist font-normal text-[120px] md:text-[200px] leading-none text-light pr-16">
-                            {name}&nbsp;&nbsp;{name}&nbsp;&nbsp;{name}&nbsp;&nbsp;
-                        </span>
-                    </DynamicMarquee>
-                </div>
-
-                {/* Info bar */}
-                <div className="mt-16 w-full px-4 md:px-12">
-                    <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-3 md:gap-0 font-spaceg text-[11px] md:text-[12px] tracking-[0.1em] uppercase text-gray400">
-                        <span>{category}</span>
-                        <div className="flex items-center gap-2">
-                            <ArrowDown className="w-3 h-3 md:w-4 md:h-4 animate-[floatUpDown_1.5s_ease-in-out_infinite]" />
-                            <span>SCROLL TO EXPLORE</span>
-                        </div>
-                        <span>CREATED {year}</span>
-                    </div>
-                </div>
-
-                {/* Hero image — portrait on mobile, 16:9 on desktop */}
-                {heroImage && (
-                    <div className="mt-16 w-full aspect-[9/16] md:aspect-[16/9]" style={{ padding: IMAGE_PADDING }}>
-                        <img
-                            src={heroImage}
-                            alt={`${name} hero`}
-                            className="w-full h-full object-cover"
-                            style={{ borderRadius: IMAGE_RADIUS }}
-                            onLoad={scheduleScrollRefresh}
-                        />
                     </div>
                 )}
-            </section>
 
-            {/* ── Description ── */}
-            {description && (
-                <section className="w-full bg-dark py-16 md:py-40 px-4 md:px-12">
-                    <div className="flex justify-end">
-                        <p
-                            ref={descriptionRef}
-                            className="font-urbanist text-[22px] md:text-[40px] leading-[1.35] font-normal w-full md:w-[50%]"
-                        >
-                            {renderRevealText(description)}
-                        </p>
-                    </div>
-                </section>
-            )}
+                {/* ── Back button ── */}
+                <button
+                    onClick={() => navigateTo('/works')}
+                    className="fixed top-[84px] left-4 z-50 w-[60px] h-[60px] md:top-6 md:left-6 md:w-12 md:h-12 aspect-square rounded-[14px] border border-gray600 backdrop-blur-[12px] flex items-center justify-center overflow-hidden transition-transform duration-300 hover:scale-105 cursor-pointer"
+                    style={{ backgroundColor: 'var(--blurBg)' }}
+                    {...backBtnHandlers}
+                >
+                    <div style={backBtnGlow} aria-hidden="true" />
+                    <img src={arrow02Left} alt="Back" className="w-5 h-5 relative z-10" />
+                </button>
 
-            {/* ── Key information ── */}
-            {Object.keys(keyInfo).length > 0 && (
-                <section className="w-full bg-dark px-4 md:px-12 pb-10 md:pb-16">
-                    <div className="flex flex-col gap-8 md:gap-10">
-                        <h2 className="font-urbanist text-[26px] md:text-[32px] font-normal text-light">Key information</h2>
-                        <div className="grid grid-cols-2 md:flex md:flex-wrap md:justify-between gap-6 md:gap-8">
-                            {keyInfo.client && (
-                                <div className="flex flex-col gap-3">
-                                    <span className="font-spaceg text-[10px] md:text-[12px] uppercase tracking-widest text-gray400">Client</span>
-                                    <span className="font-urbanist text-[15px] md:text-[16px] text-light">{keyInfo.client}</span>
-                                </div>
-                            )}
-                            {keyInfo.timeSpan && (
-                                <div className="flex flex-col gap-3">
-                                    <span className="font-spaceg text-[10px] md:text-[12px] uppercase tracking-widest text-gray400">Time Span</span>
-                                    <span className="font-urbanist text-[15px] md:text-[16px] text-light">{keyInfo.timeSpan}</span>
-                                </div>
-                            )}
-                            {keyInfo.typeOfWork && (
-                                <div className="flex flex-col gap-3">
-                                    <span className="font-spaceg text-[10px] md:text-[12px] uppercase tracking-widest text-gray400">Type of Work</span>
-                                    <span className="font-urbanist text-[15px] md:text-[16px] text-light">{keyInfo.typeOfWork}</span>
-                                </div>
-                            )}
-                            {keyInfo.kpi && (
-                                <div className="flex flex-col gap-3">
-                                    <span className="font-spaceg text-[10px] md:text-[12px] uppercase tracking-widest text-gray400">KPI</span>
-                                    <span className="font-urbanist text-[15px] md:text-[16px] text-light">{keyInfo.kpi}</span>
-                                </div>
-                            )}
-                        </div>
-                    </div>
-                </section>
-            )}
+                <Header currentPage="Works" />
 
-            {/* ── Dynamic sections ── */}
-            {sections.map((section, i) => (
-                <SectionRenderer
-                    key={i}
-                    section={section}
-                    index={i}
-                    name={name}
-                    resizeTick={resizeTick}
-                />
-            ))}
-
-            {/* ── Next project ── */}
-            {nextProject && (
-                <NextProjectSection nextProject={nextProject} navigateTo={navigateTo} />
-            )}
-
-            <div ref={footerRef}>
-                <Footer resizeTick={resizeTick} />
-            </div>
-        </div>
-    );
-}
-
-// ─────────────────────────────────────────────
-// Section router
-// ─────────────────────────────────────────────
-
-function SectionRenderer({ section, index, name, resizeTick }) {
-    switch (section.type) {
-        case 'full-image':  return <FullImageSection  section={section} name={name} index={index} />;
-        case 'desktop':     return <DesktopSection    section={section} name={name} index={index} />;
-        case 'iphone-row':  return <IPhoneRowSection  section={section} name={name} />;
-        case 'text':        return <TextSection       section={section} index={index} resizeTick={resizeTick} />;
-        case 'palette':     return <PaletteSection    section={section} />;
-        case 'gallery':     return <GallerySection    section={section} name={name} />;
-        case 'split':       return <SplitSection      section={section} name={name} />;
-        case 'row':         return <RowSection        section={section} name={name} />;
-        case 'natural':     return <NaturalImageSection section={section} name={name} index={index} />;
-        case 'wireframe':   return <WireframeSection  section={section} name={name} index={index} />;
-        case 'masonry':     return <MasonrySection    section={section} name={name} />;
-        case 'live-ui':     return (
-            <section className="w-full" style={{ paddingLeft: IMAGE_PADDING, paddingRight: IMAGE_PADDING, paddingBottom: IMAGE_PADDING }}>
-                {section.content}
-            </section>
-        );
-        default:            return null;
-    }
-}
-
-// ─────────────────────────────────────────────
-// Section components
-// ─────────────────────────────────────────────
-
-/**
- * Full-bleed single image
- * Mobile: aspect from data (portrait/square/landscape)
- * Desktop: 16:9
- */
-function FullImageSection({ section, name, index }) {
-    const mobileAspect = getMobileAspect(section.aspect);
-    return (
-        <section className="w-full bg-dark py-2 md:py-3" style={{ paddingLeft: IMAGE_PADDING, paddingRight: IMAGE_PADDING }}>
-            <div className={`w-full ${mobileAspect} md:aspect-[16/9]`}>
-                <img
-                    src={section.src}
-                    alt={section.alt || `${name} image ${index + 1}`}
-                    className="w-full h-full object-cover"
-                    style={{ borderRadius: IMAGE_RADIUS }}
-                    onLoad={scheduleScrollRefresh}
-                />
-            </div>
-        </section>
-    );
-}
-
-/**
- * Desktop-oriented screenshot — always 16:9
- */
-function DesktopSection({ section, name, index }) {
-    return (
-        <section className="w-full bg-dark py-2 md:py-3" style={{ paddingLeft: IMAGE_PADDING, paddingRight: IMAGE_PADDING }}>
-            <div className="w-full aspect-[16/9]">
-                <img
-                    src={section.src}
-                    alt={section.alt || `${name} desktop ${index + 1}`}
-                    className="w-full h-full object-cover"
-                    style={{ borderRadius: IMAGE_RADIUS }}
-                    onLoad={scheduleScrollRefresh}
-                />
-            </div>
-        </section>
-    );
-}
-
-/**
- * Single full-width image at its NATIVE aspect ratio — no forced box, no crop.
- * Renders exactly as exported: width fills the section, height follows
- * automatically from the image's own dimensions (no object-cover, no
- * aspect-[...] container that could clip top/bottom or sides).
- */
-function NaturalImageSection({ section, name, index }) {
-    return (
-        <section className="w-full bg-dark py-2 md:py-3" style={{ paddingLeft: IMAGE_PADDING, paddingRight: IMAGE_PADDING }}>
-            <img
-                src={section.src}
-                alt={section.alt || `${name} image ${index + 1}`}
-                className="w-full h-auto block"
-                style={{ borderRadius: IMAGE_RADIUS }}
-                onLoad={scheduleScrollRefresh}
-            />
-        </section>
-    );
-}
-
-// iPhone portrait aspect ratio (390×844 ≈ 9/19.5)
-const IPHONE_ASPECT = 'aspect-[390/844]';
-
-/**
- * 3 iPhone PNG mockups — floating group with staggered vertical offsets.
- * Each phone starts at a different Y position for depth, then parallaxes
- * at a different speed — creates the Dennis Snellenberg floating effect.
- *
- * Desktop: centered group at ~72vw, 3 equal flex columns.
- * Mobile:  3 images in a row (all visible at once), small gap.
- */
-/**
- * Single iPhone image with parallax — no overflow clip, image shown at natural ratio.
- */
-function IPhoneItem({ src, alt, strength, radius }) {
-    const wrapRef = useRef(null);
-    useLayoutEffect(() => {
-        const el = wrapRef.current;
-        if (!el) return;
-        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-        const ctx = gsap.context(() => {
-            gsap.fromTo(el,
-                { yPercent: strength },
-                {
-                    yPercent: -strength,
-                    ease: 'none',
-                    scrollTrigger: {
-                        trigger: el,
-                        start: 'top bottom',
-                        end: 'bottom top',
-                        scrub: true,
-                        invalidateOnRefresh: true,
-                    },
-                }
-            );
-        });
-        return () => ctx.revert();
-    }, [strength]);
-
-    return (
-        <div ref={wrapRef}>
-            <img src={src} alt={alt} className="w-full block" style={{ borderRadius: radius }} onLoad={scheduleScrollRefresh} />
-        </div>
-    );
-}
-
-function IPhoneRowSection({ section, name }) {
-    const images = section.images || [];
-
-    // Descending strengths: forte → medio → debole (Dennis Snellenberg style)
-    const strengths = [16, 9, 3];
-
-    // Static Y offset (px): stagger iniziale che amplifica la scala visiva.
-    // Padding-bottom compensates so nothing gets clipped.
-    const yOffsets = [80, 40, 0];
-
-    return (
-        <section
-            className="w-full bg-dark pt-24 md:pt-40"
-            style={{
-                paddingLeft: IMAGE_PADDING,
-                paddingRight: IMAGE_PADDING,
-                paddingBottom: `calc(${IMAGE_PADDING} + 80px)`,   /* extra for largest offset */
-            }}
-        >
-            {/* Mobile: all 3 in a row */}
-            <div className="flex gap-2 md:hidden">
-                {images.map((img, i) => (
-                    <div
-                        key={i}
-                        className="flex-1"
-                        style={{ transform: `translateY(${yOffsets[i] ?? 0}px)` }}
-                    >
-                        <IPhoneItem
-                            src={img.src}
-                            alt={img.alt || `${name} mockup ${i + 1}`}
-                            strength={strengths[i] ?? 4}
-                            radius="20px"
-                        />
-                    </div>
-                ))}
-            </div>
-
-            {/* Desktop: centered group, max 72% viewport */}
-            <div className="hidden md:flex justify-center">
-                <div className="flex gap-8 w-[72%]">
-                    {images.map((img, i) => (
-                        <div
-                            key={i}
-                            className="flex-1"
-                            style={{ transform: `translateY(${yOffsets[i] ?? 0}px)` }}
-                        >
-                            <IPhoneItem
-                                src={img.src}
-                                alt={img.alt || `${name} mockup ${i + 1}`}
-                                strength={strengths[i] ?? 4}
-                                radius="28px"
-                            />
-                        </div>
-                    ))}
-                </div>
-            </div>
-        </section>
-    );
-}
-
-/** Narrative text block with word-by-word scroll reveal */
-function TextSection({ section, index, resizeTick }) {
-    const sectionRef = useRef(null);
-
-    useLayoutEffect(() => {
-        if (!sectionRef.current) return;
-        const ctx = gsap.context(() => {
-            const isMobile = window.matchMedia('(max-width: 767px)').matches;
-            const words = sectionRef.current.querySelectorAll('.reveal-word');
-            if (!words.length) return;
-            gsap.set(words, { color: 'var(--color-light)', opacity: 0.2 });
-            ScrollTrigger.getById(`text-${index}`)?.kill();
-            gsap.timeline({
-                scrollTrigger: {
-                    id: `text-${index}`,
-                    trigger: sectionRef.current,
-                    start: 'top 80%',
-                    end: () => `+=${isMobile ? 300 : 500}`,
-                    scrub: isMobile ? true : 0.5,
-                    invalidateOnRefresh: true,
-                },
-            }).to(words, { opacity: 1, ease: 'none', stagger: { each: 0.12, from: 'start' } });
-        }, sectionRef.current);
-        return () => ctx.revert();
-    }, [resizeTick, index]);
-
-    const layout  = section.layout || 'full';
-    const justify = { right: 'justify-end', center: 'justify-center', left: 'justify-start', full: 'justify-start' }[layout];
-    const width   = layout === 'full' ? 'w-full' : 'w-full md:w-[50%]';
-
-    return (
-        <section ref={sectionRef} className="w-full bg-dark py-14 md:py-24 px-4 md:px-12">
-            <div className={`flex ${justify}`}>
-                <div className={`font-urbanist text-[19px] md:text-[32px] leading-[1.5] ${width}`}>
-                    {renderRevealText(section.content)}
-                </div>
-            </div>
-        </section>
-    );
-}
-
-/**
- * Palette & Typography section.
- *
- * NEW (image-based) — preferred:
- *   section.paletteImage    = { src, alt }   ← screenshot della palette
- *   section.typographyImage = { src, alt }   ← screenshot della tipografia
- *
- * LEGACY (code-generated) — mantenuto per backward compat:
- *   section.colors = [{ hex, name }, ...]
- *   section.fonts  = [{ name, weights, specimen }, ...]
- */
-function PaletteSection({ section }) {
-    const hasImages = section.paletteImage || section.typographyImage;
-
-    // ── Image-based mode ───────────────────────────────────────────────────────
-    if (hasImages) {
-        const items = [
-            section.paletteImage    && { ...section.paletteImage,    label: 'Color Palette'  },
-            section.typographyImage && { ...section.typographyImage, label: 'Typography'      },
-        ].filter(Boolean);
-
-        return (
-            <section className="w-full bg-dark" style={{ padding: IMAGE_PADDING }}>
-                {/* Mobile: stacked */}
-                <div className="flex flex-col gap-4 md:hidden">
-                    {items.map((item, i) => (
-                        <div key={i} className="flex flex-col gap-3">
-                            <span className="font-spaceg text-[10px] uppercase tracking-[0.12em] text-gray400">
-                                {item.label}
+                {/* ── Intestazione: uguale per tutti i progetti ── */}
+                <section ref={heroSectionRef} className="relative bg-dark pt-[300px]">
+                    <div className="w-full overflow-x-hidden">
+                        <DynamicMarquee duration="70s">
+                            <span className="font-urbanist font-normal text-[120px] md:text-[200px] leading-none text-light pr-16">
+                                {name}&nbsp;&nbsp;{name}&nbsp;&nbsp;{name}&nbsp;&nbsp;
                             </span>
-                            <ParallaxImage
-                                src={item.src}
-                                alt={item.alt || item.label}
-                                strength={3 + i * 2}
-                                radius={IMAGE_RADIUS}
-                                className="w-full aspect-[4/3]"
-                                onLoad={scheduleScrollRefresh}
-                            />
+                        </DynamicMarquee>
+                    </div>
+                    <h1 className="sr-only">{name}</h1>
+
+                    <div className="mt-16 w-full px-4 md:px-12">
+                        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-3 md:gap-0 font-spaceg text-[11px] md:text-[12px] tracking-[0.1em] uppercase text-gray400">
+                            <span>{category}</span>
+                            <div className="flex items-center gap-2">
+                                <ArrowDown className="w-3 h-3 md:w-4 md:h-4 animate-[floatUpDown_1.5s_ease-in-out_infinite]" />
+                                <span>SCROLL TO EXPLORE</span>
+                            </div>
+                            <span>CREATED {year}</span>
                         </div>
-                    ))}
-                </div>
-
-                {/* Desktop: side by side */}
-                <div className="hidden md:flex flex-col gap-5">
-                    <div className="flex gap-5">
-                        {items.map((item, i) => (
-                            <div key={i} className="flex flex-col gap-4 flex-1">
-                                <span className="font-spaceg text-[10px] uppercase tracking-[0.12em] text-gray400">
-                                    {item.label}
-                                </span>
-                                <ParallaxImage
-                                    src={item.src}
-                                    alt={item.alt || item.label}
-                                    strength={3 + i * 3}
-                                    radius={IMAGE_RADIUS}
-                                    className="w-full aspect-[4/3]"
-                                    onLoad={scheduleScrollRefresh}
-                                />
-                            </div>
-                        ))}
                     </div>
-                </div>
-            </section>
-        );
-    }
 
-    // ── Legacy code-generated mode ─────────────────────────────────────────────
-    const colors = section.colors || [];
-    const fonts  = section.fonts  || [];
-
-    return (
-        <section className="w-full bg-dark px-4 md:px-12 py-14 md:py-24">
-
-            {/* Colour swatches */}
-            {colors.length > 0 && (
-                <div className={fonts.length > 0 ? 'mb-16 md:mb-24' : ''}>
-                    <span className="font-spaceg text-[10px] md:text-[11px] tracking-[0.12em] uppercase text-gray400 block mb-6 md:mb-8">
-                        Colour Palette
-                    </span>
-                    <div className="grid grid-cols-2 md:flex md:flex-nowrap gap-3 md:gap-6">
-                        {colors.map((color, i) => (
-                            <div key={i} className="flex flex-col gap-2 md:gap-3 md:flex-1">
-                                <div
-                                    className="w-full aspect-[3/2] md:h-[160px] md:aspect-auto rounded-[10px] md:rounded-[12px] border border-white/5"
-                                    style={{ backgroundColor: color.hex }}
-                                />
-                                <div className="flex flex-col gap-[3px]">
-                                    {color.name && (
-                                        <span className="font-urbanist text-[12px] md:text-[14px] text-light leading-tight">{color.name}</span>
-                                    )}
-                                    <span className="font-spaceg text-[10px] md:text-[11px] tracking-[0.06em] text-gray400 uppercase">{color.hex}</span>
-                                </div>
+                    {/* La prima immagine parte incorniciata e si allarga fino ai bordi mentre scorri */}
+                    {heroImage && (
+                        <div className="heroimg">
+                            <div className="frame">
+                                <img src={heroImage} alt={heroAlt || `${name} hero`} onLoad={scheduleScrollRefresh} />
                             </div>
-                        ))}
-                    </div>
-                </div>
-            )}
+                        </div>
+                    )}
+                </section>
 
-            {/* Typography */}
-            {fonts.length > 0 && (
-                <div>
-                    <span className="font-spaceg text-[10px] md:text-[11px] tracking-[0.12em] uppercase text-gray400 block mb-6 md:mb-8">
-                        Typography
-                    </span>
-                    <div className="flex flex-col gap-0">
-                        {fonts.map((font, i) => (
-                            <div key={i} className="flex flex-col gap-4 md:gap-5 border-t border-gray600 py-6 md:py-8">
-                                <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-2 md:gap-4">
-                                    <span className="font-urbanist text-[20px] md:text-[28px] text-light leading-none">
-                                        {font.name}
-                                    </span>
-                                    {font.weights?.length > 0 && (
-                                        <div className="flex gap-2 flex-wrap">
-                                            {font.weights.map((w, wi) => (
-                                                <span
-                                                    key={wi}
-                                                    className="font-spaceg text-[9px] md:text-[10px] tracking-[0.06em] uppercase text-gray400 border border-gray600 px-2 md:px-3 py-[4px] md:py-[5px] rounded-full"
-                                                >
-                                                    {w}
-                                                </span>
-                                            ))}
-                                        </div>
-                                    )}
-                                </div>
-                                {font.specimen && (
-                                    <p className="font-urbanist text-[32px] md:text-[72px] leading-[1.05] text-light/50 break-words">
-                                        {font.specimen}
-                                    </p>
-                                )}
-                            </div>
-                        ))}
-                    </div>
-                </div>
-            )}
-        </section>
-    );
-}
+                <LocalNav name={name} links={navLinks} />
 
-/** Wraps DynamicGallery as a section type */
-function GallerySection({ section, name }) {
-    return <DynamicGallery images={section.images || []} name={name} />;
-}
+                {overview && <Overview overview={overview} />}
+                {highlights?.length > 0 && <Highlights items={highlights} />}
 
-/**
- * Two images side by side with different parallax speeds — no preceding full image.
- * Left moves faster (strength 14), right moves slower (strength 5).
- * section.images = [leftImg, rightImg]  each { src, alt, aspect }
- */
-function SplitSection({ section, name }) {
-    const [left, right] = section.images || [];
-    if (!left || !right) return null;
-    return (
-        <GallerySplit
-            left={left}
-            right={right}
-            name={name}
-            startIdx={0}
-            onLoad={scheduleScrollRefresh}
-        />
-    );
-}
+                {/* ── Sezioni del progetto ── */}
+                {sections.map((section, i) => {
+                    const Comp = SECTIONS[section.type];
+                    return Comp
+                        ? <Comp key={i} section={section} resizeTick={resizeTick} />
+                        : <LegacySection key={i} section={section} index={i} name={name} resizeTick={resizeTick} />;
+                })}
 
-/**
- * Two images side by side, static (no parallax).
- * Desktop: the pair sits in a 70vw column centered in the section, each
- *          image taking 50% of that column.
- * Mobile:  stacked full-width, each image uses its own aspect ratio.
- * section.images = [leftImg, rightImg]  each { src, alt, aspect }
- */
-function RowSection({ section, name }) {
-    const images = section.images || [];
-    if (images.length !== 2) return null;
-    const [left, right] = images;
-    const lMobile = getMobileAspect(left.aspect || 'portrait');
-    const rMobile = getMobileAspect(right.aspect || 'portrait');
-    return (
-        <section className="w-full bg-dark py-2 md:py-3" style={{ paddingLeft: IMAGE_PADDING, paddingRight: IMAGE_PADDING }}>
-            <div className="flex flex-col md:flex-row gap-4 md:gap-6 md:w-[70vw] md:mx-auto">
-                <div className={`w-full md:w-1/2 ${lMobile} md:aspect-[4/5]`}>
-                    <img
-                        src={left.src}
-                        alt={left.alt || `${name} image`}
-                        className="w-full h-full object-cover"
-                        style={{ borderRadius: IMAGE_RADIUS }}
-                        onLoad={scheduleScrollRefresh}
-                    />
-                </div>
-                <div className={`w-full md:w-1/2 ${rMobile} md:aspect-[4/5]`}>
-                    <img
-                        src={right.src}
-                        alt={right.alt || `${name} image`}
-                        className="w-full h-full object-cover"
-                        style={{ borderRadius: IMAGE_RADIUS }}
-                        onLoad={scheduleScrollRefresh}
-                    />
+                {/* ── Next project ── */}
+                {nextProject && (
+                    <NextProjectSection nextProject={nextProject} navigateTo={navigateTo} />
+                )}
+
+                <div ref={footerRef}>
+                    <Footer resizeTick={resizeTick} />
                 </div>
             </div>
-        </section>
+        </div>
     );
 }
 
-/** Wireframe / user flow — object-contain so diagrams aren't cropped */
-function WireframeSection({ section, name, index }) {
-    const mobileAspect = getMobileAspect(section.aspect || 'landscape');
-    return (
-        <section className="w-full bg-dark" style={{ padding: IMAGE_PADDING }}>
-            <div
-                className={`w-full ${mobileAspect} md:aspect-[16/9] bg-[#111]`}
-                style={{ borderRadius: IMAGE_RADIUS }}
-            >
-                <img
-                    src={section.src}
-                    alt={section.alt || `${name} wireframe ${index + 1}`}
-                    className="w-full h-full object-contain"
-                    style={{ borderRadius: IMAGE_RADIUS }}
-                    onLoad={scheduleScrollRefresh}
-                />
-            </div>
-        </section>
-    );
-}
-
-/** CSS-columns masonry — ideal for AI visual grids */
-function MasonrySection({ section, name }) {
-    const images = section.images || [];
-    return (
-        <section className="w-full bg-dark" style={{ padding: IMAGE_PADDING }}>
-            <div className="columns-2 md:columns-3 gap-3 md:gap-6 [column-fill:_balance]">
-                {images.map((img, i) => (
-                    <div key={i} className="break-inside-avoid mb-3 md:mb-6">
-                        <img
-                            src={img.src}
-                            alt={img.alt || `${name} ${i + 1}`}
-                            className="w-full h-auto"
-                            style={{ borderRadius: IMAGE_RADIUS }}
-                            onLoad={scheduleScrollRefresh}
-                        />
-                    </div>
-                ))}
-            </div>
-        </section>
-    );
-}
+// ─────────────────────────────────────────────
+// Next project
+// ─────────────────────────────────────────────
 
 /**
  * Next project teaser with cursor-following image preview (desktop only).
@@ -929,173 +391,3 @@ function NextProjectSection({ nextProject, navigateTo }) {
     );
 }
 
-// ─────────────────────────────────────────────
-// DynamicGallery — strict alternation: full → split → full → split
-// Full:  one image at 16:9
-// Split: two images at 4:5 side by side
-// Rule:  two multi-image sections can never be adjacent.
-// ─────────────────────────────────────────────
-
-function DynamicGallery({ images, name }) {
-    const totalImages    = images.length;
-    const loadedCountRef = useRef(0);
-
-    const handleImageLoad = useCallback(() => {
-        loadedCountRef.current += 1;
-        if (loadedCountRef.current >= totalImages) {
-            requestAnimationFrame(() => {
-                ScrollTrigger.refresh();
-                if (window.lenis) window.lenis.resize();
-            });
-        }
-    }, [totalImages]);
-
-    const elements = [];
-    let idx      = 0;
-    let wantSplit = false; // start with full, then alternate
-
-    while (idx < images.length) {
-        const remaining = images.length - idx;
-
-        if (wantSplit && remaining >= 2) {
-            // Two images side by side
-            elements.push(
-                <GallerySplit
-                    key={`split-${idx}`}
-                    left={images[idx]} right={images[idx + 1]}
-                    name={name} startIdx={idx} onLoad={handleImageLoad}
-                />
-            );
-            idx += 2;
-        } else {
-            // Single full-width image (either by choice or because only 1 remains)
-            elements.push(
-                <GalleryFull
-                    key={`full-${idx}`}
-                    image={images[idx]} name={name} idx={idx} onLoad={handleImageLoad}
-                />
-            );
-            idx += 1;
-        }
-
-        wantSplit = !wantSplit;
-    }
-
-    return <>{elements}</>;
-}
-
-/**
- * Image with scroll-driven parallax.
- * The entire box (wrapper) translates on the Y axis — Dennis Snellenberg style.
- * The image inside fills the box statically (object-cover, no extra scale).
- *
- * Props:
- *   src, alt, onLoad  — forwarded to <img>
- *   className         — applied to the outer wrapper (aspect ratio, width, etc.)
- *   radius            — border-radius string
- *   strength          — yPercent range applied to the BOX. E.g. 5 → box travels from +5% to -5%
- */
-function ParallaxImage({ src, alt, onLoad, className = '', radius = IMAGE_RADIUS, strength = 5 }) {
-    const wrapRef = useRef(null);
-
-    useLayoutEffect(() => {
-        const wrap = wrapRef.current;
-        if (!wrap) return;
-        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-
-        const ctx = gsap.context(() => {
-            gsap.fromTo(wrap,
-                { yPercent: strength },
-                {
-                    yPercent: -strength,
-                    ease: 'none',
-                    scrollTrigger: {
-                        trigger: wrap,
-                        start: 'top bottom',
-                        end: 'bottom top',
-                        scrub: true,
-                        invalidateOnRefresh: true,
-                    },
-                }
-            );
-        });
-        return () => ctx.revert();
-    }, [strength]);
-
-    return (
-        <div ref={wrapRef} className={className} style={{ overflow: 'hidden', borderRadius: radius }}>
-            <img
-                src={src}
-                alt={alt}
-                onLoad={onLoad}
-                className="w-full h-full object-cover"
-            />
-        </div>
-    );
-}
-
-/**
- * Two images side by side — NOT full-width.
- * Desktop: images are inset (~10% each side), 4:5, the dark background
- *          is clearly visible around and between them.
- * Mobile: stacked full-width, each image uses its own aspect ratio.
- * Parallax: left and right move at slightly different speeds for depth.
- */
-function GallerySplit({ left, right, name, startIdx, onLoad }) {
-    const lMobile = getMobileAspect(left.aspect);
-    const rMobile = getMobileAspect(right.aspect);
-
-    return (
-        <section className="w-full bg-dark py-2 md:py-3" style={{ paddingLeft: IMAGE_PADDING, paddingRight: IMAGE_PADDING }}>
-            {/* Mobile: stacked */}
-            <div className="flex flex-col gap-4 md:hidden">
-                <ParallaxImage
-                    src={left.src} alt={left.alt || `${name} ${startIdx + 1}`}
-                    onLoad={onLoad} strength={14} radius={IMAGE_RADIUS}
-                    className={`w-full ${lMobile}`}
-                />
-                <ParallaxImage
-                    src={right.src} alt={right.alt || `${name} ${startIdx + 2}`}
-                    onLoad={onLoad} strength={5} radius={IMAGE_RADIUS}
-                    className={`w-full ${rMobile}`}
-                />
-            </div>
-            {/* Desktop: side by side — sinistra forte, destra debole */}
-            <div className="hidden md:flex justify-center gap-5">
-                <ParallaxImage
-                    src={left.src} alt={left.alt || `${name} ${startIdx + 1}`}
-                    onLoad={onLoad} strength={14} radius={IMAGE_RADIUS}
-                    className="w-[38vw] aspect-[4/5] flex-shrink-0"
-                />
-                <ParallaxImage
-                    src={right.src} alt={right.alt || `${name} ${startIdx + 2}`}
-                    onLoad={onLoad} strength={5} radius={IMAGE_RADIUS}
-                    className="w-[38vw] aspect-[4/5] flex-shrink-0"
-                />
-            </div>
-        </section>
-    );
-}
-
-/**
- * Single full-width image
- * Mobile: aspect from data  |  Desktop: 16:9
- */
-function GalleryFull({ image, name, idx, onLoad }) {
-    const mA = getMobileAspect(image.aspect);
-    return (
-        <section className="w-full bg-dark py-2 md:py-3" style={{ paddingLeft: IMAGE_PADDING, paddingRight: IMAGE_PADDING }}>
-            <div className={`w-full ${mA} md:aspect-[16/9]`}>
-                <img
-                    src={image.src}
-                    alt={image.alt || `${name} ${idx + 1}`}
-                    onLoad={onLoad}
-                    className="w-full h-full object-cover"
-                    style={{ borderRadius: IMAGE_RADIUS }}
-                />
-            </div>
-        </section>
-    );
-}
-
-export { PaletteSection, TextSection };

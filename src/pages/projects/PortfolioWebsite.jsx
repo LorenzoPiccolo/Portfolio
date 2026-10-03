@@ -22,6 +22,12 @@ const portfolioWebsite = {
         typeOfWork: 'Web Design',
         kpi: 'Interactive Experience',
     },
+    overview: {
+        title: 'A portfolio that moves with the scroll.',
+        lede: 'A personal portfolio website designed to show creative work through scroll animations and careful typography.',
+        specs: [['Client', 'Personal project'], ['Year', '2025'], ['Role', 'Web design'], ['Focus', 'Interactive experience']],
+    },
+
     sections: [
         // 1. Immagine subito dopo le key information
         { type: 'desktop', src: image2, alt: 'Homepage design' },

@@ -21,6 +21,12 @@ const alidays = {
         typeOfWork: 'Brand Identity',
         kpi: 'Visual System',
     },
+    overview: {
+        title: 'A brand identity for travel.',
+        lede: 'A complete brand identity system built around travel and discovery, from the logo to every touchpoint.',
+        specs: [['Client', 'Alidays'], ['Year', '2024'], ['Role', 'Brand identity'], ['Focus', 'Visual system']],
+    },
+
     sections: [
         // 1. Immagine subito dopo le key information
         { type: 'full-image', src: image1, alt: 'Brand elements', aspect: 'landscape' },
