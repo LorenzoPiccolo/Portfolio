@@ -10,7 +10,6 @@ import useAttentionTitle from '../../hooks/useAttentionTitle.js';
 // ─── Images ──────────────────────────────────────────────────────────────────
 import buildZeroImg   from '../../../img/build-zero-2026/card.webp';
 import portfolioImg   from '../../../img/portfolio/portfolio-01.jpg';
-import alidaysImg     from '../../../img/footer-image.jpg';
 import rediImg        from '../../../img/image-footer-05.jpg';
 import romajiImg      from '../../../img/romaji/romaji-01.jpg';
 import atalusImg      from '../../../img/atalus/atalus-01.jpg';
@@ -20,7 +19,6 @@ import rebornImg      from '../../../img/reborn/reborn-01.jpg';
 const ALL_PROJECTS = [
   { id: 'build-zero',        title: 'Build Zero',        type: 'UX/UI',            year: '2024', image: buildZeroImg, href: '/works/build-zero'        },
   { id: 'portfolio-website', title: 'Portfolio Website', type: 'Web Design',        year: '2025', image: portfolioImg, href: '/works/portfolio-website'  },
-  { id: 'alidays',           title: 'Alidays',           type: 'Brand Identity',    year: '2024', image: alidaysImg,  href: '/works/alidays'             },
   { id: 'redi-website',      title: 'Redi Website',      type: 'Web Development',   year: '2025', image: rediImg,     href: '/works/redi'                },
   { id: 'romaji',            title: 'Romaji',            type: 'Magazine',          year: '2024', image: romajiImg,   href: '/works/romaji'              },
   { id: 'atalus',            title: 'Atalus',            type: 'Brand Identity',    year: '2025', image: atalusImg,   href: '/works/atalus'              },

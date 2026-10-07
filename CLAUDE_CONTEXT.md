@@ -23,7 +23,7 @@ Lavoro principalmente su web design, UI/UX, e sviluppo React + GSAP per animazio
 
 - `src/pages/home` — pagina principale con Hero (canvas frame animation), SecondSection, ThirdSection (skills), FourthSection, FifthSection, Footer
 - `src/pages/works` — galleria dei lavori
-- `src/pages/case-history` — pagine singole dei progetti (Alidays, Atalus, BuildZero, PortfolioWebsite, RediWebsite, Romaji, Reborn)
+- `src/pages/case-history` — pagine singole dei progetti (Atalus, BuildZero, PortfolioWebsite, RediWebsite, Romaji, Reborn)
 - `src/components` — CustomCursor, Header, Footer, Navbar (inutilizzato), IntroLoader, PageTransition, DynamicMarquee, DynamicButton, GlassCard, EdgeBlur, TransitionLink
 - `src/hooks` — useFadeInUp, useViewportHeight, useResizeObserver, useResizeTick, useCursorGlow, useAttentionTitle, useIntersectionObserver
 - `src/context/TransitionContext` — sistema di transizioni tra pagine

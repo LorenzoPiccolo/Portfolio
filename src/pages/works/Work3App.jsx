@@ -14,7 +14,6 @@ import useAttentionTitle        from '../../hooks/useAttentionTitle.js';
 // ─── Project images ───────────────────────────────────────────────────────────
 import buildZeroImg  from '../../../img/build-zero-2026/preview.webp';
 import portfolioImg  from '../../../img/portfolio/portfolio-01.jpg';
-import alidaysImg    from '../../../img/footer-image.jpg';
 import euricaImg     from '../../../img/eurica/eurica-preview.webp';
 import euricaHomeImg from '../../../img/eurica-home/kamakura-preview.webp';
 import romajiImg     from '../../../img/romaji/romaji-01.jpg';
@@ -40,15 +39,6 @@ export const ALL_PROJECTS = [
     year: '2025',
     href: '/works/portfolio-website',
     image: portfolioImg,
-  },
-  {
-    id: 'alidays',
-    title: 'Alidays',
-    discipline: 'UX/UI',
-    services: ['Brand Identity', 'Visual Identity'],
-    year: '2024',
-    href: '/works/alidays',
-    image: alidaysImg,
   },
   {
     id: 'eurica',
