@@ -4,7 +4,7 @@ import project01Video from '../../video/project-01.mp4';
 import project02Video from '../../video/project-02.mp4';
 import footerImage from '../../img/footer-image.jpg';
 import imageFooter02 from '../../img/image-footer-02.jpg';
-import buildZeroCover from '../../img/build-zero/build-zero-cover.png';
+import buildZeroCover from '../../img/build-zero-2026/cover.webp';
 import imageFooter05 from '../../img/image-footer-05.jpg';
 import portfolioHero from '../../img/portfolio/portfolio-01.jpg';
 import atalusHero from '../../img/atalus/atalus-01.jpg';

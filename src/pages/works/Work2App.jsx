@@ -8,7 +8,7 @@ import useResizeTick from '../../hooks/useResizeTick.js';
 import useAttentionTitle from '../../hooks/useAttentionTitle.js';
 
 // ─── Images ──────────────────────────────────────────────────────────────────
-import buildZeroImg   from '../../../img/build-zero/build-zero-01.jpg';
+import buildZeroImg   from '../../../img/build-zero-2026/card.webp';
 import portfolioImg   from '../../../img/portfolio/portfolio-01.jpg';
 import alidaysImg     from '../../../img/footer-image.jpg';
 import rediImg        from '../../../img/image-footer-05.jpg';

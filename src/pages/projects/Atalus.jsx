@@ -1,7 +1,7 @@
 // src/pages/projects/Atalus.jsx
 import ProjectPage from './ProjectPage.jsx';
 import heroImage     from '../../../img/atalus/atalus-01.jpg';
-import nextHeroImage from '../../../img/build-zero/build-zero-01.jpg';
+import nextHeroImage from '../../../img/build-zero-2026/card.webp';
 import imgShelter  from '../../../img/atalus/atalus-02.jpg';
 import imgCards    from '../../../img/atalus/atalus-03.jpg';
 import imgTotem    from '../../../img/atalus/atalus-04.jpg';

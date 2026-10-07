@@ -34,9 +34,9 @@ export function LocalNav({ name, links }) {
     );
 }
 
-/** Panoramica: titolo di una frase, due righe, dati chiave in riga. */
+/** Panoramica: titolo di una frase, due righe, dati chiave in riga. `legal`: riquadro sotto i dati (es. progetto non ufficiale). */
 export function Overview({ overview }) {
-    const { eyebrow = 'Overview', title, lede, specs = [] } = overview;
+    const { eyebrow = 'Overview', title, lede, specs = [], legal } = overview;
     return (
         <section className="ov" id="overview">
             <p className="eb">{eyebrow}</p>
@@ -49,14 +49,15 @@ export function Overview({ overview }) {
                     ))}
                 </dl>
             )}
+            {legal && <p className="legal">{legal}</p>}
         </section>
     );
 }
 
-/** Titolo di capitolo: parola colorata, titolo grande, una riga. `lede` accetta <strong>. */
+/** Titolo di capitolo: parola colorata, titolo grande, una riga. `lede` accetta <strong>. `small`: sottocapitolo. */
 export function Chapter({ section }) {
     return (
-        <section className="ch" id={section.id}>
+        <section className={`ch${section.small ? ' ch--sm' : ''}`} id={section.id}>
             {section.eyebrow && <p className="eb">{section.eyebrow}</p>}
             <h2 className="display">{section.title}</h2>
             {section.lede && <p className="lede">{section.lede}</p>}
@@ -103,6 +104,7 @@ const HL_DURATION = 5000;
  * Va avanti da solo quando è a schermo, si mette in pausa, si scorre col dito
  * e si trascina col mouse. La rotella verticale resta alla pagina (Lenis).
  * items: [{ src, alt, strong, text, fit: 'contain', bg, position }]
+ *        oppure [{ node, bg, strong, text }]: una scena composta al posto dell'immagine
  */
 export function Highlights({ items, title = 'In short.' }) {
     const rootRef = useRef(null);
@@ -204,11 +206,13 @@ export function Highlights({ items, title = 'In short.' }) {
                 {items.map((it, i) => (
                     <figure className="hl__card" key={i}>
                         <div className="frame" style={it.bg ? { background: it.bg } : undefined}>
-                            <img
-                                src={it.src} alt={it.alt} width={it.width} height={it.height} draggable="false"
-                                style={{ objectFit: it.fit || 'cover', objectPosition: it.position || 'center' }}
-                                onLoad={scheduleScrollRefresh}
-                            />
+                            {it.node || (
+                                <img
+                                    src={it.src} alt={it.alt} width={it.width} height={it.height} draggable="false"
+                                    style={{ objectFit: it.fit || 'cover', objectPosition: it.position || 'center' }}
+                                    onLoad={scheduleScrollRefresh}
+                                />
+                            )}
                         </div>
                         <figcaption><strong>{it.strong}</strong> {it.text}</figcaption>
                     </figure>

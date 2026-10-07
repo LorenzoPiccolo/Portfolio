@@ -21,6 +21,9 @@ import {
 import EuricaLive from './eurica/EuricaLive.jsx';
 import LandingFeatures from './eurica/LandingFeatures.jsx';
 import LandingHero from './eurica/LandingHero.jsx';
+import {
+    BzEvent, BzRedesign, BzBoards, BzMoments, BzRules, BzWorlds, BzBear, BzFlows, BzSystem, BzMetrics, BzLegal,
+} from './buildzero/BuildZeroSections.jsx';
 
 // Cursor-follow constants (match Work3App)
 const LERP_DUR       = 0.35;
@@ -55,6 +58,17 @@ const SECTIONS = {
     'eurica-live': EuricaLive,
     'landing-features': LandingFeatures,
     'landing-hero': LandingHero,
+    'bz-event': BzEvent,
+    'bz-redesign': BzRedesign,
+    'bz-boards': BzBoards,
+    'bz-moments': BzMoments,
+    'bz-rules': BzRules,
+    'bz-worlds': BzWorlds,
+    'bz-bear': BzBear,
+    'bz-flows': BzFlows,
+    'bz-system': BzSystem,
+    'bz-metrics': BzMetrics,
+    'bz-legal': BzLegal,
 };
 
 /** Senza `overview` (progetti non ancora migrati) la panoramica si ricava da description e keyInfo. */
@@ -76,6 +90,8 @@ function deriveOverview(project) {
  * Project data shape:
  * {
  *   name, category, year, heroImage, heroAlt,
+ *   heroStage:   al posto di heroImage, una scena composta (React) dentro la stessa cornice che si allarga
+ *   marqueeMark: un segno prima di ogni ripetizione del nome nel marquee (es. il mattoncino di Build Zero)
  *   theme: 'eurica' | 'home' | 'atalus' | 'romaji' | 'reborn'   (variabili colore di caseHistory.css)
  *   hue:   colore delle parole sopra i titoli (default: primary del sito)
  *   overview:   { eyebrow, title, lede, specs: [[label, value], ...] }
@@ -100,6 +116,8 @@ export default function ProjectPage({ project }) {
         year        = '2025',
         heroImage,
         heroAlt,
+        heroStage,
+        marqueeMark,
         theme,
         hue,
         highlights,
@@ -215,7 +233,9 @@ export default function ProjectPage({ project }) {
                     <div className="w-full overflow-x-hidden">
                         <DynamicMarquee duration="70s">
                             <span className="font-urbanist font-normal text-[120px] md:text-[200px] leading-none text-light pr-16">
-                                {name}&nbsp;&nbsp;{name}&nbsp;&nbsp;{name}&nbsp;&nbsp;
+                                {marqueeMark
+                                    ? [0, 1, 2].map((i) => <span key={i}>{marqueeMark}{name}&nbsp;&nbsp;</span>)
+                                    : <>{name}&nbsp;&nbsp;{name}&nbsp;&nbsp;{name}&nbsp;&nbsp;</>}
                             </span>
                         </DynamicMarquee>
                     </div>
@@ -233,10 +253,10 @@ export default function ProjectPage({ project }) {
                     </div>
 
                     {/* La prima immagine parte incorniciata e si allarga fino ai bordi mentre scorri */}
-                    {heroImage && (
+                    {(heroStage || heroImage) && (
                         <div className="heroimg">
                             <div className="frame">
-                                <img src={heroImage} alt={heroAlt || `${name} hero`} onLoad={scheduleScrollRefresh} />
+                                {heroStage || <img src={heroImage} alt={heroAlt || `${name} hero`} onLoad={scheduleScrollRefresh} />}
                             </div>
                         </div>
                     )}

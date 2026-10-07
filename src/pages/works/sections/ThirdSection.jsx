@@ -11,7 +11,7 @@ import euricaPreview from '../../../../img/eurica/eurica-preview.webp';
 import portfolioHero from '../../../../img/portfolio/portfolio-01.jpg';
 import romajiHero from '../../../../img/romaji/romaji-01.jpg';
 import rebornHero from '../../../../img/reborn/reborn-01.jpg';
-import buildZeroHero from '../../../../img/build-zero/build-zero-01.jpg';
+import buildZeroHero from '../../../../img/build-zero-2026/card.webp';
 import atalusHero from '../../../../img/atalus/atalus-01.jpg';
 
 const CASE_HISTORY_CARDS = [

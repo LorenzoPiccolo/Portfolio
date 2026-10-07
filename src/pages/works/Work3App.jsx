@@ -12,7 +12,7 @@ import useResizeTick            from '../../hooks/useResizeTick.js';
 import useAttentionTitle        from '../../hooks/useAttentionTitle.js';
 
 // ─── Project images ───────────────────────────────────────────────────────────
-import buildZeroImg  from '../../../img/build-zero/build-zero-preview.png';
+import buildZeroImg  from '../../../img/build-zero-2026/preview.webp';
 import portfolioImg  from '../../../img/portfolio/portfolio-01.jpg';
 import alidaysImg    from '../../../img/footer-image.jpg';
 import euricaImg     from '../../../img/eurica/eurica-preview.webp';
