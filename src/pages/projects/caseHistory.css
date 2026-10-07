@@ -73,10 +73,12 @@
 .chp .hl{padding-top:clamp(70px,9vw,120px)}
 .chp .hl__head{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;padding-inline:var(--gut);margin-bottom:32px}
 .chp .hl__head h2{font-size:clamp(32px,4vw,56px);letter-spacing:-.03em}
-.chp .hl__track{display:flex;gap:20px;overflow-x:auto;scroll-snap-type:x mandatory;scroll-padding-inline:var(--gut);padding-inline:var(--gut);scrollbar-width:none;scroll-behavior:smooth}
+.chp .hl__track{display:flex;gap:20px;overflow-x:auto;scroll-snap-type:x mandatory;scroll-padding-inline:var(--gut);padding-inline:var(--gut);scrollbar-width:none}
 .chp .hl__track::-webkit-scrollbar{display:none}
 .chp .hl__track.can-drag{cursor:grab}
-.chp .hl__track.dragging{cursor:grabbing;scroll-snap-type:none;scroll-behavior:auto;user-select:none;-webkit-user-select:none}
+.chp .hl__track.dragging{cursor:grabbing;user-select:none;-webkit-user-select:none}
+/* mentre si trascina o scorre da sola, lo snap del browser è spento: lo fa l'animazione */
+.chp .hl__track.dragging,.chp .hl__track.gliding{scroll-snap-type:none;scroll-behavior:auto}
 .chp .hl__track img{-webkit-user-drag:none;user-select:none}
 .chp .hl__card{flex:none;width:min(82vw,1040px);scroll-snap-align:start;margin:0}
 .chp .hl__card .frame{aspect-ratio:16/10;border-radius:var(--R)}
@@ -762,7 +764,8 @@
 .chp .bz-boards{display:flex;gap:20px;overflow-x:auto;padding-inline:var(--gut);scroll-padding-inline:var(--gut);scroll-snap-type:x mandatory;scrollbar-width:none}
 .chp .bz-boards::-webkit-scrollbar,.chp .bz-flow__row::-webkit-scrollbar{display:none}
 .chp .bz-boards.can-drag,.chp .bz-flow__row.can-drag{cursor:grab}
-.chp .bz-boards.dragging,.chp .bz-flow__row.dragging{cursor:grabbing;scroll-snap-type:none;user-select:none;-webkit-user-select:none}
+.chp .bz-boards.dragging,.chp .bz-flow__row.dragging{cursor:grabbing;user-select:none;-webkit-user-select:none}
+.chp .bz-boards.dragging,.chp .bz-boards.gliding,.chp .bz-flow__row.dragging,.chp .bz-flow__row.gliding{scroll-snap-type:none;scroll-behavior:auto}
 .chp .bz-boards figure{flex:none;margin:0;width:min(78vw,860px);scroll-snap-align:start}
 .chp .bz-boards__fr{border-radius:var(--R);overflow:hidden;background:#f7f7f7;aspect-ratio:16/10}
 .chp .bz-boards__fr img{width:100%;height:100%;object-fit:contain;-webkit-user-drag:none}

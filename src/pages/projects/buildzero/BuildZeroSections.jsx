@@ -5,6 +5,7 @@
 import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { gsap } from '../../../utils/gsapConfig.js';
 import { scheduleScrollRefresh } from '../sections/LegacySections.jsx';
+import { createMouseDrag, glideTo, nearestCard, stopGlide, stripLeft } from '../sections/common.jsx';
 
 const reduceMotion = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
@@ -30,31 +31,32 @@ export function Phone({ src, alt = '', eager = false }) {
     );
 }
 
-/** Trascinamento col mouse per le strisce che scorrono di lato (al dito ci pensa lo scroll nativo). */
+/** Trascinamento col mouse per le strisce che scorrono di lato, con l'aggancio morbido di «In short»
+ *  (al dito ci pensa lo scroll nativo). */
 function useDragScroll(ref) {
     useEffect(() => {
         const el = ref.current;
-        if (!el || !window.matchMedia('(pointer: fine)').matches) return undefined;
-        let down = false, moved = false, x0 = 0, s0 = 0;
-        const onDown = (e) => { if (e.pointerType !== 'mouse' || e.button !== 0) return; down = true; moved = false; x0 = e.clientX; s0 = el.scrollLeft; };
-        const onMove = (e) => {
-            if (!down) return;
-            const dx = e.clientX - x0;
-            if (Math.abs(dx) > 4) { moved = true; el.classList.add('dragging'); }
-            el.scrollLeft = s0 - dx;
-        };
-        const onUp = () => { if (!down) return; down = false; el.classList.remove('dragging'); };
-        const onClick = (e) => { if (moved) { e.preventDefault(); e.stopPropagation(); moved = false; } };
+        if (!el) return undefined;
+        const onAnyDown = () => stopGlide(el);
+        el.addEventListener('pointerdown', onAnyDown);
+        if (!window.matchMedia('(pointer: fine)').matches) return () => el.removeEventListener('pointerdown', onAnyDown);
+        const drag = createMouseDrag();
+        const onDown = (e) => { if (e.pointerType !== 'mouse' || e.button !== 0) return; drag.down(el, e); };
+        const onMove = (e) => drag.move(e);
+        const onUp = () => { const x = drag.up(); if (x !== null) glideTo(el, stripLeft(el, nearestCard(el, x))); };
+        const onClick = (e) => { if (drag.state.moved) { e.preventDefault(); e.stopPropagation(); drag.state.moved = false; } };
         el.addEventListener('pointerdown', onDown);
         window.addEventListener('pointermove', onMove, { passive: true });
         window.addEventListener('pointerup', onUp);
         el.addEventListener('click', onClick, true);
         el.classList.add('can-drag');
         return () => {
+            el.removeEventListener('pointerdown', onAnyDown);
             el.removeEventListener('pointerdown', onDown);
             window.removeEventListener('pointermove', onMove);
             window.removeEventListener('pointerup', onUp);
             el.removeEventListener('click', onClick, true);
+            stopGlide(el);
         };
     }, [ref]);
 }

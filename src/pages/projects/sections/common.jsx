@@ -91,6 +91,87 @@ export function Outro({ section }) {
     );
 }
 
+/** Distanza di una scheda dall'inizio della striscia, al netto del margine interno. */
+export function stripLeft(track, i) {
+    const card = track.children[i];
+    return card.offsetLeft - track.offsetLeft - parseFloat(getComputedStyle(track).paddingLeft);
+}
+
+/** La scheda più vicina a una posizione di scroll. */
+export function nearestCard(track, x) {
+    let best = 0, bd = Infinity;
+    [...track.children].forEach((_, i) => { const d = Math.abs(stripLeft(track, i) - x); if (d < bd) { bd = d; best = i; } });
+    return best;
+}
+
+/**
+ * Porta una striscia orizzontale a `x` con un'animazione morbida. Lo snap CSS resta spento
+ * (classe `gliding`) finché l'animazione non arriva: altrimenti il browser salta di colpo
+ * alla scheda più vicina. La durata cresce un po' con la distanza.
+ */
+export function glideTo(track, x, duration) {
+    gsap.killTweensOf(track.__glide || {});
+    // prima si spegne lo snap, poi si legge la posizione: leggerla con lo snap acceso lo fa scattare
+    track.classList.add('gliding');
+    track.classList.remove('dragging');
+    const to = Math.max(0, Math.min(track.scrollWidth - track.clientWidth, x));
+    const from = track.scrollLeft;
+    if (reduceMotion()) { track.scrollLeft = to; track.classList.remove('gliding'); return; }
+    const dur = duration ?? Math.min(1.1, 0.6 + Math.abs(to - from) / 2400);
+    const p = (track.__glide = { x: from });
+    gsap.to(p, {
+        x: to, duration: dur, ease: 'power3.out',
+        onUpdate: () => { track.scrollLeft = p.x; },
+        onComplete: () => track.classList.remove('gliding'),
+    });
+}
+
+/** Ferma l'animazione in corso (es. quando l'utente riprende la striscia col dito o col mouse). */
+export function stopGlide(track) {
+    gsap.killTweensOf(track.__glide || {});
+    track.classList.remove('gliding');
+}
+
+/**
+ * Trascinamento col mouse che segue il puntatore con un leggero ritardo morbido e,
+ * al rilascio, restituisce dove la spinta porterebbe la striscia (velocità smussata).
+ */
+export function createMouseDrag() {
+    const d = { on: false, moved: false, x0: 0, left0: 0, target: 0, lastX: 0, lastT: 0, vel: 0, follow: null, proxy: null };
+    return {
+        state: d,
+        down(track, e) {
+            stopGlide(track);
+            const proxy = { x: track.scrollLeft };
+            Object.assign(d, {
+                on: true, moved: false, x0: e.clientX, left0: track.scrollLeft, target: track.scrollLeft,
+                lastX: e.clientX, lastT: performance.now(), vel: 0, proxy,
+                follow: gsap.quickTo(proxy, 'x', { duration: 0.32, ease: 'power3.out', onUpdate: () => { track.scrollLeft = proxy.x; } }),
+            });
+            track.classList.add('dragging');
+        },
+        move(e) {
+            if (!d.on) return;
+            const dx = e.clientX - d.x0;
+            if (Math.abs(dx) > 4) d.moved = true;
+            d.target = d.left0 - dx;
+            d.follow(d.target);
+            const now = performance.now(), dt = now - d.lastT;
+            if (dt > 0) d.vel = d.vel * 0.7 + ((e.clientX - d.lastX) / dt) * 0.3;
+            d.lastX = e.clientX; d.lastT = now;
+        },
+        /** Fine del trascinamento: restituisce la posizione «lanciata», o null se non stava trascinando.
+         *  La classe `dragging` resta: la toglie glideTo, che va chiamata subito dopo. */
+        up() {
+            if (!d.on) return null;
+            d.on = false;
+            gsap.killTweensOf(d.proxy);
+            if (performance.now() - d.lastT > 90) d.vel = 0;   // fermo prima di lasciare: niente spinta
+            return d.target - d.vel * 320;
+        },
+    };
+}
+
 const PAUSE_ICON = (
     <svg viewBox="0 0 14 14" fill="currentColor" width="14" height="14"><rect x="2" y="1" width="3.5" height="12" rx="1" /><rect x="8.5" y="1" width="3.5" height="12" rx="1" /></svg>
 );
@@ -113,15 +194,11 @@ export function Highlights({ items, title = 'In short.' }) {
     const [playing, setPlaying] = useState(() => !reduceMotion());
     const [tick, setTick] = useState(0);          // riavvia l'animazione del puntino attivo
     const visible = useRef(false);
-    const drag = useRef({ on: false, moved: false, x0: 0, left0: 0, lastX: 0, lastT: 0, vel: 0 });
+    const drag = useRef(null);
+    if (!drag.current) drag.current = createMouseDrag();
 
-    const cardLeft = (i) => {
-        const track = trackRef.current;
-        const card = track.children[i];
-        return card.offsetLeft - track.offsetLeft - parseFloat(getComputedStyle(track).paddingLeft);
-    };
-    const go = (i) => {
-        trackRef.current.scrollTo({ left: cardLeft(i), behavior: reduceMotion() ? 'auto' : 'smooth' });
+    const go = (i, duration) => {
+        glideTo(trackRef.current, stripLeft(trackRef.current, i), duration);
         setIndex(i); setTick((t) => t + 1);
     };
     const stop = () => setPlaying(false);
@@ -135,7 +212,7 @@ export function Highlights({ items, title = 'In short.' }) {
     }, []);
     useEffect(() => {
         if (!playing || !visible.current) return undefined;
-        const t = setTimeout(() => go((index + 1) % items.length), HL_DURATION);
+        const t = setTimeout(() => go((index + 1) % items.length, 1.1), HL_DURATION);
         return () => clearTimeout(t);
     }, [playing, index, tick, items.length]);
 
@@ -146,38 +223,28 @@ export function Highlights({ items, title = 'In short.' }) {
         const onScroll = () => {
             clearTimeout(t);
             t = setTimeout(() => {
-                let best = 0, bd = Infinity;
-                [...track.children].forEach((_, i) => { const d = Math.abs(cardLeft(i) - track.scrollLeft); if (d < bd) { bd = d; best = i; } });
+                const best = nearestCard(track, track.scrollLeft);
                 setIndex((cur) => (cur === best ? cur : best));
             }, 120);
         };
         track.addEventListener('scroll', onScroll, { passive: true });
-        return () => { clearTimeout(t); track.removeEventListener('scroll', onScroll); };
+        return () => { clearTimeout(t); track.removeEventListener('scroll', onScroll); gsap.killTweensOf(track.__glide || {}); };
     }, []);
 
     // Trascinamento col mouse (al dito ci pensa lo scroll nativo)
     const fine = typeof window !== 'undefined' && window.matchMedia('(pointer: fine)').matches;
     const onPointerDown = (e) => {
         stop();
+        const track = trackRef.current;
+        stopGlide(track);
         if (!fine || e.pointerType !== 'mouse' || e.button !== 0) return;
-        const d = drag.current, track = trackRef.current;
-        Object.assign(d, { on: true, moved: false, x0: e.clientX, lastX: e.clientX, left0: track.scrollLeft, lastT: performance.now(), vel: 0 });
+        drag.current.down(track, e);
         track.setPointerCapture(e.pointerId);
-        track.classList.add('dragging');
     };
-    const onPointerMove = (e) => {
-        const d = drag.current; if (!d.on) return;
-        const dx = e.clientX - d.x0; if (Math.abs(dx) > 4) d.moved = true;
-        trackRef.current.scrollLeft = d.left0 - dx;
-        const now = performance.now(); d.vel = (e.clientX - d.lastX) / Math.max(1, now - d.lastT); d.lastX = e.clientX; d.lastT = now;
-    };
+    const onPointerMove = (e) => drag.current.move(e);
     const onPointerUp = () => {
-        const d = drag.current; if (!d.on) return;
-        d.on = false; trackRef.current.classList.remove('dragging');
-        const target = trackRef.current.scrollLeft - d.vel * 260;
-        let best = index, bd = Infinity;
-        items.forEach((_, i) => { const dd = Math.abs(cardLeft(i) - target); if (dd < bd) { bd = dd; best = i; } });
-        go(best);
+        const target = drag.current.up();
+        if (target !== null) go(nearestCard(trackRef.current, target));
     };
     const onWheel = (e) => { if (Math.abs(e.deltaX) > Math.abs(e.deltaY)) stop(); };
 
@@ -200,7 +267,7 @@ export function Highlights({ items, title = 'In short.' }) {
                 className={`hl__track${fine ? ' can-drag' : ''}`}
                 onPointerDown={onPointerDown} onPointerMove={onPointerMove} onPointerUp={onPointerUp} onPointerCancel={onPointerUp}
                 onWheel={onWheel}
-                onClickCapture={(e) => { if (drag.current.moved) { e.preventDefault(); e.stopPropagation(); drag.current.moved = false; } }}
+                onClickCapture={(e) => { const d = drag.current.state; if (d.moved) { e.preventDefault(); e.stopPropagation(); d.moved = false; } }}
                 onDragStart={(e) => e.preventDefault()}
             >
                 {items.map((it, i) => (
