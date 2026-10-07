@@ -2,7 +2,7 @@
 import ProjectPage from './ProjectPage.jsx';
 
 import heroImage     from '../../../img/footer-image.jpg';
-import nextHeroImage from '../../../img/atalus/atalus-01.jpg';
+import nextHeroImage from '../../../img/eurica/eurica-cover.webp';
 import image1 from '../../../img/image-footer-03.jpg';
 import image2 from '../../../img/image-footer-04.jpg';
 import image3 from '../../../img/image-footer-02.jpg';
@@ -53,8 +53,8 @@ const alidays = {
         },
     ],
     nextProject: {
-        name: 'Atalus',
-        path: '/works/atalus',
+        name: 'Eurica',
+        path: '/works/eurica',
         heroImage: nextHeroImage,
     },
 };

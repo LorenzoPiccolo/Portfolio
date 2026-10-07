@@ -1,7 +1,7 @@
 // src/pages/projects/Reborn.jsx
 import ProjectPage from './ProjectPage.jsx';
 import heroImage     from '../../../img/reborn/reborn-01.jpg';
-import nextHeroImage from '../../../img/footer-image.jpg';
+import nextHeroImage from '../../../img/build-zero-2026/card.webp';
 import imgCoverArt from '../../../img/reborn/reborn-02.jpg';
 import imgTitle    from '../../../img/reborn/reborn-03.jpg';
 import imgOpen     from '../../../img/reborn/reborn-04.jpg';
@@ -45,8 +45,8 @@ const reborn = {
     ],
 
     nextProject: {
-        name: 'Alidays',
-        path: '/works/alidays',
+        name: 'Build Zero',
+        path: '/works/build-zero',
         heroImage: nextHeroImage,
     },
 };

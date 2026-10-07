@@ -1,7 +1,7 @@
 // src/pages/projects/Romaji.jsx
 import ProjectPage from './ProjectPage.jsx';
 import heroImage     from '../../../img/romaji/romaji-01.jpg';
-import nextHeroImage from '../../../img/reborn/reborn-01.jpg';
+import nextHeroImage from '../../../img/atalus/atalus-01.jpg';
 import imgVespa   from '../../../img/romaji/romaji-02.jpg';
 import imgTorii   from '../../../img/romaji/romaji-03.jpg';
 import imgCover   from '../../../img/romaji/romaji-04.jpg';
@@ -42,8 +42,8 @@ const romaji = {
     ],
 
     nextProject: {
-        name: 'Reborn',
-        path: '/works/reborn',
+        name: 'Atalus',
+        path: '/works/atalus',
         heroImage: nextHeroImage,
     },
 };

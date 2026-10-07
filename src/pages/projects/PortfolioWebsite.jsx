@@ -6,7 +6,7 @@
 import ProjectPage from './ProjectPage.jsx';
 import DynamicButton from '../../components/DynamicButton.jsx';
 
-import nextHeroImage from '../../../img/image-footer-05.jpg';
+import nextHeroImage from '../../../img/footer-image.jpg';
 import logo from '../../../img/logo.svg';
 import iconWeb from '../../../img/icona-01.svg';
 import iconUx  from '../../../img/icona-02.svg';
@@ -124,8 +124,8 @@ const portfolioWebsite = {
     ],
 
     nextProject: {
-        name: 'Redi Website',
-        path: '/works/redi',
+        name: 'Alidays',
+        path: '/works/alidays',
         heroImage: nextHeroImage,
     },
 };

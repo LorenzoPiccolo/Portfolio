@@ -1,7 +1,7 @@
 // src/pages/projects/Atalus.jsx
 import ProjectPage from './ProjectPage.jsx';
 import heroImage     from '../../../img/atalus/atalus-01.jpg';
-import nextHeroImage from '../../../img/build-zero-2026/card.webp';
+import nextHeroImage from '../../../img/reborn/reborn-01.jpg';
 import imgShelter  from '../../../img/atalus/atalus-02.jpg';
 import imgCards    from '../../../img/atalus/atalus-03.jpg';
 import imgTotem    from '../../../img/atalus/atalus-04.jpg';
@@ -49,8 +49,8 @@ const atalus = {
     ],
 
     nextProject: {
-        name: 'Build Zero',
-        path: '/works/build-zero',
+        name: 'Reborn',
+        path: '/works/reborn',
         heroImage: nextHeroImage,
     },
 };
