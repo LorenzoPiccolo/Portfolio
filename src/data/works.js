@@ -28,19 +28,19 @@ export const WORKS = [
     href: '/works/portfolio-website',
   },
   {
-    id: 'eurica',
-    title: 'Eurica',
-    subtitle: 'UX/UI Design',
-    poster: euricaCover,
-    year: '2025',
-    href: '/works/eurica',
-  },
-  {
     id: 'atalus',
     title: 'Atalus',
     subtitle: 'Digital Identity',
     poster: atalusHero,
     year: '2024',
     href: '/works/atalus',
+  },
+  {
+    id: 'eurica',
+    title: 'Eurica',
+    subtitle: 'UX/UI Design',
+    poster: euricaCover,
+    year: '2025',
+    href: '/works/eurica',
   },
 ];
