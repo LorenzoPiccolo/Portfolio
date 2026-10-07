@@ -261,7 +261,7 @@ export function Highlights({ items, title = 'In short.' }) {
 
     return (
         <section ref={rootRef} className={`hl${playing ? ' playing' : ''}`} style={{ '--dur': `${HL_DURATION}ms` }}>
-            <div className="hl__head"><h2>{title}</h2></div>
+            {title && <div className="hl__head"><h2>{title}</h2></div>}
             <div
                 ref={trackRef}
                 className={`hl__track${fine ? ' can-drag' : ''}`}

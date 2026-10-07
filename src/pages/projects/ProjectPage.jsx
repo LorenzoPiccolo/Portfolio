@@ -24,6 +24,7 @@ import LandingHero from './eurica/LandingHero.jsx';
 import {
     BzEvent, BzRedesign, BzBoards, BzMoments, BzRules, BzWorlds, BzBear, BzFlows, BzSystem, BzMetrics, BzLegal,
 } from './buildzero/BuildZeroSections.jsx';
+import { PfIdentity, PfReveal, PfImage, PfMotion } from './portfolio/PortfolioSections.jsx';
 
 // Cursor-follow constants (match Work3App)
 const LERP_DUR       = 0.35;
@@ -69,6 +70,10 @@ const SECTIONS = {
     'bz-system': BzSystem,
     'bz-metrics': BzMetrics,
     'bz-legal': BzLegal,
+    'pf-identity': PfIdentity,
+    'pf-reveal': PfReveal,
+    'pf-image': PfImage,
+    'pf-motion': PfMotion,
 };
 
 /** Senza `overview` (progetti non ancora migrati) la panoramica si ricava da description e keyInfo. */
@@ -360,7 +365,7 @@ function NextProjectSection({ nextProject, navigateTo }) {
     return (
         <section
             ref={sectionRef}
-            className="relative w-full bg-dark px-4 md:px-12 py-20 md:py-40 cursor-pointer group overflow-hidden border-t border-gray600"
+            className="relative w-full bg-dark px-4 md:px-12 py-20 md:py-40 mt-[120px] md:mt-[200px] cursor-pointer group overflow-hidden border-t border-gray600"
             onClick={() => navigateTo(nextProject.path)}
             onMouseEnter={showPreview}
             onMouseLeave={hidePreview}
